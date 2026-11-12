@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Join free | iLoveLatins</title>
+  <meta name="description" content="Join iLoveLatins free. Women never pay. Men hear about new tour dates first.">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Join free</h1>
+        <p class="lead">Tell Sam who you are. Women never pay, and men hear about new tour dates first.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <div class="toggle" role="group" aria-label="I am">
+          <button type="button" data-who="man" aria-pressed="true">I am a man</button>
+          <button type="button" data-who="woman" aria-pressed="false">Soy mujer</button>
+        </div>
+
+        <form class="form card" id="join-form" data-form="New member from the website" data-lang="en">
+          <input type="hidden" name="joining_as" data-label="Joining as" value="Man seeking a woman">
+          <div class="row">
+            <label><span data-t="first">First name</span>
+              <input type="text" name="first_name" data-label="First name" autocomplete="given-name" required>
+            </label>
+            <label><span><span data-t="age">Age</span> <span class="hint" data-t="agehint">You must be 18 or over.</span></span>
+              <input type="number" name="age" data-label="Age" min="18" max="99" required>
+            </label>
+          </div>
+          <div class="row">
+            <label><span data-t="city">City</span>
+              <input type="text" name="city" data-label="City" required>
+            </label>
+            <label><span data-t="country">Country</span>
+              <input type="text" name="country" data-label="Country" autocomplete="country-name" required>
+            </label>
+          </div>
+          <div class="row">
+            <label><span data-t="email">Email</span>
+              <input type="email" name="email" data-label="Email" autocomplete="email" required>
+            </label>
+            <label><span data-t="phone">Mobile or WhatsApp</span>
+              <input type="tel" name="phone" data-label="Phone" autocomplete="tel">
+            </label>
+          </div>
+          <label><span data-t="about">About you, and who you hope to meet</span>
+            <textarea name="about" data-label="About"></textarea>
+          </label>
+          <p class="form-small" data-t="photo">Sam will reply and ask for a recent photo. A profile needs a real photo before it is shown to anyone.</p>
+          <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <button class="btn" type="submit" data-t="send">Send my details</button>
+          <p class="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer data-footer></footer>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    (function () {
+      var T = {
+        man: { first: 'First name', age: 'Age', agehint: 'You must be 18 or over.', city: 'City', country: 'Country', email: 'Email', phone: 'Mobile or WhatsApp', about: 'About you, and who you hope to meet', photo: 'Sam will reply and ask for a recent photo. A profile needs a real photo before it is shown to anyone.', send: 'Send my details', as: 'Man seeking a woman', lang: 'en' },
+        woman: { first: 'Nombre', age: 'Edad', agehint: 'Debes tener 18 años o más.', city: 'Ciudad', country: 'País', email: 'Correo electrónico', phone: 'Celular o WhatsApp', about: 'Cuéntanos de ti y a quién te gustaría conocer', photo: 'Es gratis. Sam te responderá y te pedirá una foto reciente. Un perfil necesita una foto real antes de mostrarse.', send: 'Enviar mis datos', as: 'Woman seeking a man', lang: 'es' }
+      };
+      var form = document.getElementById('join-form');
+      var buttons = document.querySelectorAll('[data-who]');
+      function set(who) {
+        var t = T[who];
+        buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.who === who); });
+        form.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = t[el.dataset.t]; });
+        form.setAttribute('data-lang', t.lang);
+        form.setAttribute('lang', t.lang);
+        form.elements.joining_as.value = t.as;
+      }
+      buttons.forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.who); }); });
+      if (new URLSearchParams(location.search).get('soy') === 'mujer') set('woman');
+    })();
+  </script>
+</body>
+</html>

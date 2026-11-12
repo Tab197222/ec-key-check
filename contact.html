@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | iLoveLatins</title>
+  <meta name="description" content="Call or text Sam Smith at 832-385-4161, email iLoveLatins, or send a message about tours, joining or a concern.">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Talk to Sam</h1>
+        <p class="lead">Tours, joining, or a profile you want to report. The phone is the quickest way.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap split">
+        <ul class="contact-list">
+          <li><strong><a data-phone></a></strong><span>Call or text. <span data-hours></span></span></li>
+          <li><strong style="font-size:1.2rem"><a data-email></a></strong><span>Email, answered by Sam</span></li>
+          <li><strong style="font-size:1.2rem"><a data-whatsapp rel="noopener">WhatsApp group for single men</a></strong><span>Free to join. Tour news and questions.</span></li>
+        </ul>
+        <form class="form card" data-form="Message from the website">
+          <div class="row">
+            <label>Your name
+              <input type="text" name="name" data-label="Name" autocomplete="name" required>
+            </label>
+            <label>Email
+              <input type="email" name="email" data-label="Email" autocomplete="email" required>
+            </label>
+          </div>
+          <label>What is it about?
+            <select name="topic" data-label="Topic">
+              <option>A question about a tour</option>
+              <option>Reserving a tour</option>
+              <option>Joining</option>
+              <option>Report a profile or a concern</option>
+              <option>Something else</option>
+            </select>
+          </label>
+          <label>Message
+            <textarea name="message" data-label="Message" required></textarea>
+          </label>
+          <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <button class="btn" type="submit">Send message</button>
+          <p class="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer data-footer></footer>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+</body>
+</html>
