@@ -22,7 +22,7 @@ function setting(name: string) {
 function stripeKey() {
   const k = setting('STRIPE_SECRET_KEY');
   if (!/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/.test(k)) {
-    throw new Error('STRIPE_SECRET_KEY in Supabase is not a complete Stripe secret key. Copy it again from Stripe (Developers > API keys > Secret key > Reveal) and save it again.');
+    throw new Error(`STRIPE_SECRET_KEY in Supabase is not a complete Stripe secret key (it is ${k.length} characters and starts "${k.slice(0, 8)}"). Copy it again with the copy icon in Stripe (Developers > API keys) and save it again.`);
   }
   return k;
 }
