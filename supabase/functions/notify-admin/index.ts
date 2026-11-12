@@ -1,7 +1,7 @@
 // Emails the owner when a member submits a profile for approval.
 // Optional. Without RESEND_API_KEY it does nothing and approvals still work from admin.html.
 // Turn OFF "Verify JWT" for this function: it checks the member's login itself.
-// Secrets needed: RESEND_API_KEY, ADMIN_EMAIL, SITE_URL. Optional: EMAIL_FROM
+// Secrets needed: RESEND_API_KEY, ADMIN_EMAIL (one address, or several separated by commas), SITE_URL. Optional: EMAIL_FROM
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 // Server key: the new secret key if the project has one, otherwise the legacy service role key.
@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from: Deno.env.get('EMAIL_FROM') ?? 'iLoveLatins <onboarding@resend.dev>',
-        to: [to],
+        to: to.split(',').map((x) => x.trim()).filter(Boolean),
         subject: `New profile to approve: ${p.first_name}`,
         html: `<p>${esc(p.first_name)} (${esc(p.gender)}, ${esc(p.city)}, ${esc(p.country)}) has submitted a profile.</p>
                <p><a href="${site}/admin.html">Open the approvals page</a> to approve or reject it.</p>`,
