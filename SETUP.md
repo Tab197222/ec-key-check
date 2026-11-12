@@ -54,9 +54,13 @@ part in live mode.
 1. In Supabase, open **Edge Functions** and create four functions with these exact
    names, pasting in the matching file from `supabase/functions/`:
    - `create-checkout`
-   - `stripe-webhook`: turn **off** "Verify JWT" for this one only
+   - `stripe-webhook`
    - `billing-portal`
    - `notify-admin`
+
+   For all four, turn **off** "Verify JWT" (also called "Enforce JWT
+   verification"). Each function checks the login itself, and Stripe's calls
+   don't carry a Supabase login at all.
 2. Open **Edge Functions > Secrets** and add:
 
    | Name | Value |

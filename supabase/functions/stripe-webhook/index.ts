@@ -4,7 +4,17 @@
 // Secrets needed: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_YEARLY
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
-const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+// Server key: the new secret key if the project has one, otherwise the legacy service role key.
+function serverKey() {
+  try {
+    const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
+    const k = keys.default ?? Object.values(keys)[0];
+    if (k) return k as string;
+  } catch (_) { /* fall through */ }
+  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+}
+
+const admin = createClient(Deno.env.get('SUPABASE_URL')!, serverKey());
 
 function hex(buf: ArrayBuffer) {
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');

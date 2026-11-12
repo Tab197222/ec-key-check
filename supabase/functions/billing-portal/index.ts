@@ -1,6 +1,17 @@
 // Opens Stripe's own "manage billing" page so a member can update a card or cancel.
+// Turn OFF "Verify JWT" for this function: it checks the member's login itself.
 // Secrets needed: STRIPE_SECRET_KEY, SITE_URL
 import { createClient } from 'npm:@supabase/supabase-js@2';
+
+// Server key: the new secret key if the project has one, otherwise the legacy service role key.
+function serverKey() {
+  try {
+    const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
+    const k = keys.default ?? Object.values(keys)[0];
+    if (k) return k as string;
+  } catch (_) { /* fall through */ }
+  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+}
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -12,14 +23,11 @@ const json = (body: unknown, status = 200) =>
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   try {
-    const url = Deno.env.get('SUPABASE_URL')!;
-    const asUser = createClient(url, Deno.env.get('SUPABASE_ANON_KEY')!, {
-      global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } },
-    });
-    const { data: { user } } = await asUser.auth.getUser();
+    const admin = createClient(Deno.env.get('SUPABASE_URL')!, serverKey());
+    const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+    const { data: { user } } = token ? await admin.auth.getUser(token) : { data: { user: null } };
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
-    const admin = createClient(url, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
     const { data: sub } = await admin.from('subscriptions')
       .select('stripe_customer_id').eq('user_id', user.id).maybeSingle();
     if (!sub?.stripe_customer_id) return json({ error: 'No membership found for this account.' }, 404);

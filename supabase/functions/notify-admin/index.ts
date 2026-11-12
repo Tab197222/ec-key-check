@@ -1,7 +1,18 @@
 // Emails the owner when a member submits a profile for approval.
 // Optional. Without RESEND_API_KEY it does nothing and approvals still work from admin.html.
+// Turn OFF "Verify JWT" for this function: it checks the member's login itself.
 // Secrets needed: RESEND_API_KEY, ADMIN_EMAIL, SITE_URL. Optional: EMAIL_FROM
 import { createClient } from 'npm:@supabase/supabase-js@2';
+
+// Server key: the new secret key if the project has one, otherwise the legacy service role key.
+function serverKey() {
+  try {
+    const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
+    const k = keys.default ?? Object.values(keys)[0];
+    if (k) return k as string;
+  } catch (_) { /* fall through */ }
+  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+}
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -14,18 +25,15 @@ const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   try {
-    const url = Deno.env.get('SUPABASE_URL')!;
-    const asUser = createClient(url, Deno.env.get('SUPABASE_ANON_KEY')!, {
-      global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } },
-    });
-    const { data: { user } } = await asUser.auth.getUser();
+    const admin = createClient(Deno.env.get('SUPABASE_URL')!, serverKey());
+    const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+    const { data: { user } } = token ? await admin.auth.getUser(token) : { data: { user: null } };
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
     const key = Deno.env.get('RESEND_API_KEY');
     const to = Deno.env.get('ADMIN_EMAIL');
     if (!key || !to) return json({ sent: false });
 
-    const admin = createClient(url, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
     const { data: p } = await admin.from('profiles')
       .select('first_name, gender, city, country, status').eq('id', user.id).maybeSingle();
     if (!p || p.status !== 'pending') return json({ sent: false });
