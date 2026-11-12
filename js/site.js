@@ -78,6 +78,7 @@
       '<li><a href="join.html">Join free</a></li>' +
       '<li><a href="members.html">Members</a></li>' +
       '<li><a href="messages.html">Messages</a></li>' +
+      '<li><a href="likes.html">Likes</a></li>' +
       '<li><a href="membership.html">Membership</a></li>' +
       '<li><a href="account.html">My account</a></li></ul></div>' +
       '<div><h3>Help</h3><ul>' +

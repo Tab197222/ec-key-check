@@ -7,6 +7,8 @@ App.start(async function () {
   };
 
   var u = await App.requireUser();
+  var DETAILS = ['looking_for', 'height_cm', 'english', 'religion', 'has_children', 'wants_children'];
+  document.querySelectorAll('#profile [data-opts]').forEach(function (sel) { sel.innerHTML = App.options(sel.dataset.opts); });
   var profile = null, media = [], sub = null;
   var form = $('profile');
 
@@ -34,7 +36,14 @@ App.start(async function () {
       form.city.value = profile.city;
       form.country.value = profile.country;
       form.about.value = profile.about;
+      DETAILS.forEach(function (k) { form[k].value = profile[k] == null ? '' : profile[k]; });
     }
+    var v = $('verify-note');
+    v.hidden = !profile || profile.status !== 'approved';
+    v.className = 'notice' + (profile && profile.verified ? ' good' : '');
+    v.innerHTML = profile && profile.verified
+      ? '<span class="badge-verified">✓ ' + esc(t('verified')) + '</span> ' + esc(t('verified_note'))
+      : esc(t('get_verified'));
     var locked = !!profile && profile.status !== 'draft';
     form.querySelectorAll('[name=gender]').forEach(function (r) { r.disabled = locked; });
     form.birthdate.disabled = locked;
@@ -53,6 +62,10 @@ App.start(async function () {
       country: form.country.value.trim(),
       about: form.about.value.trim()
     };
+    DETAILS.forEach(function (k) {
+      var val = form[k].value.trim();
+      row[k] = val === '' ? null : (k === 'height_cm' ? +val : val);
+    });
     if (!profile || profile.status === 'draft') {
       row.gender = form.gender.value;
       row.birthdate = form.birthdate.value;

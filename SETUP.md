@@ -23,6 +23,9 @@ part in live mode.
    **anon / publishable key**. Paste them into `js/config.js`, or send them to
    Claude to do it. Both are safe to publish.
 
+5. Also run `supabase/002_dating_features.sql` the same way. It adds profile
+   details, the Verified badge, last active and likes.
+
 ## 2. Make yourself the site owner
 
 1. On the site, press **Join free**, create an account, confirm the email, and
@@ -57,6 +60,7 @@ part in live mode.
    - `stripe-webhook`
    - `billing-portal`
    - `notify-admin`
+   - `notify-message` (emails members about new messages)
 
    For all four, turn **off** "Verify JWT" (also called "Enforce JWT
    verification"). Each function checks the login itself, and Stripe's calls
@@ -71,9 +75,12 @@ part in live mode.
    | `SITE_URL` | `https://tab197222.github.io/ec-key-check` |
    | `STRIPE_WEBHOOK_SECRET` | from step 5 below |
 
-3. Optional, to get an email whenever a profile is waiting for approval: create
-   a free https://resend.com account and add `RESEND_API_KEY` and `ADMIN_EMAIL`
-   (your email). Without these, check `admin.html` yourself.
+3. Emails (new-message alerts, and approval alerts to you): create a free
+   https://resend.com account, verify ilovelatins.com under **Domains** (it gives
+   DNS records to add at your domain host), then add `RESEND_API_KEY`,
+   `EMAIL_FROM` (for example `iLoveLatins <alerts@ilovelatins.com>`) and
+   `ADMIN_EMAIL` (your email). Until the domain is verified, Resend only
+   delivers to your own address, so members get no alerts.
 
 ## 5. Connect Stripe back to the site
 

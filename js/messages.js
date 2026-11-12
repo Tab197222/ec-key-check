@@ -35,9 +35,13 @@ App.start(async function () {
     var rows = r.data || [];
     if (force || rows.length !== shown) {
       shown = rows.length;
+      originals = {};
       $('thread').innerHTML = rows.map(function (m) {
-        return '<div class="bubble ' + (m.sender === u.id ? 'mine' : 'theirs') + '">' + esc(m.body) +
-          '<time>' + new Date(m.created_at).toLocaleString(App.lang(), { dateStyle: 'medium', timeStyle: 'short' }) + '</time></div>';
+        var theirs = m.sender !== u.id;
+        return '<div class="bubble ' + (theirs ? 'theirs' : 'mine') + '"><span class="body">' + esc(m.body) + '</span>' +
+          '<time>' + new Date(m.created_at).toLocaleString(App.lang(), { dateStyle: 'medium', timeStyle: 'short' }) + '</time>' +
+          (theirs ? '<button type="button" class="link translate" data-translate="' + m.id + '">' + esc(t('translate')) + '</button>' : '') +
+          '</div>';
       }).join('');
       $('thread').scrollTop = $('thread').scrollHeight;
       if (rows.some(function (m) { return m.recipient === u.id && !m.read_at; })) await sb.rpc('mark_read', { other: open });
@@ -64,12 +68,59 @@ App.start(async function () {
     await loadList(); await loadThread(true);
   });
 
+  /* ----- translation: a free public service, used only when the reader presses Translate ----- */
+  var originals = {};
+  async function translateText(text) {
+    var target = App.lang() === 'es' ? 'es' : 'en';
+    var source = target === 'es' ? 'en' : 'es';
+    // The service takes up to about 500 characters at a time: split at spaces.
+    var chunks = [], rest = text;
+    while (rest.length > 450) {
+      var cut = rest.lastIndexOf(' ', 450);
+      if (cut < 100) cut = 450;
+      chunks.push(rest.slice(0, cut)); rest = rest.slice(cut);
+    }
+    chunks.push(rest);
+    var out = [];
+    for (var i = 0; i < chunks.length; i++) {
+      var r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunks[i]) +
+        '&langpair=' + source + '|' + target + '&de=' + encodeURIComponent((window.ILL && ILL.contact.email) || ''));
+      var d = await r.json();
+      if (!d || d.responseStatus !== 200 || !d.responseData) throw new Error('translation failed');
+      out.push(d.responseData.translatedText);
+    }
+    return out.join(' ');
+  }
+  $('thread').addEventListener('click', async function (e) {
+    var b = e.target.closest('[data-translate]');
+    if (!b) return;
+    var body = b.parentNode.querySelector('.body');
+    var key = b.dataset.translate;
+    if (originals[key] != null) {
+      body.textContent = originals[key]; delete originals[key];
+      b.textContent = t('translate');
+      return;
+    }
+    b.disabled = true; b.textContent = t('translating');
+    try {
+      var translated = await translateText(body.textContent);
+      originals[key] = body.textContent;
+      body.textContent = translated;
+      b.textContent = t('original');
+    } catch (err) {
+      b.textContent = t('translate_failed');
+    }
+    b.disabled = false;
+  });
+
   $('send').addEventListener('submit', async function (e) {
     e.preventDefault();
     var body = this.body.value.trim();
     if (!body || !open) return;
-    var r = await sb.from('messages').insert({ sender: u.id, recipient: open, body: body });
+    var r = await sb.from('messages').insert({ sender: u.id, recipient: open, body: body }).select('id').single();
     if (r.error) { await checkAllowed(); return; }
+    // Email the other person (the server decides whether an alert is needed).
+    sb.functions.invoke('notify-message', { body: { message_id: r.data.id } }).catch(function () {});
     this.reset();
     await loadThread(true); await loadList();
   });

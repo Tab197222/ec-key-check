@@ -31,6 +31,7 @@
           </form>
 
           <p class="notice" id="status"></p>
+          <p class="notice" id="verify-note" hidden></p>
 
           <div class="account-grid">
             <form class="form card" id="profile">
@@ -54,6 +55,30 @@
                 </label>
                 <label><span data-i18n="country">Country</span>
                   <input type="text" name="country" maxlength="80" autocomplete="country-name" required>
+                </label>
+              </div>
+              <div class="row">
+                <label><span data-i18n="looking_for">Looking for</span>
+                  <select name="looking_for" data-opts="looking_for"></select>
+                </label>
+                <label><span data-i18n="height">Height (cm)</span>
+                  <input type="number" name="height_cm" min="120" max="230" inputmode="numeric">
+                </label>
+              </div>
+              <div class="row">
+                <label><span data-i18n="english">English</span>
+                  <select name="english" data-opts="english"></select>
+                </label>
+                <label><span data-i18n="religion">Religion</span>
+                  <select name="religion" data-opts="religion"></select>
+                </label>
+              </div>
+              <div class="row">
+                <label><span data-i18n="has_children">Children</span>
+                  <select name="has_children" data-opts="has_children"></select>
+                </label>
+                <label><span data-i18n="wants_children">Wants children</span>
+                  <select name="wants_children" data-opts="wants_children"></select>
                 </label>
               </div>
               <label><span data-i18n="about">About you, and who you hope to meet</span>
@@ -93,6 +118,7 @@
 
               <div class="actions">
                 <a class="btn btn-quiet" href="messages.html">Messages</a>
+                <a class="btn btn-quiet" href="likes.html" data-i18n="likes_h">Likes</a>
                 <button class="btn btn-quiet" type="button" id="logout" data-i18n="logout">Log out</button>
                 <button class="link danger" type="button" id="delete" data-i18n="delete">Delete my account</button>
               </div>

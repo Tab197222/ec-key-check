@@ -64,7 +64,23 @@ window.App = (function () {
       r_limit: 'Free members can send one message a week. Upgrade for unlimited messages.',
       // membership
       choose: 'Choose', current: 'Your current plan', login_first: 'Log in or create an account first.',
-      already: 'You already have an active membership.'
+      already: 'You already have an active membership.',
+      // profile details
+      details_h: 'About me', height: 'Height (cm)', has_children: 'Children', wants_children: 'Wants children',
+      religion: 'Religion', english: 'English', looking_for: 'Looking for', any: 'Any', choose_one: 'Choose…',
+      verified: 'Verified', verified_note: 'Sam has checked this person is real.',
+      get_verified: 'Get a Verified badge: send Sam a selfie holding a paper with today’s date and your first name, by WhatsApp or email. Verified profiles get more replies.',
+      online: 'Online now', today: 'Active today', week: 'Active this week',
+      mark_verified: 'Mark as verified', unmark_verified: 'Remove verified badge',
+      // likes
+      like: 'I’m interested', liked: 'Interested ✓', mutual: 'You like each other',
+      likes_h: 'Likes', who_likes_me: 'Who likes me', i_like: 'People I like',
+      likes_count: 'members like you.', likes_upgrade: 'Upgrade to see who they are.',
+      no_likes: 'Nobody yet. A complete profile with good photos gets more likes.',
+      no_i_like: 'You haven’t liked anyone yet. Open a profile and press “I’m interested”.',
+      // translation
+      translate: 'Translate', original: 'Show original', translating: 'Translating…',
+      translate_failed: 'Translation is not available right now.'
     },
     es: {
       setup: 'El registro de miembros se está configurando. Para unirte ahora, llama o escribe a Sam al 832-385-4161.',
@@ -117,7 +133,20 @@ window.App = (function () {
       r_unavailable: 'Este miembro no está disponible para mensajes.',
       r_limit: 'Los miembros gratis pueden enviar un mensaje por semana. Mejora tu plan para mensajes ilimitados.',
       choose: 'Elegir', current: 'Tu plan actual', login_first: 'Primero entra o crea una cuenta.',
-      already: 'Ya tienes una membresía activa.'
+      already: 'Ya tienes una membresía activa.',
+      details_h: 'Sobre mí', height: 'Estatura (cm)', has_children: 'Hijos', wants_children: 'Quiere hijos',
+      religion: 'Religión', english: 'Inglés', looking_for: 'Busca', any: 'Cualquiera', choose_one: 'Elige…',
+      verified: 'Verificado', verified_note: 'Sam comprobó que esta persona es real.',
+      get_verified: 'Obtén la insignia de Verificado: envía a Sam una selfie sosteniendo un papel con la fecha de hoy y tu nombre, por WhatsApp o correo. Los perfiles verificados reciben más respuestas.',
+      online: 'En línea', today: 'Activo hoy', week: 'Activo esta semana',
+      mark_verified: 'Marcar como verificado', unmark_verified: 'Quitar verificado',
+      like: 'Me interesa', liked: 'Te interesa ✓', mutual: 'Se gustan mutuamente',
+      likes_h: 'Me gusta', who_likes_me: 'A quién le gustas', i_like: 'Personas que me gustan',
+      likes_count: 'miembros están interesados en ti.', likes_upgrade: 'Mejora tu plan para ver quiénes son.',
+      no_likes: 'Nadie todavía. Un perfil completo con buenas fotos recibe más interés.',
+      no_i_like: 'Todavía no has marcado a nadie. Abre un perfil y pulsa «Me interesa».',
+      translate: 'Traducir', original: 'Ver original', translating: 'Traduciendo…',
+      translate_failed: 'La traducción no está disponible ahora.'
     }
   };
   var lang = localStorage.getItem('ill_lang') ||
@@ -179,6 +208,57 @@ window.App = (function () {
     (r.data || []).forEach(function (d) { if (d.signedUrl) out[d.path] = d.signedUrl; });
     return out;
   }
+  /* ---------- profile detail labels ---------- */
+  var OPTS = {
+    has_children: { no: ['No children', 'Sin hijos'], yes_home: ['Has children, living at home', 'Tiene hijos que viven en casa'], yes_away: ['Has children, not at home', 'Tiene hijos que no viven en casa'] },
+    wants_children: { yes: ['Wants children', 'Quiere hijos'], no: ['Doesn’t want children', 'No quiere hijos'], maybe: ['Maybe wants children', 'Tal vez quiere hijos'] },
+    religion: { catholic: ['Catholic', 'Católica'], christian: ['Christian', 'Cristiana'], other: ['Other religion', 'Otra religión'], none: ['Not religious', 'No religiosa'] },
+    english: { none: ['No English', 'No habla inglés'], basic: ['Basic English', 'Inglés básico'], conversational: ['Conversational English', 'Inglés conversacional'], fluent: ['Fluent English', 'Inglés fluido'], native: ['Native English', 'Inglés nativo'] },
+    looking_for: { dating: ['Dating', 'Citas'], serious: ['A serious relationship', 'Una relación seria'], marriage: ['Marriage', 'Matrimonio'], friendship: ['Friendship', 'Amistad'] }
+  };
+  function opt(field, value) {
+    var o = OPTS[field] && OPTS[field][value];
+    return o ? o[lang === 'es' ? 1 : 0] : '';
+  }
+  // <option> list for a select, with a blank first choice.
+  function options(field, blankKey) {
+    return '<option value="">' + esc(t(blankKey || 'choose_one')) + '</option>' +
+      Object.keys(OPTS[field]).map(function (k) { return '<option value="' + k + '">' + esc(opt(field, k)) + '</option>'; }).join('');
+  }
+  function badges(p) {
+    return (p.verified ? '<span class="badge-verified" title="' + esc(t('verified_note')) + '">✓ ' + esc(t('verified')) + '</span>' : '') +
+      (p.activity ? '<span class="activity activity-' + esc(p.activity) + '">' + esc(t(p.activity)) + '</span>' : '');
+  }
+  function heightText(cm) {
+    if (!cm) return '';
+    var inches = Math.round(cm / 2.54);
+    return cm + ' cm (' + Math.floor(inches / 12) + '′' + (inches % 12) + '″)';
+  }
+  // The profile facts as a list, skipping anything not filled in.
+  function facts(p) {
+    var rows = [];
+    if (p.looking_for) rows.push([t('looking_for'), opt('looking_for', p.looking_for)]);
+    if (p.height_cm) rows.push([t('height').replace(' (cm)', ''), heightText(p.height_cm)]);
+    if (p.english) rows.push([t('english'), opt('english', p.english)]);
+    if (p.has_children) rows.push([t('has_children'), opt('has_children', p.has_children)]);
+    if (p.wants_children) rows.push([t('wants_children'), opt('wants_children', p.wants_children)]);
+    if (p.religion) rows.push([t('religion'), opt('religion', p.religion)]);
+    return rows.length ? '<dl class="facts">' + rows.map(function (r) {
+      return '<div><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>';
+    }).join('') + '</dl>' : '';
+  }
+
+  /* ---------- "last active": at most once every 2 minutes ---------- */
+  async function touch() {
+    try {
+      var last = +sessionStorage.getItem('ill_seen') || 0;
+      if (Date.now() - last < 120000) return;
+      if (!(await user())) return;
+      sessionStorage.setItem('ill_seen', Date.now());
+      await sb.rpc('touch_last_seen');
+    } catch (e) { /* not important enough to show */ }
+  }
+
   function start(fn) {
     document.documentElement.lang = lang;
     translate();
@@ -190,12 +270,14 @@ window.App = (function () {
       else if (root) root.innerHTML = '<p class="notice">' + esc(t('setup')) + '</p>';
       return;
     }
+    touch();
     Promise.resolve(fn()).catch(function (e) {
       console.error(e);
       if (root) root.insertAdjacentHTML('afterbegin', '<p class="form-status error">' + esc(e.message || e) + '</p>');
     });
   }
 
-  return { sb: sb, ready: ready, recovery: recovery, t: t, translate: translate, esc: esc, say: say, lang: function () { return lang; },
+  return { opt: opt, options: options, badges: badges, facts: facts, heightText: heightText,
+    sb: sb, ready: ready, recovery: recovery, t: t, translate: translate, esc: esc, say: say, lang: function () { return lang; },
     user: user, requireUser: requireUser, myProfile: myProfile, signed: signed, start: start };
 })();
