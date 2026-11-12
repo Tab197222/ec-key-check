@@ -1,8 +1,10 @@
 // Emails the owner when a member submits a profile for approval.
-// Optional. Without RESEND_API_KEY it does nothing and approvals still work from admin.html.
+// Optional. Without an email sender set up it does nothing; approvals still work from admin.html.
 // Turn OFF "Verify JWT" for this function: it checks the member's login itself.
-// Secrets needed: RESEND_API_KEY, ADMIN_EMAIL (one address, or several separated by commas), SITE_URL. Optional: EMAIL_FROM
+// Secrets needed: ADMIN_EMAIL (one address, or several separated by commas), SITE_URL,
+// and either GMAIL_USER + GMAIL_APP_PASSWORD, or RESEND_API_KEY + EMAIL_FROM
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { mailReady, sendMail } from '../_shared/mail.ts';
 
 // Server key: the new secret key if the project has one, otherwise the legacy service role key.
 function serverKey() {
@@ -36,27 +38,18 @@ Deno.serve(async (req) => {
     const { data: { user } } = token ? await admin.auth.getUser(token) : { data: { user: null } };
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
-    const key = setting('RESEND_API_KEY');
     const to = setting('ADMIN_EMAIL');
-    if (!key || !to) return json({ sent: false });
+    if (!mailReady() || !to) return json({ sent: false });
 
     const { data: p } = await admin.from('profiles')
       .select('first_name, gender, city, country, status').eq('id', user.id).maybeSingle();
     if (!p || p.status !== 'pending') return json({ sent: false });
 
     const site = (setting('SITE_URL')).replace(/\/$/, '');
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: Deno.env.get('EMAIL_FROM') ?? 'iLoveLatins <onboarding@resend.dev>',
-        to: to.split(',').map((x) => x.trim()).filter(Boolean),
-        subject: `New profile to approve: ${p.first_name}`,
-        html: `<p>${esc(p.first_name)} (${esc(p.gender)}, ${esc(p.city)}, ${esc(p.country)}) has submitted a profile.</p>
-               <p><a href="${site}/admin.html">Open the approvals page</a> to approve or reject it.</p>`,
-      }),
-    });
-    return json({ sent: res.ok });
+    const sent = await sendMail(to.split(',').map((x) => x.trim()).filter(Boolean), `New profile to approve: ${p.first_name}`,
+      `<p>${esc(p.first_name)} (${esc(p.gender)}, ${esc(p.city)}, ${esc(p.country)}) has submitted a profile.</p>
+               <p><a href="${site}/admin.html">Open the approvals page</a> to approve or reject it.</p>`);
+    return json({ sent });
   } catch (e) {
     return json({ error: String(e) }, 500);
   }

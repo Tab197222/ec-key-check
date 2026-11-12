@@ -2,8 +2,9 @@
 // Skips the email when the member is on the site right now, or when they already
 // have an unread message from the same person in the last hour (one alert, not ten).
 // Turn OFF "Verify JWT" for this function: it checks the member's login itself.
-// Secrets needed: RESEND_API_KEY, SITE_URL, EMAIL_FROM (an address on a domain verified in Resend)
+// Secrets needed: SITE_URL, and either GMAIL_USER + GMAIL_APP_PASSWORD, or RESEND_API_KEY + EMAIL_FROM
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { mailReady, sendMail } from '../_shared/mail.ts';
 
 // Server key: the new secret key if the project has one, otherwise the legacy service role key.
 function serverKey() {
@@ -34,9 +35,7 @@ Deno.serve(async (req) => {
     const { data: { user } } = token ? await admin.auth.getUser(token) : { data: { user: null } };
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
-    const key = setting('RESEND_API_KEY');
-    const from = setting('EMAIL_FROM');
-    if (!key || !from) return json({ sent: false, reason: 'email not set up' });
+    if (!mailReady()) return json({ sent: false, reason: 'email not set up' });
 
     const { message_id } = await req.json();
     const { data: msg } = await admin.from('messages').select('*').eq('id', message_id).maybeSingle();
@@ -62,21 +61,13 @@ Deno.serve(async (req) => {
     const site = setting('SITE_URL').replace(/\/$/, '');
     const link = `${site}/messages.html?to=${encodeURIComponent(user.id)}`;
     const name = esc(me.first_name);
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from,
-        to: [recipient.email],
-        subject: `${me.first_name} te envió un mensaje / sent you a message`,
-        html: `<p>Hola ${esc(to.first_name)},</p>
+    const sent = await sendMail([recipient.email], `${me.first_name} te envió un mensaje / sent you a message`,
+      `<p>Hola ${esc(to.first_name)},</p>
 <p><strong>${name}</strong> te envió un mensaje en iLoveLatins.<br>
 <strong>${name}</strong> sent you a message on iLoveLatins.</p>
 <p><a href="${link}" style="display:inline-block;background:#c81e82;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">Leer y responder / Read and reply</a></p>
-<p style="color:#666;font-size:13px">iLoveLatins nunca te pedirá dinero por correo. / iLoveLatins will never ask you for money by email.</p>`,
-      }),
-    });
-    return json({ sent: res.ok });
+<p style="color:#666;font-size:13px">iLoveLatins nunca te pedirá dinero por correo. / iLoveLatins will never ask you for money by email.</p>`);
+    return json({ sent });
   } catch (e) {
     return json({ error: String(e) }, 500);
   }
