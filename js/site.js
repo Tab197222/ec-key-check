@@ -246,17 +246,24 @@
         var data = new FormData(form);
         data.append('_subject', subject);
         out.textContent = es() ? 'Enviando…' : 'Sending…';
+        var btn = form.querySelector('button[type=submit]');
+        btn.disabled = true;
         fetch(D.formEndpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
           .then(function (r) {
-            if (!r.ok) throw new Error();
+            btn.disabled = false;
+            if (!r.ok) {
+              return r.json().catch(function () { return {}; }).then(function (d) { throw new Error(d.error || ''); });
+            }
             form.reset();
             out.textContent = es()
               ? 'Enviado. Sam te responderá pronto.'
               : 'Sent. Sam will reply by phone or email.';
           })
-          .catch(function () {
+          .catch(function (err) {
+            btn.disabled = false;
             out.className = 'form-status error';
-            out.textContent = (es() ? 'No se pudo enviar. Escribe o llama a Sam: ' : 'That did not send. Call or text Sam instead: ') + C.phoneDisplay + '.';
+            out.textContent = (err && err.message ? err.message + ' ' : '') +
+              (es() ? 'También puedes escribir o llamar a Sam: ' : 'You can also call or text Sam: ') + C.phoneDisplay + '.';
           });
       } else {
         location.href = 'mailto:' + C.email + '?subject=' + encodeURIComponent(subject) +

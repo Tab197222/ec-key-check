@@ -12,7 +12,7 @@ export function mailReady() {
     (setting('RESEND_API_KEY') && setting('EMAIL_FROM')));
 }
 
-export async function sendMail(to: string[], subject: string, html: string): Promise<boolean> {
+export async function sendMail(to: string[], subject: string, html: string, replyTo?: string): Promise<boolean> {
   const gmailUser = setting('GMAIL_USER');
   const gmailPass = setting('GMAIL_APP_PASSWORD').replace(/\s+/g, '');
   if (gmailUser && gmailPass) {
@@ -21,7 +21,7 @@ export async function sendMail(to: string[], subject: string, html: string): Pro
       host: 'smtp.gmail.com', port: 465, secure: true,
       auth: { user: gmailUser, pass: gmailPass },
     });
-    await transport.sendMail({ from: `iLoveLatins <${gmailUser}>`, to: to.join(', '), subject, html });
+    await transport.sendMail({ from: `iLoveLatins <${gmailUser}>`, to: to.join(', '), subject, html, ...(replyTo ? { replyTo } : {}) });
     return true;
   }
   const key = setting('RESEND_API_KEY');
@@ -30,7 +30,7 @@ export async function sendMail(to: string[], subject: string, html: string): Pro
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from, to, subject, html }),
+    body: JSON.stringify({ from, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
   });
   return res.ok;
 }

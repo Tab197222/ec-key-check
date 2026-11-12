@@ -13,10 +13,10 @@ window.ILL = {
     hours: 'Mon–Fri, 9am–6pm Central'
   },
 
-  // Where the forms are delivered. Paste a form service URL here
-  // (for example a Formspree endpoint). While it is empty, each form
-  // opens the visitor's email app with the message already written.
-  formEndpoint: '',
+  // Where the contact form is delivered: the site's own contact-message function,
+  // which emails it to the owners. If this is emptied, the form opens the
+  // visitor's email app with the message already written instead.
+  formEndpoint: 'https://fdhntvzctkdojldxduan.supabase.co/functions/v1/contact-message',
 
   deposit: 250,
 
