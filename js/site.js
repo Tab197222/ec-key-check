@@ -112,7 +112,7 @@
     if (st === 'open') {
       var href = t.depositLink || ('tours.html?tour=' + encodeURIComponent(t.id) + '#reserve');
       stub =
-        '<div class="ticket-deposit">$' + D.deposit + '<small>deposit holds your place</small></div>' +
+        '<div class="ticket-deposit">$' + D.deposit + '<small>non-refundable deposit holds your place</small></div>' +
         '<a class="btn" href="' + esc(href) + '">' + (t.depositLink ? 'Pay deposit' : 'Reserve') + '</a>';
     } else {
       stub =
