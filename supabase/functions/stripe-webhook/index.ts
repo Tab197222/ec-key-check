@@ -9,9 +9,23 @@ function serverKey() {
   try {
     const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
     const k = keys.default ?? Object.values(keys)[0];
-    if (k) return k as string;
+    if (typeof k === 'string' && k.trim()) return k.trim();
   } catch (_) { /* fall through */ }
-  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+  return (Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '').trim();
+}
+
+// A setting, with stray spaces and line breaks removed.
+function setting(name: string) {
+  return (Deno.env.get(name) ?? '').trim();
+}
+
+// The Stripe secret key, checked for the usual copy-and-paste mistakes.
+function stripeKey() {
+  const k = setting('STRIPE_SECRET_KEY');
+  if (!/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/.test(k)) {
+    throw new Error('STRIPE_SECRET_KEY in Supabase is not a complete Stripe secret key. Copy it again from Stripe (Developers > API keys > Secret key > Reveal) and save it again.');
+  }
+  return k;
 }
 
 const admin = createClient(Deno.env.get('SUPABASE_URL')!, serverKey());
@@ -29,7 +43,7 @@ async function signatureIsValid(body: string, header: string | null) {
   if (!t || !sent.length) return false;
   if (Math.abs(Date.now() / 1000 - Number(t)) > 300) return false;
   const key = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(Deno.env.get('STRIPE_WEBHOOK_SECRET')!),
+    'raw', new TextEncoder().encode(setting('STRIPE_WEBHOOK_SECRET')),
     { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
   );
   const expected = hex(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(`${t}.${body}`)));
@@ -43,7 +57,7 @@ async function signatureIsValid(body: string, header: string | null) {
 
 async function stripeGet(path: string) {
   const res = await fetch(`https://api.stripe.com/v1/${path}`, {
-    headers: { Authorization: `Bearer ${Deno.env.get('STRIPE_SECRET_KEY')}` },
+    headers: { Authorization: `Bearer ${stripeKey()}` },
   });
   if (!res.ok) throw new Error(`Stripe ${path}: ${res.status}`);
   return res.json();
@@ -63,8 +77,8 @@ async function saveSubscription(sub: any, userId?: string) {
   const end = sub.current_period_end ?? item?.current_period_end;
   // The settings may hold either a price ID (price_…) or a product ID (prod_…).
   const ids = [item?.price?.id, typeof item?.price?.product === 'string' ? item.price.product : item?.price?.product?.id];
-  const plan = ids.includes(Deno.env.get('STRIPE_PRICE_YEARLY')) ? 'yearly'
-    : ids.includes(Deno.env.get('STRIPE_PRICE_MONTHLY')) ? 'monthly' : null;
+  const plan = ids.includes(setting('STRIPE_PRICE_YEARLY')) ? 'yearly'
+    : ids.includes(setting('STRIPE_PRICE_MONTHLY')) ? 'monthly' : null;
 
   const { error } = await admin.from('subscriptions').upsert({
     user_id: uid,

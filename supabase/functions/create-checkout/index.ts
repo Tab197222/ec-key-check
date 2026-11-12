@@ -8,9 +8,23 @@ function serverKey() {
   try {
     const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
     const k = keys.default ?? Object.values(keys)[0];
-    if (k) return k as string;
+    if (typeof k === 'string' && k.trim()) return k.trim();
   } catch (_) { /* fall through */ }
-  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+  return (Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '').trim();
+}
+
+// A setting, with stray spaces and line breaks removed.
+function setting(name: string) {
+  return (Deno.env.get(name) ?? '').trim();
+}
+
+// The Stripe secret key, checked for the usual copy-and-paste mistakes.
+function stripeKey() {
+  const k = setting('STRIPE_SECRET_KEY');
+  if (!/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/.test(k)) {
+    throw new Error('STRIPE_SECRET_KEY in Supabase is not a complete Stripe secret key. Copy it again from Stripe (Developers > API keys > Secret key > Reveal) and save it again.');
+  }
+  return k;
 }
 
 const cors = {
@@ -29,13 +43,13 @@ Deno.serve(async (req) => {
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
     const { plan } = await req.json();
-    let price = plan === 'yearly' ? Deno.env.get('STRIPE_PRICE_YEARLY') : Deno.env.get('STRIPE_PRICE_MONTHLY');
-    const site = (Deno.env.get('SITE_URL') ?? '').replace(/\/$/, '');
+    let price = plan === 'yearly' ? setting('STRIPE_PRICE_YEARLY') : setting('STRIPE_PRICE_MONTHLY');
+    const site = (setting('SITE_URL')).replace(/\/$/, '');
     if (!price || !site) return json({ error: 'Payments are not set up yet.' }, 500);
     // A product ID (prod_…) also works: use that product's default price.
     if (price.startsWith('prod_')) {
       const r = await fetch(`https://api.stripe.com/v1/products/${price}`, {
-        headers: { Authorization: `Bearer ${Deno.env.get('STRIPE_SECRET_KEY')}` },
+        headers: { Authorization: `Bearer ${stripeKey()}` },
       });
       const product = await r.json();
       price = typeof product.default_price === 'string' ? product.default_price : product.default_price?.id;
@@ -63,7 +77,7 @@ Deno.serve(async (req) => {
     const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${Deno.env.get('STRIPE_SECRET_KEY')}`,
+        Authorization: `Bearer ${stripeKey()}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: params,

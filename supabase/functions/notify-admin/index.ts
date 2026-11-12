@@ -9,10 +9,16 @@ function serverKey() {
   try {
     const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
     const k = keys.default ?? Object.values(keys)[0];
-    if (k) return k as string;
+    if (typeof k === 'string' && k.trim()) return k.trim();
   } catch (_) { /* fall through */ }
-  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+  return (Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '').trim();
 }
+
+// A setting, with stray spaces and line breaks removed.
+function setting(name: string) {
+  return (Deno.env.get(name) ?? '').trim();
+}
+
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -30,15 +36,15 @@ Deno.serve(async (req) => {
     const { data: { user } } = token ? await admin.auth.getUser(token) : { data: { user: null } };
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
-    const key = Deno.env.get('RESEND_API_KEY');
-    const to = Deno.env.get('ADMIN_EMAIL');
+    const key = setting('RESEND_API_KEY');
+    const to = setting('ADMIN_EMAIL');
     if (!key || !to) return json({ sent: false });
 
     const { data: p } = await admin.from('profiles')
       .select('first_name, gender, city, country, status').eq('id', user.id).maybeSingle();
     if (!p || p.status !== 'pending') return json({ sent: false });
 
-    const site = (Deno.env.get('SITE_URL') ?? '').replace(/\/$/, '');
+    const site = (setting('SITE_URL')).replace(/\/$/, '');
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },

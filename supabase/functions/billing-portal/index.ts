@@ -8,9 +8,23 @@ function serverKey() {
   try {
     const keys = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}');
     const k = keys.default ?? Object.values(keys)[0];
-    if (k) return k as string;
+    if (typeof k === 'string' && k.trim()) return k.trim();
   } catch (_) { /* fall through */ }
-  return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+  return (Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '').trim();
+}
+
+// A setting, with stray spaces and line breaks removed.
+function setting(name: string) {
+  return (Deno.env.get(name) ?? '').trim();
+}
+
+// The Stripe secret key, checked for the usual copy-and-paste mistakes.
+function stripeKey() {
+  const k = setting('STRIPE_SECRET_KEY');
+  if (!/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/.test(k)) {
+    throw new Error('STRIPE_SECRET_KEY in Supabase is not a complete Stripe secret key. Copy it again from Stripe (Developers > API keys > Secret key > Reveal) and save it again.');
+  }
+  return k;
 }
 
 const cors = {
@@ -32,11 +46,11 @@ Deno.serve(async (req) => {
       .select('stripe_customer_id').eq('user_id', user.id).maybeSingle();
     if (!sub?.stripe_customer_id) return json({ error: 'No membership found for this account.' }, 404);
 
-    const site = (Deno.env.get('SITE_URL') ?? '').replace(/\/$/, '');
+    const site = (setting('SITE_URL')).replace(/\/$/, '');
     const res = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${Deno.env.get('STRIPE_SECRET_KEY')}`,
+        Authorization: `Bearer ${stripeKey()}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({ customer: sub.stripe_customer_id, return_url: `${site}/account.html` }),
