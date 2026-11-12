@@ -1,0 +1,197 @@
+/* Shared code for the member pages: connection, language, small helpers. */
+window.App = (function () {
+  var cfg = window.ILL_CONFIG || {};
+  var ready = !!(cfg.supabaseUrl && cfg.supabaseKey && window.supabase);
+  var sb = ready ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey) : null;
+
+  /* ---------- language ---------- */
+  var STR = {
+    en: {
+      setup: 'Member sign-up is being set up. To join now, call or text Sam at 832-385-4161.',
+      lang: 'Español',
+      loading: 'Loading…',
+      // join
+      tab_signup: 'Create account', tab_login: 'Log in',
+      email: 'Email', password: 'Password', password_hint: 'At least 8 characters.',
+      adult: 'I am 18 or over, and I will only upload photos and videos of myself.',
+      signup_btn: 'Create my account', login_btn: 'Log in', forgot: 'Forgot your password?',
+      check_email: 'Check your email and press the confirmation link to finish creating your account.',
+      reset_sent: 'If that email has an account, a reset link is on its way.',
+      need_email: 'Type your email above first.',
+      // account
+      st_none: 'Fill in your profile below to get started.',
+      st_draft: 'Your profile is a draft. Add at least one photo, then send it for approval.',
+      st_pending: 'Your profile is waiting for approval. You will be able to browse and message once it is approved.',
+      st_approved: 'Your profile is live.',
+      st_rejected: 'Your profile was not approved. Update it and send it again, or contact Sam.',
+      profile_h: 'Your profile', i_am: 'I am', man: 'A man', woman: 'A woman',
+      first_name: 'First name', birthdate: 'Date of birth', city: 'City', country: 'Country',
+      about: 'About you, and who you hope to meet', save: 'Save profile', saved: 'Saved.',
+      locked: 'To change these after sending your profile, contact Sam.',
+      media_h: 'Photos and videos',
+      media_hint: 'Up to 8 photos (JPG, PNG or WebP, 10 MB each) and 2 videos (MP4, MOV or WebM, 50 MB each). Each one is checked before other members see it.',
+      add_photo: 'Add photos', add_video: 'Add a video', uploading: 'Uploading',
+      main: 'Main photo', make_main: 'Make main', remove: 'Remove', waiting: 'Waiting for approval',
+      too_big: 'is too large.', bad_type: 'is not a supported file type.',
+      submit: 'Send my profile for approval', submitted: 'Sent. You will hear back soon.',
+      member_h: 'Membership',
+      free_woman: 'Membership is free for women. You have full access.',
+      plan_free: 'You are on the free plan: one message a week.',
+      plan_active: 'Your membership is active until',
+      plan_ended: 'Your membership has ended.',
+      upgrade: 'See membership plans', billing: 'Manage billing or cancel',
+      paid_thanks: 'Thank you. Your membership will show here within a minute.',
+      logout: 'Log out', delete: 'Delete my account',
+      delete_confirm: 'Delete your account, profile, photos, videos and messages for good?',
+      delete_sub: 'Cancel your membership first with "Manage billing or cancel", then delete your account.',
+      new_password: 'Choose a new password', set_password: 'Save new password',
+      // members
+      show: 'Show', women: 'Women', men: 'Men', city_filter: 'City', any_age: 'Any age',
+      none_yet: 'No profiles to show here yet. Approved profiles appear on this page.',
+      join_free: 'Join free', login_to_view: 'Log in to see full profiles and send messages.',
+      need_approval: 'Full profiles open once your own profile is approved.',
+      not_found: 'This profile is not available.',
+      message: 'Send a message', report: 'Report', block: 'Block',
+      report_prompt: 'What is wrong with this profile?', reported: 'Reported. Thank you.',
+      block_confirm: 'Block this member? You will no longer be able to message each other.', blocked: 'Blocked.',
+      // messages
+      no_convos: 'No conversations yet. Open a profile and send a message.',
+      write: 'Write a message', send: 'Send',
+      r_not_approved: 'You can message once your profile is approved.',
+      r_unavailable: 'This member is not available for messages.',
+      r_limit: 'Free members can send one message a week. Upgrade for unlimited messages.',
+      // membership
+      choose: 'Choose', current: 'Your current plan', login_first: 'Log in or create an account first.',
+      already: 'You already have an active membership.'
+    },
+    es: {
+      setup: 'El registro de miembros se está configurando. Para unirte ahora, llama o escribe a Sam al 832-385-4161.',
+      lang: 'English',
+      loading: 'Cargando…',
+      tab_signup: 'Crear cuenta', tab_login: 'Entrar',
+      email: 'Correo electrónico', password: 'Contraseña', password_hint: 'Mínimo 8 caracteres.',
+      adult: 'Tengo 18 años o más y solo subiré fotos y videos míos.',
+      signup_btn: 'Crear mi cuenta', login_btn: 'Entrar', forgot: '¿Olvidaste tu contraseña?',
+      check_email: 'Revisa tu correo y pulsa el enlace de confirmación para terminar de crear tu cuenta.',
+      reset_sent: 'Si ese correo tiene una cuenta, el enlace para cambiar la contraseña va en camino.',
+      need_email: 'Escribe primero tu correo arriba.',
+      st_none: 'Completa tu perfil para empezar.',
+      st_draft: 'Tu perfil es un borrador. Agrega al menos una foto y envíalo para aprobación.',
+      st_pending: 'Tu perfil está esperando aprobación. Podrás ver perfiles y enviar mensajes cuando sea aprobado.',
+      st_approved: 'Tu perfil está publicado.',
+      st_rejected: 'Tu perfil no fue aprobado. Actualízalo y envíalo de nuevo, o contacta a Sam.',
+      profile_h: 'Tu perfil', i_am: 'Soy', man: 'Hombre', woman: 'Mujer',
+      first_name: 'Nombre', birthdate: 'Fecha de nacimiento', city: 'Ciudad', country: 'País',
+      about: 'Cuéntanos de ti y a quién te gustaría conocer', save: 'Guardar perfil', saved: 'Guardado.',
+      locked: 'Para cambiar estos datos después de enviar tu perfil, contacta a Sam.',
+      media_h: 'Fotos y videos',
+      media_hint: 'Hasta 8 fotos (JPG, PNG o WebP, 10 MB cada una) y 2 videos (MP4, MOV o WebM, 50 MB cada uno). Revisamos cada archivo antes de que otros miembros lo vean.',
+      add_photo: 'Agregar fotos', add_video: 'Agregar un video', uploading: 'Subiendo',
+      main: 'Foto principal', make_main: 'Hacer principal', remove: 'Quitar', waiting: 'Esperando aprobación',
+      too_big: 'es demasiado grande.', bad_type: 'no es un tipo de archivo permitido.',
+      submit: 'Enviar mi perfil para aprobación', submitted: 'Enviado. Pronto tendrás respuesta.',
+      member_h: 'Membresía',
+      free_woman: 'La membresía es gratis para mujeres. Tienes acceso completo.',
+      plan_free: 'Tienes el plan gratis: un mensaje por semana.',
+      plan_active: 'Tu membresía está activa hasta',
+      plan_ended: 'Tu membresía terminó.',
+      upgrade: 'Ver planes de membresía', billing: 'Administrar pago o cancelar',
+      paid_thanks: 'Gracias. Tu membresía aparecerá aquí en un minuto.',
+      logout: 'Salir', delete: 'Eliminar mi cuenta',
+      delete_confirm: '¿Eliminar para siempre tu cuenta, perfil, fotos, videos y mensajes?',
+      delete_sub: 'Primero cancela tu membresía en "Administrar pago o cancelar" y luego elimina tu cuenta.',
+      new_password: 'Elige una contraseña nueva', set_password: 'Guardar contraseña',
+      show: 'Mostrar', women: 'Mujeres', men: 'Hombres', city_filter: 'Ciudad', any_age: 'Cualquier edad',
+      none_yet: 'Todavía no hay perfiles aquí. Los perfiles aprobados aparecen en esta página.',
+      join_free: 'Unirme gratis', login_to_view: 'Entra para ver perfiles completos y enviar mensajes.',
+      need_approval: 'Los perfiles completos se abren cuando tu propio perfil sea aprobado.',
+      not_found: 'Este perfil no está disponible.',
+      message: 'Enviar mensaje', report: 'Reportar', block: 'Bloquear',
+      report_prompt: '¿Qué problema tiene este perfil?', reported: 'Reportado. Gracias.',
+      block_confirm: '¿Bloquear a este miembro? Ya no podrán enviarse mensajes.', blocked: 'Bloqueado.',
+      no_convos: 'Todavía no tienes conversaciones. Abre un perfil y envía un mensaje.',
+      write: 'Escribe un mensaje', send: 'Enviar',
+      r_not_approved: 'Podrás enviar mensajes cuando tu perfil sea aprobado.',
+      r_unavailable: 'Este miembro no está disponible para mensajes.',
+      r_limit: 'Los miembros gratis pueden enviar un mensaje por semana. Mejora tu plan para mensajes ilimitados.',
+      choose: 'Elegir', current: 'Tu plan actual', login_first: 'Primero entra o crea una cuenta.',
+      already: 'Ya tienes una membresía activa.'
+    }
+  };
+  var lang = localStorage.getItem('ill_lang') ||
+    ((navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
+  if (new URLSearchParams(location.search).get('soy') === 'mujer') lang = 'es';
+
+  function t(key) { return STR[lang][key] || STR.en[key] || key; }
+  function translate(root) {
+    (root || document).querySelectorAll('[data-i18n]').forEach(function (el) {
+      el.textContent = t(el.getAttribute('data-i18n'));
+    });
+    (root || document).querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+      el.placeholder = t(el.getAttribute('data-i18n-ph'));
+    });
+  }
+  function langButton() {
+    var b = document.querySelector('[data-lang-toggle]');
+    if (!b) return;
+    b.textContent = t('lang');
+    b.addEventListener('click', function () {
+      localStorage.setItem('ill_lang', lang === 'es' ? 'en' : 'es');
+      var u = new URL(location.href); u.searchParams.delete('soy'); location.href = u.toString();
+    });
+  }
+
+  /* ---------- helpers ---------- */
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function say(el, text, isError) {
+    if (!el) return;
+    el.className = 'form-status' + (isError ? ' error' : '');
+    el.textContent = text || '';
+  }
+  async function user() {
+    var r = await sb.auth.getSession();
+    return r.data.session ? r.data.session.user : null;
+  }
+  async function requireUser() {
+    var u = await user();
+    if (!u) {
+      location.replace('join.html?next=' + encodeURIComponent(location.pathname.split('/').pop() + location.search));
+      return new Promise(function () {}); // never resolves: the page is navigating away
+    }
+    return u;
+  }
+  async function myProfile(uid) {
+    var r = await sb.from('profiles').select('*').eq('id', uid).maybeSingle();
+    return r.data;
+  }
+  // Turns stored file paths into temporary viewable links.
+  async function signed(paths) {
+    var out = {};
+    paths = paths.filter(Boolean);
+    if (!paths.length) return out;
+    var r = await sb.storage.from('media').createSignedUrls(paths, 3600);
+    (r.data || []).forEach(function (d) { if (d.signedUrl) out[d.path] = d.signedUrl; });
+    return out;
+  }
+  function start(fn) {
+    document.documentElement.lang = lang;
+    translate();
+    langButton();
+    var root = document.querySelector('[data-app]');
+    if (!ready) {
+      if (root) root.innerHTML = '<p class="notice">' + esc(t('setup')) + '</p>';
+      return;
+    }
+    Promise.resolve(fn()).catch(function (e) {
+      console.error(e);
+      if (root) root.insertAdjacentHTML('afterbegin', '<p class="form-status error">' + esc(e.message || e) + '</p>');
+    });
+  }
+
+  return { sb: sb, ready: ready, t: t, translate: translate, esc: esc, say: say, lang: function () { return lang; },
+    user: user, requireUser: requireUser, myProfile: myProfile, signed: signed, start: start };
+})();

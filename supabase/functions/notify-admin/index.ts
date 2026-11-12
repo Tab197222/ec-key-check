@@ -1,0 +1,49 @@
+// Emails the owner when a member submits a profile for approval.
+// Optional. Without RESEND_API_KEY it does nothing and approvals still work from admin.html.
+// Secrets needed: RESEND_API_KEY, ADMIN_EMAIL, SITE_URL. Optional: EMAIL_FROM
+import { createClient } from 'npm:@supabase/supabase-js@2';
+
+const cors = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } });
+const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
+  try {
+    const url = Deno.env.get('SUPABASE_URL')!;
+    const asUser = createClient(url, Deno.env.get('SUPABASE_ANON_KEY')!, {
+      global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } },
+    });
+    const { data: { user } } = await asUser.auth.getUser();
+    if (!user) return json({ error: 'Please log in first.' }, 401);
+
+    const key = Deno.env.get('RESEND_API_KEY');
+    const to = Deno.env.get('ADMIN_EMAIL');
+    if (!key || !to) return json({ sent: false });
+
+    const admin = createClient(url, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const { data: p } = await admin.from('profiles')
+      .select('first_name, gender, city, country, status').eq('id', user.id).maybeSingle();
+    if (!p || p.status !== 'pending') return json({ sent: false });
+
+    const site = (Deno.env.get('SITE_URL') ?? '').replace(/\/$/, '');
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: Deno.env.get('EMAIL_FROM') ?? 'iLoveLatins <onboarding@resend.dev>',
+        to: [to],
+        subject: `New profile to approve: ${p.first_name}`,
+        html: `<p>${esc(p.first_name)} (${esc(p.gender)}, ${esc(p.city)}, ${esc(p.country)}) has submitted a profile.</p>
+               <p><a href="${site}/admin.html">Open the approvals page</a> to approve or reject it.</p>`,
+      }),
+    });
+    return json({ sent: res.ok });
+  } catch (e) {
+    return json({ error: String(e) }, 500);
+  }
+});
