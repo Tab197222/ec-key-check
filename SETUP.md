@@ -23,7 +23,7 @@ part in live mode.
    **anon / publishable key**. Paste them into `js/config.js`, or send them to
    Claude to do it. Both are safe to publish.
 
-5. Also run `supabase/002_dating_features.sql`, then `supabase/003_tour_deposits.sql`, the same way. It adds profile
+5. Also run `supabase/002_dating_features.sql`, then `supabase/003_tour_deposits.sql` and `supabase/004_contact_messages.sql`, the same way. It adds profile
    details, the Verified badge, last active and likes.
 
 ## 2. Make yourself the site owner
@@ -62,6 +62,7 @@ part in live mode.
    - `notify-admin`
    - `notify-message` (emails members about new messages)
    - `create-deposit` (the $250 tour deposit by card)
+   - `contact-message` (emails contact form messages to the owners)
 
    For all four, turn **off** "Verify JWT" (also called "Enforce JWT
    verification"). Each function checks the login itself, and Stripe's calls
