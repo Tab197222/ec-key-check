@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
     const { data: msg } = await admin.from('messages').select('*').eq('id', message_id).maybeSingle();
     if (!msg || msg.sender !== user.id) return json({ sent: false, reason: 'not your message' });
 
-    const { data: to } = await admin.from('profiles').select('first_name, last_seen').eq('id', msg.recipient).maybeSingle();
+    const { data: to } = await admin.from('profiles').select('first_name, last_seen, gender').eq('id', msg.recipient).maybeSingle();
     const { data: me } = await admin.from('profiles').select('first_name').eq('id', user.id).maybeSingle();
     if (!to || !me) return json({ sent: false });
 
@@ -61,12 +61,20 @@ Deno.serve(async (req) => {
     const site = setting('SITE_URL').replace(/\/$/, '');
     const link = `${site}/messages.html?to=${encodeURIComponent(user.id)}`;
     const name = esc(me.first_name);
-    const sent = await sendMail([recipient.email], `${me.first_name} te envió un mensaje / sent you a message`,
-      `<p>Hola ${esc(to.first_name)},</p>
-<p><strong>${name}</strong> te envió un mensaje en iLoveLatins.<br>
-<strong>${name}</strong> sent you a message on iLoveLatins.</p>
-<p><a href="${link}" style="display:inline-block;background:#c81e82;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none">Leer y responder / Read and reply</a></p>
-<p style="color:#666;font-size:13px">iLoveLatins nunca te pedirá dinero por correo. / iLoveLatins will never ask you for money by email.</p>`);
+    // Men get the alert in English, women in Spanish.
+    const es = to.gender === 'woman';
+    const button = 'display:inline-block;background:#c81e82;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none';
+    const subject = es ? `${me.first_name} te envió un mensaje` : `${me.first_name} sent you a message`;
+    const html = es
+      ? `<p>Hola ${esc(to.first_name)},</p>
+<p><strong>${name}</strong> te envió un mensaje en iLoveLatins.</p>
+<p><a href="${link}" style="${button}">Leer y responder</a></p>
+<p style="color:#666;font-size:13px">iLoveLatins nunca te pedirá dinero por correo.</p>`
+      : `<p>Hi ${esc(to.first_name)},</p>
+<p><strong>${name}</strong> sent you a message on iLoveLatins.</p>
+<p><a href="${link}" style="${button}">Read and reply</a></p>
+<p style="color:#666;font-size:13px">iLoveLatins will never ask you for money by email.</p>`;
+    const sent = await sendMail([recipient.email], subject, html);
     return json({ sent });
   } catch (e) {
     return json({ error: String(e) }, 500);
