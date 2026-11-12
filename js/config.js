@@ -5,6 +5,6 @@
   While they are empty, the member pages show a "being set up" notice.
 */
 window.ILL_CONFIG = {
-  supabaseUrl: '',
-  supabaseKey: ''
+  supabaseUrl: 'https://fdhntvzctkdojldxduan.supabase.co',
+  supabaseKey: 'sb_publishable_PVHHl1T18HF3j0kgm94Jkw_alwORgIA'
 };
