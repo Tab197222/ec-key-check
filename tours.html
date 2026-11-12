@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tour dates and reservations | iLoveLatins</title>
+  <meta name="description" content="Upcoming iLoveLatins singles tours to Barranquilla and Colombia, what each one includes, and how to reserve with a $250 deposit.">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Tours to Colombia</h1>
+        <p class="lead">Each tour is a hosted week in Colombia with the hotel, a welcome dinner, the socials and a bilingual host arranged. A $250 deposit holds your place.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <h2>Upcoming dates</h2>
+        <p>Reservations close 30 days before each tour. After that, call or text Sam to ask about a late place.</p>
+        <div class="tickets" data-tours></div>
+      </div>
+    </section>
+
+    <section class="band band-wash">
+      <div class="wrap">
+        <h2>What every tour includes</h2>
+        <ul class="included">
+          <li><h3>Your hotel</h3><p>A vetted, centrally located hotel for the full length of the tour.</p></li>
+          <li><h3>A welcome dinner</h3><p>The first night, with the group and the host, before the socials begin.</p></li>
+          <li><h3>Two or three socials</h3><p>Organised evenings where you meet single local women face to face.</p></li>
+          <li><h3>A bilingual host</h3><p>An English and Spanish speaker with you at every event.</p></li>
+        </ul>
+        <p class="aside-note"><strong>Not included:</strong> your flight. Barranquilla’s airport code is BAQ. Ask Sam for the full package price for your dates before you send a deposit.</p>
+      </div>
+    </section>
+
+    <section class="band" id="reserve">
+      <div class="wrap split">
+        <div>
+          <h2>Reserve your place</h2>
+          <p class="lead">Send this request and Sam will reply with the package price for your tour and how to pay the $250 deposit.</p>
+          <p>Sending the request does not charge you anything.</p>
+          <p>Prefer to talk first? Call or text <a data-phone></a>.</p>
+        </div>
+        <form class="form card" data-form="Tour reservation request">
+          <label>Which tour?
+            <select name="tour" data-label="Tour" data-tour-select></select>
+          </label>
+          <div class="row">
+            <label>Your name
+              <input type="text" name="name" data-label="Name" autocomplete="name" required>
+            </label>
+            <label>Mobile number
+              <input type="tel" name="phone" data-label="Phone" autocomplete="tel" required>
+            </label>
+          </div>
+          <label>Email
+            <input type="email" name="email" data-label="Email" autocomplete="email" required>
+          </label>
+          <label>Anything Sam should know? <span class="hint">Optional. Questions are welcome here.</span>
+            <textarea name="message" data-label="Message"></textarea>
+          </label>
+          <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <button class="btn" type="submit">Send reservation request</button>
+          <p class="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer data-footer></footer>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+</body>
+</html>
