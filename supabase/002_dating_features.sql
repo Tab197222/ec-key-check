@@ -104,7 +104,7 @@ create policy likes_select_own on public.likes for select to authenticated
 create policy likes_insert on public.likes for insert to authenticated
   with check (
     liker = auth.uid() and public.viewer_approved()
-    and exists (select 1 from public.profiles where id = liked and status = 'approved')
+    and exists (select 1 from public.public_cards c where c.id = liked)
   );
 create policy likes_delete_own on public.likes for delete to authenticated
   using (liker = auth.uid());
