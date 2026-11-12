@@ -106,11 +106,24 @@ part in live mode.
 When it all works, repeat section 3 and section 5 in Stripe's **live mode** and
 replace the test values in the Supabase secrets with the live ones.
 
+## Emails (set up 12 Nov 2026)
+
+All emails go out from **ilovelatinsvacations@gmail.com** using a Gmail App
+Password (Google Account > Security > App passwords, named "iLoveLatins site"):
+
+- **Member alerts and approval alerts:** the Supabase secrets `GMAIL_USER` and
+  `GMAIL_APP_PASSWORD`. Approval alerts go to the addresses in `ADMIN_EMAIL`.
+- **Sign-up confirmations and password resets:** Supabase > Authentication >
+  Emails > SMTP settings (smtp.gmail.com, port 465), up to 30 an hour.
+
+If that App Password is ever deleted or the Gmail password changes, create a
+new App Password and replace it in both places. Gmail allows about 500 emails a
+day. To send from @ilovelatins.com instead, verify the domain in Resend (needs 4
+DNS records at whoever manages the domain's DNS, currently HostGator) and remove
+the two GMAIL_ secrets; the functions fall back to Resend automatically.
+
 ## Before taking real money
 
-- **Email sending.** Supabase's built-in email only sends a few messages an hour.
-  For real sign-ups, add your own sender under
-  **Project Settings > Authentication > SMTP** (Resend works for this).
 - **Privacy policy and terms.** You need both before taking payments or storing
   people's photos. Have a lawyer write them. Ask in particular whether the US
   International Marriage Broker Regulation Act (IMBRA) applies to you: it covers
