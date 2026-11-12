@@ -1,8 +1,11 @@
-// Stripe calls this whenever a membership starts, renews, changes or ends.
-// It keeps the subscriptions table in step with Stripe.
+// Stripe calls this whenever a membership starts, renews, changes or ends, and when a
+// tour deposit is paid. It keeps the subscriptions and deposits tables in step with Stripe,
+// and emails the man and the owners when a deposit comes in.
 // Turn OFF "Verify JWT" for this function: Stripe does not send a Supabase login.
-// Secrets needed: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_YEARLY
+// Secrets needed: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_YEARLY,
+// ADMIN_EMAIL, and an email sender (see _shared/mail.ts)
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { sendMail } from '../_shared/mail.ts';
 
 // Server key: the new secret key if the project has one, otherwise the legacy service role key.
 function serverKey() {
@@ -92,6 +95,42 @@ async function saveSubscription(sub: any, userId?: string) {
   if (error) throw error;
 }
 
+const esc = (s: string) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+
+// A tour deposit was paid: mark it paid (once) and send the two emails.
+// deno-lint-ignore no-explicit-any
+async function depositPaid(session: any) {
+  const id = Number(session.metadata?.deposit_id);
+  if (!id || session.payment_status !== 'paid') return;
+  const { data: d } = await admin.from('deposits')
+    .update({
+      status: 'paid', paid_at: new Date().toISOString(),
+      stripe_payment_id: typeof session.payment_intent === 'string' ? session.payment_intent : null,
+    })
+    .eq('id', id).eq('status', 'pending').select('*').maybeSingle();
+  if (!d) return; // already handled: Stripe can send the same event twice
+
+  const dollars = '$' + (d.amount_cents / 100).toFixed(0);
+  const phone = setting('SAM_PHONE') || '1-832-385-4161';
+  try {
+    await sendMail([d.email], `Your place on ${d.tour_label} is reserved`,
+      `<p>Hi ${esc(d.name)},</p>
+<p>Thank you. Your ${dollars} deposit has been paid and your place on <strong>${esc(d.tour_label)}</strong> is reserved.</p>
+<p>Sam will be in touch about the hotel, the full package price and the plan for the week. Questions before then? Call or text Sam at ${phone}.</p>
+<p style="color:#666;font-size:13px">The deposit is non-refundable. Stripe sends a separate card receipt. iLoveLatins will never ask you to send money by gift card or wire to a person.</p>`);
+  } catch (e) { console.error('customer email', e); }
+  try {
+    const to = setting('ADMIN_EMAIL').split(',').map((x) => x.trim()).filter(Boolean);
+    if (to.length) {
+      await sendMail(to, `Deposit paid: ${d.name}, ${d.tour_label}`,
+        `<p><strong>${esc(d.name)}</strong> paid a ${dollars} deposit for <strong>${esc(d.tour_label)}</strong>.</p>
+<p>Email: ${esc(d.email)}<br>Phone: ${esc(d.phone) || 'not given'}</p>
+${d.message ? `<p>Message:<br>${esc(d.message).replace(/\n/g, '<br>')}</p>` : ''}
+<p>All deposits are on the approvals page of the site.</p>`);
+    }
+  } catch (e) { console.error('owner email', e); }
+}
+
 Deno.serve(async (req) => {
   const body = await req.text();
   if (!(await signatureIsValid(body, req.headers.get('stripe-signature')))) {
@@ -100,7 +139,9 @@ Deno.serve(async (req) => {
   try {
     const event = JSON.parse(body);
     const obj = event.data.object;
-    if (event.type === 'checkout.session.completed' && obj.mode === 'subscription' && obj.subscription) {
+    if (event.type === 'checkout.session.completed' && obj.metadata?.kind === 'deposit') {
+      await depositPaid(obj);
+    } else if (event.type === 'checkout.session.completed' && obj.mode === 'subscription' && obj.subscription) {
       await saveSubscription(await stripeGet(`subscriptions/${obj.subscription}`), obj.client_reference_id);
     } else if (['customer.subscription.updated', 'customer.subscription.deleted'].includes(event.type)) {
       // Fetch the current state so an old, late event cannot overwrite a newer one.

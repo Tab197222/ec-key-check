@@ -66,6 +66,18 @@ App.start(async function () {
         '<div class="actions"><button class="btn btn-quiet" data-resolve="' + x.id + '">Mark as dealt with</button>' +
         '<button class="btn btn-quiet" data-reject="' + x.reported_p.id + '">Take profile down</button></div></article>';
     }).join('') : '<p class="form-small">No open reports.</p>';
+
+    // Tour deposits, newest first
+    var dp = await sb.from('deposits').select('*').eq('status', 'paid').order('paid_at', { ascending: false }).limit(100);
+    var deps = dp.data || [];
+    $('deposits').innerHTML = deps.length ? '<div class="table-wrap"><table class="deposits"><thead><tr>' +
+      '<th>Paid</th><th>Tour</th><th>Name</th><th>Email</th><th>Phone</th><th>Amount</th></tr></thead><tbody>' +
+      deps.map(function (x) {
+        return '<tr><td>' + new Date(x.paid_at).toLocaleDateString() + '</td><td>' + esc(x.tour_label) + '</td><td>' +
+          esc(x.name) + (x.message ? '<br><span class="form-small">' + esc(x.message) + '</span>' : '') + '</td><td><a href="mailto:' +
+          esc(x.email) + '">' + esc(x.email) + '</a></td><td>' + esc(x.phone) + '</td><td>$' + (x.amount_cents / 100) + '</td></tr>';
+      }).join('') + '</tbody></table></div>'
+      : '<p class="form-small">No deposits yet.</p>';
   }
 
   document.querySelector('[data-app]').addEventListener('click', async function (e) {

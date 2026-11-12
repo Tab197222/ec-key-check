@@ -83,13 +83,14 @@
       <div class="wrap split">
         <div>
           <h2>Reserve your place</h2>
-          <p class="lead">Send this request and Sam will reply with the package price for your tour and how to pay the $250 deposit.</p>
-          <p>Sending the request does not charge you anything. The $250 deposit, once paid, is non-refundable.</p>
-          <p>Prefer to talk first? Call or text <a data-phone></a>.</p>
+          <p class="lead">Pay the $250 deposit by card to hold your place. Sam will then be in touch about the hotel, the full package price and the plan for the week.</p>
+          <p><strong>The deposit is non-refundable.</strong> You pay on Stripe’s secure page; iLoveLatins never sees your card number.</p>
+          <p>Questions first? Call or text <a data-phone></a> before you pay.</p>
         </div>
-        <form class="form card" data-form="Tour reservation request">
+        <form class="form card" id="deposit-form">
+          <p class="form-status" id="deposit-result" role="status"></p>
           <label>Which tour?
-            <select name="tour" data-label="Tour" data-tour-select></select>
+            <select name="tour" data-tour-select required></select>
           </label>
           <div class="row">
             <label>Your name
@@ -106,8 +107,8 @@
             <textarea name="message" data-label="Message"></textarea>
           </label>
           <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-          <button class="btn" type="submit">Send reservation request</button>
-          <p class="form-status" role="status"></p>
+          <button class="btn" type="submit">Pay $250 deposit</button>
+          <p class="form-status" id="deposit-status" role="status"></p>
         </form>
       </div>
     </section>
@@ -116,6 +117,7 @@
 
   <footer data-footer></footer>
   <script src="js/data.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/site.js"></script>
 </body>
 </html>

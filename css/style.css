@@ -390,3 +390,7 @@ figcaption { font-size: 0.92rem; margin-top: 0.6rem; opacity: 0.8; }
 
 .ticket.info .ticket-stub { background: var(--wash); border-radius: 0 18px 18px 0; }
 @media (max-width: 620px) { .ticket.info .ticket-stub { border-radius: 0 0 18px 18px; } }
+.table-wrap { overflow-x: auto; }
+table.deposits { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+table.deposits th, table.deposits td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.deposits th { font-weight: 600; background: var(--wash); }

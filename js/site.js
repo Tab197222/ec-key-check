@@ -152,8 +152,56 @@
   if (select) {
     var wanted = new URLSearchParams(location.search).get('tour');
     select.innerHTML = open.map(function (t) {
-      return '<option value="' + esc(label(t)) + '"' + (t.id === wanted ? ' selected' : '') + '>' + esc(label(t)) + '</option>';
-    }).join('') + '<option value="Not sure yet">Not sure yet</option>';
+      return '<option value="' + esc(t.id) + '"' + (t.id === wanted ? ' selected' : '') + '>' + esc(label(t)) + '</option>';
+    }).join('');
+    if (!open.length) select.innerHTML = '<option value="">No tours are open for reservations right now</option>';
+  }
+
+  /* ---------- $250 tour deposit: card payment on Stripe ---------- */
+  var dep = document.getElementById('deposit-form');
+  if (dep) {
+    var cfg = window.ILL_CONFIG || {};
+    var out = document.getElementById('deposit-status');
+    var result = document.getElementById('deposit-result');
+    var back = new URLSearchParams(location.search).get('deposit');
+    if (back === 'paid') {
+      result.textContent = 'Payment received. Your place is reserved, and a confirmation email is on its way. Sam will be in touch soon.';
+    } else if (back === 'cancelled') {
+      result.className = 'form-status error';
+      result.textContent = 'Payment was cancelled, so nothing was charged. You can try again below.';
+    }
+    dep.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      if (dep.querySelector('.hp input').value) return; // spam trap
+      var btn = dep.querySelector('button[type=submit]');
+      var opt = dep.tour.options[dep.tour.selectedIndex];
+      if (!dep.tour.value) return;
+      if (!cfg.supabaseUrl) {
+        out.className = 'form-status error';
+        out.textContent = 'Online payment is not available right now. Call or text Sam at ' + C.phoneDisplay + '.';
+        return;
+      }
+      btn.disabled = true;
+      out.className = 'form-status';
+      out.textContent = 'Opening the secure payment page…';
+      try {
+        var r = await fetch(cfg.supabaseUrl + '/functions/v1/create-deposit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: cfg.supabaseKey },
+          body: JSON.stringify({
+            tour_id: dep.tour.value, tour_label: opt.textContent,
+            name: dep.name.value, email: dep.email.value, phone: dep.phone.value, message: dep.message.value
+          })
+        });
+        var d = await r.json();
+        if (d.url) { location.href = d.url; return; }
+        throw new Error(d.error || 'Payment could not start.');
+      } catch (err) {
+        btn.disabled = false;
+        out.className = 'form-status error';
+        out.textContent = err.message + ' You can also call or text Sam at ' + C.phoneDisplay + '.';
+      }
+    });
   }
 
   /* ---------- tour videos: a thumbnail until pressed, then the YouTube player ---------- */
