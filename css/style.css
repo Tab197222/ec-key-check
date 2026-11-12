@@ -379,3 +379,11 @@ figcaption { font-size: 0.92rem; margin-top: 0.6rem; opacity: 0.8; }
 .space-top { margin-top: 2.5rem; }
 .owner-tools { border-top: 1px dashed var(--line); padding-top: 1rem; }
 .bubble .translate { display: block; font-size: 0.8rem; margin-top: 0.3rem; }
+.poster-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2rem); margin-top: 2rem; }
+@media (max-width: 760px) { .poster-grid { grid-template-columns: 1fr 1fr; } .poster-grid .poster:last-child { grid-column: span 2; max-width: 60%; justify-self: center; } }
+.poster { display: block; border-radius: 18px; overflow: hidden; border: 6px solid #fff; box-shadow: 0 12px 30px rgba(35, 22, 79, 0.15); }
+.poster:nth-child(1) { transform: rotate(-1.2deg); }
+.poster:nth-child(3) { transform: rotate(1.2deg); }
+.poster img { width: 100%; height: auto; }
+.poster:hover { box-shadow: 0 16px 36px rgba(35, 22, 79, 0.25); }
+@media (prefers-reduced-motion: no-preference) { .poster { transition: transform 0.2s ease; } .poster:hover { transform: rotate(0) scale(1.02); } }
