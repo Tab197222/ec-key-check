@@ -1,6 +1,8 @@
 /* Shared code for the member pages: connection, language, small helpers. */
 window.App = (function () {
   var cfg = window.ILL_CONFIG || {};
+  // A password-reset link arrives with this marker; read it before the client clears it.
+  var recovery = /type=recovery/.test(location.hash);
   var ready = !!(cfg.supabaseUrl && cfg.supabaseKey && window.supabase);
   var sb = ready ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey) : null;
 
@@ -183,7 +185,9 @@ window.App = (function () {
     langButton();
     var root = document.querySelector('[data-app]');
     if (!ready) {
-      if (root) root.innerHTML = '<p class="notice">' + esc(t('setup')) + '</p>';
+      var fallback = document.querySelector('[data-fallback]');
+      if (fallback) { fallback.hidden = false; if (root) root.closest('section').remove(); }
+      else if (root) root.innerHTML = '<p class="notice">' + esc(t('setup')) + '</p>';
       return;
     }
     Promise.resolve(fn()).catch(function (e) {
@@ -192,6 +196,6 @@ window.App = (function () {
     });
   }
 
-  return { sb: sb, ready: ready, t: t, translate: translate, esc: esc, say: say, lang: function () { return lang; },
+  return { sb: sb, ready: ready, recovery: recovery, t: t, translate: translate, esc: esc, say: say, lang: function () { return lang; },
     user: user, requireUser: requireUser, myProfile: myProfile, signed: signed, start: start };
 })();

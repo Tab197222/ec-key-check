@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Membership | iLoveLatins</title>
+  <meta name="description" content="iLoveLatins membership: free for women; $39 a month or $299 a year for men, with unlimited messaging and tour discounts.">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Membership</h1>
+        <p class="lead">Women join and message free, always. Men can message once a week for free, or choose a plan.</p>
+      </div>
+    </section>
+    <section class="band">
+      <div class="wrap">
+        <p class="lang-switch"><button type="button" class="link" data-lang-toggle></button></p>
+        <div data-app></div>
+        <div>
+          <div class="plans">
+            <article class="plan">
+              <h2>Free</h2>
+              <p class="price">$0</p>
+              <ul>
+                <li>Profile with photos and videos</li>
+                <li>Browse approved members</li>
+                <li>One message a week</li>
+              </ul>
+              <a class="btn btn-quiet" href="join.html">Join free</a>
+            </article>
+            <article class="plan">
+              <h2>Monthly</h2>
+              <p class="price">$39 <small>a month</small></p>
+              <ul>
+                <li>Unlimited messages</li>
+                <li>10% off romance tours</li>
+                <li>Cancel any time</li>
+              </ul>
+              <button class="btn" type="button" data-plan="monthly">Choose monthly</button>
+            </article>
+            <article class="plan plan-best">
+              <h2>Yearly</h2>
+              <p class="price">$299 <small>a year</small></p>
+              <ul>
+                <li>Unlimited messages</li>
+                <li>20% off romance tours</li>
+                <li>Costs less than 8 months of monthly</li>
+              </ul>
+              <button class="btn" type="button" data-plan="yearly">Choose yearly</button>
+            </article>
+          </div>
+          <p class="form-status" id="plan-status" role="status"></p>
+          <p class="form-small">Payments are handled by Stripe. iLoveLatins never sees your card number. Plans renew automatically until you cancel from your account page.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer data-footer></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/membership.js"></script>
+</body>
+</html>

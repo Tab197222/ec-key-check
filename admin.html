@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Approvals | iLoveLatins</title>
+  <meta name="description" content="Site owner approvals.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+
+    <section class="band">
+      <div class="wrap">
+        <p class="lang-switch"><button type="button" class="link" data-lang-toggle></button></p>
+        <div data-app>
+          <h1>Approvals</h1>
+          <h2>Profiles waiting for approval</h2>
+          <div id="pending"></div>
+          <h2>New uploads from live members</h2>
+          <div class="gallery-list" id="uploads"></div>
+          <h2>Reports</h2>
+          <div id="reports"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer data-footer></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

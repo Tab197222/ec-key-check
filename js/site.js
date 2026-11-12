@@ -31,11 +31,12 @@
   var page = location.pathname.split('/').pop() || 'index.html';
   var links = [
     ['tours.html', 'Tours'],
-    ['how-it-works.html', 'How it works'],
+    ['members.html', 'Members'],
+    ['membership.html', 'Membership'],
     ['about.html', 'About Sam'],
     ['faq.html', 'Questions'],
-    ['safety.html', 'Safety'],
-    ['contact.html', 'Contact']
+    ['contact.html', 'Contact'],
+    ['account.html', 'My account']
   ];
   var header = document.querySelector('[data-header]');
   if (header) {
@@ -48,7 +49,7 @@
       links.map(function (l) {
         return '<a href="' + l[0] + '"' + (page === l[0] ? ' aria-current="page"' : '') + '>' + l[1] + '</a>';
       }).join('') +
-      '<a class="btn" href="tours.html#reserve">Reserve a tour</a>' +
+      '<a class="btn" href="join.html">Join free</a>' +
       '</nav></div>';
     var toggle = header.querySelector('.nav-toggle');
     var nav = header.querySelector('.nav');
@@ -72,7 +73,13 @@
       '<li><a href="tours.html">Tour dates</a></li>' +
       '<li><a href="tours.html#reserve">Reserve a tour</a></li>' +
       '<li><a href="how-it-works.html">How it works</a></li>' +
-      '<li><a href="join.html">Join free</a></li></ul></div>' +
+      '<li><a href="tour-videos.html">Tour videos</a></li></ul></div>' +
+      '<div><h3>Members</h3><ul>' +
+      '<li><a href="join.html">Join free</a></li>' +
+      '<li><a href="members.html">Members</a></li>' +
+      '<li><a href="messages.html">Messages</a></li>' +
+      '<li><a href="membership.html">Membership</a></li>' +
+      '<li><a href="account.html">My account</a></li></ul></div>' +
       '<div><h3>Help</h3><ul>' +
       '<li><a href="about.html">About Sam</a></li>' +
       '<li><a href="faq.html">Questions</a></li>' +
@@ -141,6 +148,29 @@
       return '<option value="' + esc(label(t)) + '"' + (t.id === wanted ? ' selected' : '') + '>' + esc(label(t)) + '</option>';
     }).join('') + '<option value="Not sure yet">Not sure yet</option>';
   }
+
+  /* ---------- tour videos: a thumbnail until pressed, then the YouTube player ---------- */
+  document.querySelectorAll('[data-videos]').forEach(function (el) {
+    var max = +el.getAttribute('data-videos') || D.videos.length;
+    el.innerHTML = D.videos.slice(0, max).map(function (v) {
+      return '<figure class="yt"><button type="button" class="yt-play" data-yt="' + esc(v.id) + '" data-title="' + esc(v.title) + '">' +
+        '<img src="https://i.ytimg.com/vi/' + esc(v.id) + '/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">' +
+        '<span class="yt-icon" aria-hidden="true"></span><span class="sr">Play video: ' + esc(v.title) + '</span></button>' +
+        '<figcaption><strong>' + esc(v.title) + '</strong><br>' + esc(v.when) + '</figcaption></figure>';
+    }).join('');
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-yt]');
+      if (!b) return;
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(b.dataset.yt) + '?autoplay=1&rel=0';
+      f.title = b.dataset.title;
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      b.replaceWith(f);
+      f.focus();
+    });
+  });
+  document.querySelectorAll('[data-yt-channel]').forEach(function (a) { a.href = D.youtubeChannel; });
 
   /* ---------- forms ---------- */
   document.querySelectorAll('form[data-form]').forEach(function (form) {

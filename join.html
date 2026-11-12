@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Join free | iLoveLatins</title>
-  <meta name="description" content="Join iLoveLatins free. Women never pay. Men hear about new tour dates first.">
+  <meta name="description" content="Create a free iLoveLatins profile with photos and videos. Women never pay.">
   <link rel="icon" href="assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,10 +19,43 @@
     <section class="page-head">
       <div class="wrap">
         <h1>Join free</h1>
-        <p class="lead">Tell Sam who you are. Women never pay, and men hear about new tour dates first.</p>
+        <p class="lead">Create your profile with photos and videos. Women never pay. Men can upgrade for unlimited messages.</p>
       </div>
     </section>
-
+    <section class="band">
+      <div class="wrap">
+        <p class="lang-switch"><button type="button" class="link" data-lang-toggle></button></p>
+        <div data-app>
+          <div class="toggle" role="group">
+            <button type="button" data-tab="signup" aria-pressed="true" data-i18n="tab_signup">Create account</button>
+            <button type="button" data-tab="login" aria-pressed="false" data-i18n="tab_login">Log in</button>
+          </div>
+          <form class="form card" id="signup">
+            <label><span data-i18n="email">Email</span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+            <label><span><span data-i18n="password">Password</span> <span class="hint" data-i18n="password_hint">At least 8 characters.</span></span>
+              <input type="password" name="password" autocomplete="new-password" minlength="8" required>
+            </label>
+            <label class="check"><input type="checkbox" name="adult" required> <span data-i18n="adult">I am 18 or over, and I will only upload photos and videos of myself.</span></label>
+            <button class="btn" type="submit" data-i18n="signup_btn">Create my account</button>
+            <p class="form-status" role="status"></p>
+          </form>
+          <form class="form card" id="login" hidden>
+            <label><span data-i18n="email">Email</span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+            <label><span data-i18n="password">Password</span>
+              <input type="password" name="password" autocomplete="current-password" required>
+            </label>
+            <button class="btn" type="submit" data-i18n="login_btn">Log in</button>
+            <button class="link" type="button" id="forgot" data-i18n="forgot">Forgot your password?</button>
+            <p class="form-status" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+    <div data-fallback hidden>
     <section class="band">
       <div class="wrap">
         <div class="toggle" role="group" aria-label="I am">
@@ -66,12 +99,16 @@
         </form>
       </div>
     </section>
-
+    </div>
   </main>
 
   <footer data-footer></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/data.js"></script>
   <script src="js/site.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/join.js"></script>
   <script>
     (function () {
       var T = {

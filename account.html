@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My account | iLoveLatins</title>
+  <meta name="description" content="Your iLoveLatins profile, photos, videos and membership.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+
+    <section class="band">
+      <div class="wrap">
+        <p class="lang-switch"><button type="button" class="link" data-lang-toggle></button></p>
+        <div data-app>
+          <form class="form card" id="recover" hidden>
+            <label><span data-i18n="new_password">Choose a new password</span>
+              <input type="password" name="password" autocomplete="new-password" minlength="8" required>
+            </label>
+            <button class="btn" type="submit" data-i18n="set_password">Save new password</button>
+            <p class="form-status" role="status"></p>
+          </form>
+
+          <p class="notice" id="status"></p>
+
+          <div class="account-grid">
+            <form class="form card" id="profile">
+              <h2 data-i18n="profile_h">Your profile</h2>
+              <fieldset class="radios">
+                <legend data-i18n="i_am">I am</legend>
+                <label class="check"><input type="radio" name="gender" value="man" checked> <span data-i18n="man">A man</span></label>
+                <label class="check"><input type="radio" name="gender" value="woman"> <span data-i18n="woman">A woman</span></label>
+              </fieldset>
+              <div class="row">
+                <label><span data-i18n="first_name">First name</span>
+                  <input type="text" name="first_name" maxlength="40" autocomplete="given-name" required>
+                </label>
+                <label><span data-i18n="birthdate">Date of birth</span>
+                  <input type="date" name="birthdate" required>
+                </label>
+              </div>
+              <div class="row">
+                <label><span data-i18n="city">City</span>
+                  <input type="text" name="city" maxlength="80" required>
+                </label>
+                <label><span data-i18n="country">Country</span>
+                  <input type="text" name="country" maxlength="80" autocomplete="country-name" required>
+                </label>
+              </div>
+              <label><span data-i18n="about">About you, and who you hope to meet</span>
+                <textarea name="about" maxlength="2000"></textarea>
+              </label>
+              <p class="form-small" id="locked" hidden data-i18n="locked">To change these after sending your profile, contact Sam.</p>
+              <button class="btn" type="submit" data-i18n="save">Save profile</button>
+              <p class="form-status" role="status"></p>
+            </form>
+
+            <div>
+              <section class="card" id="media-box" hidden>
+                <h2 data-i18n="media_h">Photos and videos</h2>
+                <p class="form-small" data-i18n="media_hint"></p>
+                <div class="actions">
+                  <label class="btn btn-quiet file-btn"><span data-i18n="add_photo">Add photos</span>
+                    <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" multiple>
+                  </label>
+                  <label class="btn btn-quiet file-btn"><span data-i18n="add_video">Add a video</span>
+                    <input type="file" id="video-input" accept="video/mp4,video/quicktime,video/webm">
+                  </label>
+                </div>
+                <p class="form-status" id="media-status" role="status"></p>
+                <div class="gallery small" id="media"></div>
+                <button class="btn" type="button" id="submit" hidden data-i18n="submit">Send my profile for approval</button>
+              </section>
+
+              <section class="card" id="member-box" hidden>
+                <h2 data-i18n="member_h">Membership</h2>
+                <p id="member-text"></p>
+                <div class="actions">
+                  <a class="btn" href="membership.html" id="upgrade" hidden data-i18n="upgrade">See membership plans</a>
+                  <button class="btn btn-quiet" type="button" id="billing" hidden data-i18n="billing">Manage billing or cancel</button>
+                </div>
+                <p class="form-status" id="member-status" role="status"></p>
+              </section>
+
+              <div class="actions">
+                <a class="btn btn-quiet" href="messages.html">Messages</a>
+                <button class="btn btn-quiet" type="button" id="logout" data-i18n="logout">Log out</button>
+                <button class="link danger" type="button" id="delete" data-i18n="delete">Delete my account</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer data-footer></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>

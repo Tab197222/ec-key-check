@@ -20,6 +20,18 @@ window.ILL = {
 
   deposit: 250,
 
+  // Videos from Sam's YouTube channel (youtube.com/@user-ye3wm9sb8k).
+  // The id is the part after "v=" in a YouTube link.
+  videos: [
+    { id: 'WmqkM2xOhkY', title: 'Day one', when: 'September 13, 2019' },
+    { id: 'K-8WZNkQPOQ', title: 'Day one, the party', when: 'September 13, 2019' },
+    { id: 'WLwA71GS3Mg', title: 'Day two', when: 'September 14, 2019' },
+    { id: '5znW_2c8XS0', title: 'Day two, another clip', when: 'September 14, 2019' },
+    { id: 'QNyH4jRfwDM', title: 'Day three', when: 'September 15, 2019' },
+    { id: 'ao4ZzGIefhc', title: 'Day three, another clip', when: 'September 15, 2019' }
+  ],
+  youtubeChannel: 'https://www.youtube.com/@user-ye3wm9sb8k',
+
   // Online reservations close this many days before a tour starts.
   bookingCutoffDays: 30,
 
