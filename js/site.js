@@ -16,10 +16,12 @@
   }
   function label(t) { return t.name + ', ' + range(t) + ', ' + day(t.start).getFullYear(); }
 
-  // past = finished, closed = inside the booking cutoff, open = can be reserved online
+  // past = finished, info = a date only (not bookable), closed = inside the booking cutoff,
+  // open = can be reserved online
   function status(t) {
     var today = new Date(); today.setHours(0, 0, 0, 0);
     if (day(t.end) < today) return 'past';
+    if (t.bookable === false) return 'info';
     var cutoff = day(t.start); cutoff.setDate(cutoff.getDate() - D.bookingCutoffDays);
     return today > cutoff ? 'closed' : 'open';
   }
@@ -114,12 +116,16 @@
       stub =
         '<div class="ticket-deposit">$' + D.deposit + '<small>non-refundable deposit holds your place</small></div>' +
         '<a class="btn" href="' + esc(href) + '">' + (t.depositLink ? 'Pay deposit' : 'Reserve') + '</a>';
+    } else if (st === 'info') {
+      stub =
+        '<p class="ticket-note"><strong>Not a hosted tour.</strong> No deposit and nothing to book.</p>' +
+        '<a class="btn btn-quiet" href="tel:' + C.phoneLink + '">Ask Sam about it</a>';
     } else {
       stub =
         '<p class="ticket-note"><strong>Online reservations have closed.</strong> Ask Sam about a late place.</p>' +
         '<a class="btn btn-quiet" href="tel:' + C.phoneLink + '">Call or text Sam</a>';
     }
-    return '<article class="ticket' + (hero ? ' ticket-hero' : '') + (st === 'closed' ? ' closed' : '') + '">' +
+    return '<article class="ticket' + (hero ? ' ticket-hero' : '') + (st === 'closed' ? ' closed' : '') + (st === 'info' ? ' info' : '') + '">' +
       '<div class="ticket-main">' +
       (hero ? '<p class="ticket-label">Next tour you can reserve</p>' : '') +
       '<div class="ticket-dates">' + range(t) + ' <span class="ticket-year">' + day(t.start).getFullYear() + '</span></div>' +
@@ -132,7 +138,7 @@
 
   var next = document.querySelector('[data-next-tour]');
   if (next) {
-    var pick = open[0] || upcoming[0];
+    var pick = open[0] || upcoming.filter(function (t) { return status(t) !== 'info'; })[0];
     next.innerHTML = pick ? ticket(pick, true)
       : '<p>New tour dates are being set. Call or text Sam at <a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a>.</p>';
   }

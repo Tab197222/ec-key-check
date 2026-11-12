@@ -33,6 +33,7 @@ window.ILL = {
   youtubeChannel: 'https://www.youtube.com/@user-ye3wm9sb8k',
 
   // Online reservations close this many days before a tour starts.
+  // Add bookable: false to a tour to list it as a date only, with no deposit.
   bookingCutoffDays: 30,
 
   tours: [
@@ -49,11 +50,13 @@ window.ILL = {
     },
     {
       id: 'carnaval-2027',
-      name: 'Barranquilla Carnaval',
+      name: 'Barranquilla Carnaval: Sam will be there',
       city: 'Barranquilla',
       start: '2027-02-06',
       end: '2027-02-09',
-      blurb: 'Four days at Carnaval, one of the biggest street festivals in the world. Sam will be there.',
+      // false = a date to know about, not a hosted tour: no deposit, no Reserve button.
+      bookable: false,
+      blurb: 'Sam will be at Carnaval, one of the biggest street festivals in the world. This is not a hosted tour, so there is nothing to book. The Romance Tour starts two days later.',
       packagePrice: '',
       hotel: '',
       depositLink: ''

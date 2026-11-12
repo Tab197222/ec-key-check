@@ -20,9 +20,9 @@ Send this one-to-one, not to a group, so it feels personal.
 >
 > Cada perfil lo reviso yo antes de publicarlo, así que solo hay gente real. Y si me mandas por aquí una selfie sosteniendo un papel con la fecha de hoy y tu nombre, te pongo la insignia de ✓ Verificada, y esos perfiles reciben muchos más mensajes.
 >
-> El próximo evento es en Carnaval: del 6 al 9 de febrero, y del 11 al 16 de febrero de 2027. ¡Me encantaría verte allí! 💃
+> Voy a estar en Carnaval (del 6 al 9 de febrero), y justo después tenemos el próximo evento, del 11 al 16 de febrero de 2027. ¡Me encantaría verte allí! 💃
 
-**In English:** Hi [name]! It's Sam from iLoveLatins. Thanks again for coming to our event in Barranquilla. We've launched a new website and I wanted to invite you first. You can make a free profile (always free for women) with your photos, and meet serious men from the United States who come on our tours. [link] I check every profile myself before it goes live, so there are only real people. And if you send me a selfie here holding a paper with today's date and your name, I'll give you the Verified badge, and those profiles get many more messages. The next event is at Carnaval: February 6–9 and February 11–16, 2027. I'd love to see you there!
+**In English:** Hi [name]! It's Sam from iLoveLatins. Thanks again for coming to our event in Barranquilla. We've launched a new website and I wanted to invite you first. You can make a free profile (always free for women) with your photos, and meet serious men from the United States who come on our tours. [link] I check every profile myself before it goes live, so there are only real people. And if you send me a selfie here holding a paper with today's date and your name, I'll give you the Verified badge, and those profiles get many more messages. I'll be at Carnaval (February 6–9), and right after that we have the next event, February 11–16, 2027. I'd love to see you there!
 
 ---
 
