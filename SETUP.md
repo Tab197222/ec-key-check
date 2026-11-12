@@ -41,8 +41,9 @@ part in live mode.
 
 1. Sign up at https://stripe.com. Keep **Test mode** switched on for now.
 2. **Product catalog > Add product**: name it "iLoveLatins membership" and add
-   two recurring prices: **$39 monthly** and **$299 yearly**. Copy each price's
-   ID (it starts with `price_`).
+   two recurring prices: **$39.99 monthly** and **$299 yearly**. Copy each price's
+   ID (`price_…`). A product's ID (`prod_…`) also works if that product has only
+   one price.
 3. **Developers > API keys**: copy the **Secret key** (starts with `sk_test_`).
    Never put this key in the website files.
 4. **Settings > Billing > Customer portal**: turn it on and allow customers to
@@ -61,7 +62,7 @@ part in live mode.
    | Name | Value |
    |---|---|
    | `STRIPE_SECRET_KEY` | the `sk_test_…` key |
-   | `STRIPE_PRICE_MONTHLY` | the `price_…` ID of the $39 price |
+   | `STRIPE_PRICE_MONTHLY` | the `price_…` ID of the $39.99 price |
    | `STRIPE_PRICE_YEARLY` | the `price_…` ID of the $299 price |
    | `SITE_URL` | `https://tab197222.github.io/ec-key-check` |
    | `STRIPE_WEBHOOK_SECRET` | from step 5 below |

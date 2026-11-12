@@ -51,9 +51,10 @@ async function saveSubscription(sub: any, userId?: string) {
 
   const item = sub.items?.data?.[0];
   const end = sub.current_period_end ?? item?.current_period_end;
-  const priceId = item?.price?.id;
-  const plan = priceId === Deno.env.get('STRIPE_PRICE_YEARLY') ? 'yearly'
-    : priceId === Deno.env.get('STRIPE_PRICE_MONTHLY') ? 'monthly' : null;
+  // The settings may hold either a price ID (price_…) or a product ID (prod_…).
+  const ids = [item?.price?.id, typeof item?.price?.product === 'string' ? item.price.product : item?.price?.product?.id];
+  const plan = ids.includes(Deno.env.get('STRIPE_PRICE_YEARLY')) ? 'yearly'
+    : ids.includes(Deno.env.get('STRIPE_PRICE_MONTHLY')) ? 'monthly' : null;
 
   const { error } = await admin.from('subscriptions').upsert({
     user_id: uid,

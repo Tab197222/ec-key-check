@@ -20,9 +20,18 @@ Deno.serve(async (req) => {
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
     const { plan } = await req.json();
-    const price = plan === 'yearly' ? Deno.env.get('STRIPE_PRICE_YEARLY') : Deno.env.get('STRIPE_PRICE_MONTHLY');
+    let price = plan === 'yearly' ? Deno.env.get('STRIPE_PRICE_YEARLY') : Deno.env.get('STRIPE_PRICE_MONTHLY');
     const site = (Deno.env.get('SITE_URL') ?? '').replace(/\/$/, '');
     if (!price || !site) return json({ error: 'Payments are not set up yet.' }, 500);
+    // A product ID (prod_…) also works: use that product's default price.
+    if (price.startsWith('prod_')) {
+      const r = await fetch(`https://api.stripe.com/v1/products/${price}`, {
+        headers: { Authorization: `Bearer ${Deno.env.get('STRIPE_SECRET_KEY')}` },
+      });
+      const product = await r.json();
+      price = typeof product.default_price === 'string' ? product.default_price : product.default_price?.id;
+      if (!price) return json({ error: 'The membership product in Stripe has no default price.' }, 500);
+    }
 
     const admin = createClient(url, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
     const { data: sub } = await admin.from('subscriptions')
