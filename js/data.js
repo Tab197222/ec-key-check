@@ -58,7 +58,7 @@ window.ILL = {
       end: '2027-02-16',
       blurb: 'The week after Carnaval, when hotel and airline prices are much lower. Singles socials and a local host.',
       packagePrice: '',
-      hotel: '',
+      hotel: 'Events at Hotel American Golf (rooms booked separately)',
       depositLink: ''
     },
     {

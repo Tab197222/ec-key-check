@@ -486,3 +486,20 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .pay-choice label.check { font-weight: 400; }
 .price-card .price + .save { flex: 0 0 auto; }
 .price-card .save + p { flex: 1; margin: 0 0 1.1rem; font-size: 1rem; color: var(--ink-soft); }
+
+.hotel-facts { list-style: none; padding: 1.4rem 1.6rem; margin: 0; background: #fff; border-radius: 18px; display: grid; gap: 0.9rem; }
+.hotel-facts strong { display: block; font-size: 0.85rem; color: var(--ink-soft); font-weight: 600; }
+
+/* ---------- slideshow ---------- */
+.slideshow { position: relative; margin-top: 1.75rem; border-radius: 22px; overflow: hidden; box-shadow: 0 16px 38px rgba(35, 22, 79, 0.2); background: #000; }
+.slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.slides::-webkit-scrollbar { display: none; }
+.slide { flex: 0 0 100%; margin: 0; position: relative; scroll-snap-align: start; }
+.slide img { width: 100%; height: min(72vh, 640px); object-fit: cover; display: block; }
+.slide figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 1.2rem 0.9rem; color: #fff; font-weight: 600; background: linear-gradient(transparent, rgba(0, 0, 0, 0.65)); opacity: 1; margin: 0; }
+.slide-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, 0.85); color: var(--ink); font-size: 1.9rem; line-height: 1; cursor: pointer; }
+.slide-btn:hover { background: #fff; }
+.slide-btn.prev { left: 0.8rem; }
+.slide-btn.next { right: 0.8rem; }
+.photo-credit { font-size: 0.85rem; color: var(--ink-soft); margin: 0.5rem 0 0; }
+.venue-info { margin-top: 2rem; }

@@ -114,7 +114,7 @@
     var st = status(t);
     var facts = '';
     if (t.packagePrice) facts += '<li>Package: ' + esc(t.packagePrice) + '</li>';
-    if (t.hotel) facts += '<li>Hotel: ' + esc(t.hotel) + '</li>';
+    if (t.hotel) facts += '<li>' + esc(t.hotel) + '</li>';
     var stub;
     if (st === 'open') {
       var href = t.depositLink || ('tours.html?tour=' + encodeURIComponent(t.id) + '#reserve');
@@ -329,4 +329,25 @@
       changes.forEach(function (c) { c.addedNodes.forEach(function (n) { if (n.nodeType === 1) { freshen(n); if (n.matches && n.matches('a[href]')) freshen(n.parentNode); } }); });
     }).observe(document.body, { childList: true, subtree: true });
   }
+
+  /* ---------- slideshows: one big photo at a time, arrows, swipe, changes every 5 seconds ---------- */
+  document.querySelectorAll('[data-slideshow]').forEach(function (box) {
+    var track = box.querySelector('.slides');
+    var n = track.children.length, i = 0, timer = null;
+    var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function go(k) {
+      i = (k + n) % n;
+      track.scrollTo({ left: track.clientWidth * i, behavior: still ? 'auto' : 'smooth' });
+    }
+    box.querySelector('.prev').addEventListener('click', function () { go(i - 1); restart(); });
+    box.querySelector('.next').addEventListener('click', function () { go(i + 1); restart(); });
+    track.addEventListener('scroll', function () { i = Math.round(track.scrollLeft / track.clientWidth); });
+    function restart() {
+      clearInterval(timer);
+      if (!still) timer = setInterval(function () { if (!document.hidden) go(i + 1); }, 5000);
+    }
+    box.addEventListener('mouseenter', function () { clearInterval(timer); });
+    box.addEventListener('mouseleave', restart);
+    restart();
+  });
 })();
