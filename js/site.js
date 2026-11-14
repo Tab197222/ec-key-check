@@ -36,6 +36,7 @@
   var page = location.pathname.split('/').pop() || 'index.html';
   var links = [
     ['tours.html', 'Tours'],
+    ['testimonials.html', 'Testimonials'],
     ['members.html', 'Members'],
     ['membership.html', 'Membership'],
     ['about.html', 'About Sam'],
@@ -78,7 +79,8 @@
       '<li><a href="tours.html">Tour dates</a></li>' +
       '<li><a href="tours.html#reserve">Reserve a tour</a></li>' +
       '<li><a href="how-it-works.html">How it works</a></li>' +
-      '<li><a href="tour-videos.html">Tour videos</a></li></ul></div>' +
+      '<li><a href="tour-videos.html">Tour videos</a></li>' +
+      '<li><a href="testimonials.html">Testimonials</a></li></ul></div>' +
       '<div><h3>Members</h3><ul>' +
       '<li><a href="join.html">Join free</a></li>' +
       '<li><a href="members.html">Members</a></li>' +
