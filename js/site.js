@@ -356,6 +356,7 @@
     var cfg = window.ILL_CONFIG || { supabaseUrl: 'https://fdhntvzctkdojldxduan.supabase.co', supabaseKey: 'sb_publishable_PVHHl1T18HF3j0kgm94Jkw_alwORgIA' };
     if (!cfg.supabaseUrl || /^(localhost|127\.)/.test(location.hostname)) return;
     if (/^(admin|account|messages|likes|member)\.html$/.test(page)) return; // owner and private member pages
+    try { if (localStorage.getItem('ill_owner')) return; } catch (e) {} // this browser belongs to an owner
     var newVisit = false;
     try { newVisit = !sessionStorage.getItem('ill_visit'); sessionStorage.setItem('ill_visit', '1'); } catch (e) {}
     fetch(cfg.supabaseUrl + '/rest/v1/rpc/count_view', {

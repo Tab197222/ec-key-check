@@ -4,6 +4,7 @@ App.start(async function () {
   var $ = function (id) { return document.getElementById(id); };
   var u = await App.requireUser();
   var me = await App.myProfile(u.id);
+  if (me && me.is_admin) { try { localStorage.setItem('ill_owner', '1'); } catch (e) {} } // stop counting the owner's own visits
   if (!me || !me.is_admin) {
     document.querySelector('[data-app]').innerHTML = '<p class="notice">This page is for the site owner only.</p>';
     return;
