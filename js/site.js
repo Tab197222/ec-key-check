@@ -189,7 +189,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json', apikey: cfg.supabaseKey },
           body: JSON.stringify({
-            tour_id: dep.tour.value, tour_label: opt.textContent,
+            tour_id: dep.tour.value, tour_label: opt.textContent + ', ' + dep.package.value,
             name: dep.name.value, email: dep.email.value, phone: dep.phone.value, message: dep.message.value
           })
         });

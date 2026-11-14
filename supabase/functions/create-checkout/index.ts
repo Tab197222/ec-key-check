@@ -1,6 +1,6 @@
 // Starts a Stripe Checkout page for the signed-in member and returns its address.
 // Turn OFF "Verify JWT" for this function: it checks the member's login itself.
-// Secrets needed: STRIPE_SECRET_KEY, STRIPE_PRICE_MONTHLY, STRIPE_PRICE_YEARLY, SITE_URL
+// Secrets needed: STRIPE_SECRET_KEY, SITE_URL, and STRIPE_PRODUCT (or STRIPE_PRICE_MONTHLY) holding the membership product's prod_ ID
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 // Server key: the new secret key if the project has one, otherwise the legacy service role key.
@@ -43,18 +43,18 @@ Deno.serve(async (req) => {
     if (!user) return json({ error: 'Please log in first.' }, 401);
 
     const { plan } = await req.json();
-    let price = plan === 'yearly' ? setting('STRIPE_PRICE_YEARLY') : setting('STRIPE_PRICE_MONTHLY');
+    // Membership prices are set here, not in Stripe, so changing a price is a one-line edit.
+    const PLANS: Record<string, { cents: number; interval: string; count: number }> = {
+      monthly: { cents: 2999, interval: 'month', count: 1 },     // $29.99 a month
+      semiannual: { cents: 15000, interval: 'month', count: 6 }, // $150 every 6 months
+      yearly: { cents: 25000, interval: 'year', count: 1 },      // $250 a year
+    };
+    const chosen = PLANS[plan];
+    if (!chosen) return json({ error: 'Choose a plan.' }, 400);
     const site = (setting('SITE_URL')).replace(/\/$/, '');
-    if (!price || !site) return json({ error: 'Payments are not set up yet.' }, 500);
-    // A product ID (prod_…) also works: use that product's default price.
-    if (price.startsWith('prod_')) {
-      const r = await fetch(`https://api.stripe.com/v1/products/${price}`, {
-        headers: { Authorization: `Bearer ${stripeKey()}` },
-      });
-      const product = await r.json();
-      price = typeof product.default_price === 'string' ? product.default_price : product.default_price?.id;
-      if (!price) return json({ error: 'The membership product in Stripe has no default price.' }, 500);
-    }
+    // The Stripe product the plans are billed under (the membership product's prod_ ID).
+    const product = setting('STRIPE_PRODUCT') || setting('STRIPE_PRICE_MONTHLY');
+    if (!site || !product.startsWith('prod_')) return json({ error: 'Payments are not set up yet.' }, 500);
 
     const { data: sub } = await admin.from('subscriptions')
       .select('stripe_customer_id, status').eq('user_id', user.id).maybeSingle();
@@ -64,8 +64,13 @@ Deno.serve(async (req) => {
 
     const params = new URLSearchParams({
       mode: 'subscription',
-      'line_items[0][price]': price,
       'line_items[0][quantity]': '1',
+      'line_items[0][price_data][currency]': 'usd',
+      'line_items[0][price_data][product]': product,
+      'line_items[0][price_data][unit_amount]': String(chosen.cents),
+      'line_items[0][price_data][recurring][interval]': chosen.interval,
+      'line_items[0][price_data][recurring][interval_count]': String(chosen.count),
+      'subscription_data[metadata][plan]': plan,
       client_reference_id: user.id,
       'subscription_data[metadata][user_id]': user.id,
       success_url: `${site}/account.html?paid=1`,

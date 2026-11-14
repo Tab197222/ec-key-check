@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tour dates and reservations | iLoveLatins</title>
-  <meta name="description" content="Upcoming iLoveLatins singles tours to Barranquilla and Colombia, what each one includes, and how to reserve with a $250 deposit.">
+  <meta name="description" content="iLoveLatins singles tours to Barranquilla, Colombia: dates, prices from $995, and how to reserve with a $250 deposit.">
   <link rel="icon" href="assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
     <section class="page-head">
       <div class="wrap">
         <h1>Tours to Colombia</h1>
-        <p class="lead">Each tour is a hosted week in Colombia with the hotel, a welcome dinner, the socials and a bilingual host arranged. A $250 non-refundable deposit holds your place.</p>
+        <p class="lead">Each tour is a hosted week in Colombia with a welcome dinner, the singles socials and a bilingual host. Your first tour is $1,495; a $250 deposit holds your place.</p>
       </div>
     </section>
 
@@ -46,6 +46,52 @@
         </div>
       </div>
     </section>
+    <section class="band band-wash" id="prices">
+      <div class="wrap">
+        <h2>Prices</h2>
+        <p class="lead">Every tour includes the welcome dinner, the singles socials and a bilingual host. <strong>Hotel and airfare are always separate.</strong></p>
+        <div class="price-list">
+          <article class="price-card">
+            <h3>Romance tour, first time</h3>
+            <p class="price">$1,495</p>
+            <p>Your first iLoveLatins tour.</p>
+          </article>
+          <article class="price-card">
+            <h3>Romance tour, repeat client</h3>
+            <p class="price">$995</p>
+            <p>For men who have been on a tour before.</p>
+          </article>
+          <article class="price-card">
+            <h3>2 for 1 Buddy plan</h3>
+            <p class="price">$1,595</p>
+            <p>Two men, one tour. Sign up, then send Sam your buddy’s name and details.</p>
+          </article>
+          <article class="price-card">
+            <h3>2 tours for the price of 1</h3>
+            <p class="price">$1,595</p>
+            <p>Two romance tours for one price.</p>
+          </article>
+          <article class="price-card">
+            <h3>1-on-1 personal introductions</h3>
+            <p class="price">$995 <small>6 days</small></p>
+            <p>Your own introductions with a translator, separate from the group events.</p>
+          </article>
+          <article class="price-card">
+            <h3>English classes for your lady</h3>
+            <p class="price">$250 <small>a month</small></p>
+            <p>Ask Sam to arrange them.</p>
+          </article>
+        </div>
+        <h3 class="space-top">How paying works</h3>
+        <ul class="rules">
+          <li>A <strong>$250 deposit</strong> reserves your place, paid by card below.</li>
+          <li>The deposit is <strong>non-refundable</strong>, but you can use it on a future tour within 12 months of paying it.</li>
+          <li>The <strong>balance is due 30 days</strong> before the tour starts.</li>
+          <li><strong>Hotel and airfare are always separate.</strong></li>
+        </ul>
+        <p class="aside-note"><strong>Need a visa?</strong> A professional US immigration attorney is available when you need a fiancé, marriage or tourist visa. Ask Sam.</p>
+      </div>
+    </section>
     <section class="band band-sun">
       <div class="wrap photo-split">
         <figure class="photo-frame"><img src="assets/photos/tour-pool-day.jpg" alt="Women sunbathing by a pool on an iLoveLatins tour while the hosts look on" width="1534" height="1025" loading="lazy"></figure>
@@ -70,12 +116,11 @@
       <div class="wrap">
         <h2>What every tour includes</h2>
         <ul class="included">
-          <li><h3>Your hotel</h3><p>A vetted, centrally located hotel for the full length of the tour.</p></li>
           <li><h3>A welcome dinner</h3><p>The first night, with the group and the host, before the socials begin.</p></li>
           <li><h3>Two or three socials</h3><p>Organised evenings where you meet single local women face to face.</p></li>
           <li><h3>A bilingual host</h3><p>An English and Spanish speaker with you at every event.</p></li>
         </ul>
-        <p class="aside-note"><strong>Not included:</strong> your flight. Barranquilla’s airport code is BAQ. Ask Sam for the full package price for your dates before you send a deposit. <strong>The deposit is non-refundable.</strong></p>
+        <p class="aside-note"><strong>Not included:</strong> your hotel and your flight. These are always paid separately. Barranquilla’s airport code is BAQ.</p>
       </div>
     </section>
 
@@ -97,14 +142,24 @@
       <div class="wrap split">
         <div>
           <h2>Reserve your place</h2>
-          <p class="lead">Pay the $250 deposit by card to hold your place. Sam will then be in touch about the hotel, the full package price and the plan for the week.</p>
-          <p><strong>The deposit is non-refundable.</strong> You pay on Stripe’s secure page; iLoveLatins never sees your card number.</p>
+          <p class="lead">Pay the $250 deposit by card to hold your place. Sam will then be in touch about the plan for the week. The balance is due 30 days before the tour.</p>
+          <p><strong>The deposit is non-refundable</strong>, but you can use it on a future tour within 12 months. You pay on Stripe’s secure page; iLoveLatins never sees your card number.</p>
           <p>Questions first? Call or text <a data-phone></a> before you pay.</p>
         </div>
         <form class="form card" id="deposit-form">
           <p class="form-status" id="deposit-result" role="status"></p>
           <label>Which tour?
             <select name="tour" data-tour-select required></select>
+          </label>
+          <label>Which package?
+            <select name="package" required>
+              <option value="Romance tour, first time ($1,495)">Romance tour, first time ($1,495)</option>
+              <option value="Romance tour, repeat client ($995)">Romance tour, repeat client ($995)</option>
+              <option value="2 for 1 Buddy plan ($1,595)">2 for 1 Buddy plan ($1,595)</option>
+              <option value="2 tours for the price of 1 ($1,595)">2 tours for the price of 1 ($1,595)</option>
+              <option value="1-on-1 personal introductions, 6 days ($995)">1-on-1 personal introductions, 6 days ($995)</option>
+            </select>
+            <span class="hint">On the Buddy plan? Put your buddy’s name in the message box.</span>
           </label>
           <div class="row">
             <label>Your name

@@ -38,17 +38,6 @@ window.ILL = {
 
   tours: [
     {
-      id: 'thanksgiving-2026',
-      name: 'Early Thanksgiving Romance Tour',
-      city: 'Barranquilla',
-      start: '2026-11-19',
-      end: '2026-11-24',
-      blurb: 'An early Thanksgiving on the Caribbean coast, with hosted socials through the week.',
-      packagePrice: '',   // e.g. '$1,450 per person, hotel and events included'
-      hotel: '',          // e.g. 'Hotel name, neighbourhood'
-      depositLink: ''     // a payment link for the $250 deposit, when you have one
-    },
-    {
       id: 'carnaval-2027',
       name: 'Barranquilla Carnaval: Sam will be there',
       city: 'Barranquilla',

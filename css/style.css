@@ -402,3 +402,12 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .band-tight .photo-wide { margin-top: 0; }
 .photo-frame.tilt-right { transform: rotate(1.5deg); }
 @media (max-width: 800px) { .photo-frame.tilt-right { transform: none; } }
+
+/* ---------- tour prices ---------- */
+.price-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 2rem; }
+.price-card { background: #fff; border-radius: 18px; padding: 1.4rem 1.5rem; border: 1px solid var(--line); }
+.price-card h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
+.price-card .price { margin-bottom: 0.5rem; font-size: 2.2rem; color: var(--pink); }
+.price-card p:last-child { margin: 0; font-size: 1rem; color: var(--ink-soft); }
+.rules { padding-left: 1.2em; max-width: 62ch; }
+.rules li { margin-bottom: 0.45em; }

@@ -80,8 +80,8 @@ async function saveSubscription(sub: any, userId?: string) {
   const end = sub.current_period_end ?? item?.current_period_end;
   // The settings may hold either a price ID (price_…) or a product ID (prod_…).
   const ids = [item?.price?.id, typeof item?.price?.product === 'string' ? item.price.product : item?.price?.product?.id];
-  const plan = ids.includes(setting('STRIPE_PRICE_YEARLY')) ? 'yearly'
-    : ids.includes(setting('STRIPE_PRICE_MONTHLY')) ? 'monthly' : null;
+  const plan = sub.metadata?.plan || (ids.includes(setting('STRIPE_PRICE_YEARLY')) ? 'yearly'
+    : ids.includes(setting('STRIPE_PRICE_MONTHLY')) ? 'monthly' : null);
 
   const { error } = await admin.from('subscriptions').upsert({
     user_id: uid,
@@ -116,8 +116,8 @@ async function depositPaid(session: any) {
     await sendMail([d.email], `Your place on ${d.tour_label} is reserved`,
       `<p>Hi ${esc(d.name)},</p>
 <p>Thank you. Your ${dollars} deposit has been paid and your place on <strong>${esc(d.tour_label)}</strong> is reserved.</p>
-<p>Sam will be in touch about the hotel, the full package price and the plan for the week. Questions before then? Call or text Sam at ${phone}.</p>
-<p style="color:#666;font-size:13px">The deposit is non-refundable. Stripe sends a separate card receipt. iLoveLatins will never ask you to send money by gift card or wire to a person.</p>`);
+<p>Sam will be in touch about the plan for the week. The balance of your package is due 30 days before the tour starts. Hotel and airfare are separate. Questions before then? Call or text Sam at ${phone}.</p>
+<p style="color:#666;font-size:13px">The deposit is non-refundable, but you can use it on a future tour within 12 months of paying it. Stripe sends a separate card receipt. iLoveLatins will never ask you to send money by gift card or wire to a person.</p>`);
   } catch (e) { console.error('customer email', e); }
   try {
     const to = setting('ADMIN_EMAIL').split(',').map((x) => x.trim()).filter(Boolean);
