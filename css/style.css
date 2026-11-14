@@ -462,3 +462,6 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .quote figcaption { margin-top: 0.7rem; font-size: 0.95rem; color: var(--ink-soft); opacity: 1; }
 .quote-small { margin-top: 1.5rem; background: var(--wash); }
 .quote-small figcaption a { margin-left: 0.5rem; }
+
+.testimonial.couple { border: 2px solid var(--pink); }
+.testimonial.couple .who strong::after { content: " \2665"; color: var(--pink); }
