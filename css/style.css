@@ -411,3 +411,11 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .price-card p:last-child { margin: 0; font-size: 1rem; color: var(--ink-soft); }
 .rules { padding-left: 1.2em; max-width: 62ch; }
 .rules li { margin-bottom: 0.45em; }
+
+/* ---------- message lock and unread badge ---------- */
+.nav-badge { display: inline-block; min-width: 1.35em; margin-left: 0.35em; padding: 0.05em 0.4em; border-radius: 999px; background: var(--pink); color: #fff; font-size: 0.8rem; font-weight: 700; text-align: center; line-height: 1.4; }
+.bubble.locked { background: #fff7dc; border: 1px dashed #e0b300; }
+.bubble.locked .body { font-weight: 600; }
+.bubble.locked .link { display: block; font-size: 0.85rem; margin-top: 0.3rem; }
+.notice.unlock { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; background: #fff7dc; border-color: #e0b300; max-width: none; }
+.notice.unlock .btn { padding: 0.55em 1.1em; font-size: 0.95rem; }

@@ -23,7 +23,7 @@ part in live mode.
    **anon / publishable key**. Paste them into `js/config.js`, or send them to
    Claude to do it. Both are safe to publish.
 
-5. Also run `supabase/002_dating_features.sql`, then `supabase/003_tour_deposits.sql` and `supabase/004_contact_messages.sql`, the same way. It adds profile
+5. Also run `supabase/002_dating_features.sql`, then `supabase/003_tour_deposits.sql`, `supabase/004_contact_messages.sql` and `supabase/005_message_lock.sql`, the same way. It adds profile
    details, the Verified badge, last active and likes.
 
 ## 2. Make yourself the site owner

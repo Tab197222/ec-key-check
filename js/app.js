@@ -80,7 +80,13 @@ window.App = (function () {
       no_i_like: 'You haven’t liked anyone yet. Open a profile and press “I’m interested”.',
       // translation
       translate: 'Translate', original: 'Show original', translating: 'Translating…',
-      translate_failed: 'Translation is not available right now.'
+      translate_failed: 'Translation is not available right now.',
+      locked_preview: 'New message: upgrade to read',
+      locked_bubble: 'Message locked',
+      locked_one: 'sent you a message. Become a member to read it and reply.',
+      locked_many: 'sent you {n} messages. Become a member to read them and reply.',
+      unlock_btn: 'Upgrade to read',
+      unread_badge: 'unread messages'
     },
     es: {
       setup: 'El registro de miembros se está configurando. Para unirte ahora, llama o escribe a Sam al 832-385-4161.',
@@ -146,7 +152,13 @@ window.App = (function () {
       no_likes: 'Nadie todavía. Un perfil completo con buenas fotos recibe más interés.',
       no_i_like: 'Todavía no has marcado a nadie. Abre un perfil y pulsa «Me interesa».',
       translate: 'Traducir', original: 'Ver original', translating: 'Traduciendo…',
-      translate_failed: 'La traducción no está disponible ahora.'
+      translate_failed: 'La traducción no está disponible ahora.',
+      locked_preview: 'Mensaje nuevo: mejora tu plan para leerlo',
+      locked_bubble: 'Mensaje bloqueado',
+      locked_one: 'te envió un mensaje. Hazte miembro para leerlo y responder.',
+      locked_many: 'te envió {n} mensajes. Hazte miembro para leerlos y responder.',
+      unlock_btn: 'Mejorar para leer',
+      unread_badge: 'mensajes sin leer'
     }
   };
   var lang = localStorage.getItem('ill_lang') ||
@@ -259,6 +271,29 @@ window.App = (function () {
     } catch (e) { /* not important enough to show */ }
   }
 
+  /* ---------- unread messages: a number next to "My account" in the menu, updated instantly ---------- */
+  async function unreadBadge() {
+    try {
+      var u = await user();
+      var link = document.querySelector('.nav a[href="account.html"]');
+      if (!u || !link) return;
+      var show = async function () {
+        var r = await sb.rpc('my_unread_count');
+        var n = r.data || 0;
+        var b = link.querySelector('.nav-badge');
+        if (!n) { if (b) b.remove(); return; }
+        if (!b) { b = document.createElement('span'); b.className = 'nav-badge'; link.appendChild(b); }
+        b.textContent = n > 99 ? '99+' : n;
+        b.setAttribute('aria-label', n + ' ' + t('unread_badge'));
+      };
+      await show();
+      sb.channel('badge-' + u.id)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'inbox_pings', filter: 'user_id=eq.' + u.id }, show)
+        .subscribe();
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) show(); });
+    } catch (e) { /* the badge is a nicety */ }
+  }
+
   function start(fn) {
     document.documentElement.lang = lang;
     translate();
@@ -271,6 +306,7 @@ window.App = (function () {
       return;
     }
     touch();
+    unreadBadge();
     Promise.resolve(fn()).catch(function (e) {
       console.error(e);
       if (root) root.insertAdjacentHTML('afterbegin', '<p class="form-status error">' + esc(e.message || e) + '</p>');

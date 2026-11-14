@@ -63,6 +63,17 @@ Deno.serve(async (req) => {
     const name = esc(me.first_name);
     // Men get the alert in English, women in Spanish.
     const es = to.gender === 'woman';
+    // A man without a membership can't read it yet: say so, and link to the plans.
+    let locked = false;
+    if (!es) {
+      const { data: sub } = await admin.from('subscriptions').select('status, current_period_end')
+        .eq('user_id', msg.recipient).maybeSingle();
+      const paid = !!sub && ['active', 'trialing'].includes(sub.status ?? '') &&
+        (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
+      const { data: rp } = await admin.from('profiles').select('is_admin').eq('id', msg.recipient).maybeSingle();
+      locked = !paid && !rp?.is_admin;
+    }
+    const plans = `${site}/membership.html`;
     const button = 'display:inline-block;background:#c81e82;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none';
     const subject = es ? `${me.first_name} te envió un mensaje` : `${me.first_name} sent you a message`;
     const html = es
@@ -72,7 +83,10 @@ Deno.serve(async (req) => {
 <p style="color:#666;font-size:13px">iLoveLatins nunca te pedirá dinero por correo.</p>`
       : `<p>Hi ${esc(to.first_name)},</p>
 <p><strong>${name}</strong> sent you a message on iLoveLatins.</p>
-<p><a href="${link}" style="${button}">Read and reply</a></p>
+${locked
+  ? `<p>Become a member to read ${name}’s message and reply. Plans start at $29.99 a month.</p>
+<p><a href="${plans}" style="${button}">Upgrade to read</a></p>`
+  : `<p><a href="${link}" style="${button}">Read and reply</a></p>`}
 <p style="color:#666;font-size:13px">iLoveLatins will never ask you for money by email.</p>`;
     const sent = await sendMail([recipient.email], subject, html);
     return json({ sent });

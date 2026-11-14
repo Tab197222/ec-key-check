@@ -21,7 +21,7 @@ App.start(async function () {
     $('list').innerHTML = rows.length ? rows.map(function (c) {
       return '<button type="button" data-id="' + esc(c.other) + '"' + (c.other === open ? ' aria-current="true"' : '') + '>' +
         '<strong>' + esc(c.first_name) + (c.unread > 0 ? ' <span class="tag">' + c.unread + '</span>' : '') + '</strong>' +
-        '<span>' + esc((c.last_body || '').slice(0, 60)) + '</span></button>';
+        '<span>' + (c.last_body == null && c.last_at ? '🔒 ' + esc(t('locked_preview')) : esc((c.last_body || '').slice(0, 60))) + '</span></button>';
     }).join('') : '<p class="form-small">' + esc(t('no_convos')) + '</p>';
   }
 
@@ -29,22 +29,31 @@ App.start(async function () {
     if (!open || !names[open]) { $('thread-box').hidden = true; return; }
     $('thread-box').hidden = false;
     $('with').innerHTML = '<a href="member.html?id=' + encodeURIComponent(open) + '">' + esc(names[open]) + '</a>';
-    var r = await sb.from('messages').select('*')
-      .or('and(sender.eq.' + u.id + ',recipient.eq.' + open + '),and(sender.eq.' + open + ',recipient.eq.' + u.id + ')')
-      .order('created_at').limit(300);
+    var r = await sb.rpc('get_thread', { other: open });
     var rows = r.data || [];
+    var lockedCount = rows.filter(function (m) { return m.locked; }).length;
+    $('unlock').hidden = !lockedCount;
+    if (lockedCount) {
+      $('unlock').innerHTML = '🔒 <strong>' + esc(names[open]) + '</strong> ' + esc(t(lockedCount === 1 ? 'locked_one' : 'locked_many').replace('{n}', lockedCount)) +
+        ' <a class="btn" href="membership.html">' + esc(t('unlock_btn')) + '</a>';
+    }
     if (force || rows.length !== shown) {
       shown = rows.length;
       originals = {};
       $('thread').innerHTML = rows.map(function (m) {
         var theirs = m.sender !== u.id;
+        if (m.locked) {
+          return '<div class="bubble theirs locked"><span class="body">🔒 ' + esc(t('locked_bubble')) + '</span>' +
+            '<time>' + new Date(m.created_at).toLocaleString(App.lang(), { dateStyle: 'medium', timeStyle: 'short' }) + '</time>' +
+            '<a class="link" href="membership.html">' + esc(t('unlock_btn')) + '</a></div>';
+        }
         return '<div class="bubble ' + (theirs ? 'theirs' : 'mine') + '"><span class="body">' + esc(m.body) + '</span>' +
           '<time>' + new Date(m.created_at).toLocaleString(App.lang(), { dateStyle: 'medium', timeStyle: 'short' }) + '</time>' +
           (theirs ? '<button type="button" class="link translate" data-translate="' + m.id + '">' + esc(t('translate')) + '</button>' : '') +
           '</div>';
       }).join('');
       $('thread').scrollTop = $('thread').scrollHeight;
-      if (rows.some(function (m) { return m.recipient === u.id && !m.read_at; })) await sb.rpc('mark_read', { other: open });
+      if (rows.some(function (m) { return m.recipient === u.id && !m.read_at && !m.locked; })) await sb.rpc('mark_read', { other: open });
     }
     await checkAllowed();
   }
@@ -127,6 +136,11 @@ App.start(async function () {
 
   await loadList();
   await loadThread(true);
-  // Check for new messages every 15 seconds while the page is open.
-  setInterval(function () { if (!document.hidden) { loadList(); loadThread(false); } }, 15000);
+  // New messages arrive instantly through a signal that carries no message text;
+  // checking every 30 seconds as well covers a dropped connection.
+  sb.channel('inbox-' + u.id)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'inbox_pings', filter: 'user_id=eq.' + u.id },
+      function () { loadList(); loadThread(false); })
+    .subscribe();
+  setInterval(function () { if (!document.hidden) { loadList(); loadThread(false); } }, 30000);
 });
