@@ -66,7 +66,7 @@ window.App = (function () {
       choose: 'Choose', current: 'Your current plan', login_first: 'Log in or create an account first.',
       already: 'You already have an active membership.',
       // profile details
-      details_h: 'About me', height: 'Height (cm)', has_children: 'Children', wants_children: 'Wants children',
+      details_h: 'About me', height: 'Height', or: 'or', has_children: 'Children', wants_children: 'Wants children',
       religion: 'Religion', english: 'English', looking_for: 'Looking for', any: 'Any', choose_one: 'Choose…',
       verified: 'Verified', verified_note: 'Sam has checked this person is real.',
       get_verified: 'Get a Verified badge: send Sam a selfie holding a paper with today’s date and your first name, by WhatsApp or email. Verified profiles get more replies.',
@@ -140,7 +140,7 @@ window.App = (function () {
       r_limit: 'Los miembros gratis pueden enviar un mensaje por semana. Mejora tu plan para mensajes ilimitados.',
       choose: 'Elegir', current: 'Tu plan actual', login_first: 'Primero entra o crea una cuenta.',
       already: 'Ya tienes una membresía activa.',
-      details_h: 'Sobre mí', height: 'Estatura (cm)', has_children: 'Hijos', wants_children: 'Quiere hijos',
+      details_h: 'Sobre mí', height: 'Estatura', or: 'o', has_children: 'Hijos', wants_children: 'Quiere hijos',
       religion: 'Religión', english: 'Inglés', looking_for: 'Busca', any: 'Cualquiera', choose_one: 'Elige…',
       verified: 'Verificado', verified_note: 'Sam comprobó que esta persona es real.',
       get_verified: 'Obtén la insignia de Verificado: envía a Sam una selfie sosteniendo un papel con la fecha de hoy y tu nombre, por WhatsApp o correo. Los perfiles verificados reciben más respuestas.',

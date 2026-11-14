@@ -9,6 +9,28 @@ App.start(async function () {
   var u = await App.requireUser();
   var DETAILS = ['looking_for', 'height_cm', 'english', 'religion', 'has_children', 'wants_children'];
   document.querySelectorAll('#profile [data-opts]').forEach(function (sel) { sel.innerHTML = App.options(sel.dataset.opts); });
+
+  /* ----- height: feet and inches, or centimetres; either one fills in the other ----- */
+  var hf = document.querySelector('#profile [name=height_ft]');
+  var hi = document.querySelector('#profile [name=height_in]');
+  var hc = document.querySelector('#profile [name=height_cm]');
+  hf.innerHTML = '<option value="">ft</option>' + [4, 5, 6, 7].map(function (n) { return '<option value="' + n + '">' + n + '′</option>'; }).join('');
+  hi.innerHTML = '<option value="">in</option>' + Array.from({ length: 12 }, function (_, n) { return '<option value="' + n + '">' + n + '″</option>'; }).join('');
+  function heightFromFeet() {
+    if (!hf.value) { hc.value = ''; return; }
+    hc.value = Math.round((+hf.value * 12 + (+hi.value || 0)) * 2.54);
+  }
+  function heightFromCm() {
+    var cm = +hc.value;
+    if (!cm) { hf.value = ''; hi.value = ''; return; }
+    var inches = Math.round(cm / 2.54);
+    var ft = Math.floor(inches / 12);
+    if (ft < 4 || ft > 7) return;
+    hf.value = String(ft); hi.value = String(inches % 12);
+  }
+  hf.addEventListener('change', heightFromFeet);
+  hi.addEventListener('change', heightFromFeet);
+  hc.addEventListener('input', heightFromCm);
   var profile = null, media = [], sub = null;
   var form = $('profile');
 
@@ -37,6 +59,7 @@ App.start(async function () {
       form.country.value = profile.country;
       form.about.value = profile.about;
       DETAILS.forEach(function (k) { form[k].value = profile[k] == null ? '' : profile[k]; });
+      heightFromCm();
     }
     var v = $('verify-note');
     v.hidden = !profile || profile.status !== 'approved';
