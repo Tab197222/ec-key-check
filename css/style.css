@@ -474,3 +474,5 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .past-grid a { position: relative; }
 .past-grid .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 1.4rem 0.7rem 0.55rem; font-size: 0.85rem; font-weight: 600; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.7)); }
 .past-grid.tall { grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); }
+.photo-wide.pano figcaption { padding: 0.5rem 0.8rem; font-size: 0.9rem; background: #fff; }
+.photo-wide.pano + .past-grid { margin-top: 1.25rem; }
