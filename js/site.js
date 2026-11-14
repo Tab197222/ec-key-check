@@ -170,7 +170,9 @@
     var result = document.getElementById('deposit-result');
     var back = new URLSearchParams(location.search).get('deposit');
     if (back === 'paid') {
-      result.textContent = 'Payment received. Your place is reserved, and a confirmation email is on its way. Sam will be in touch soon.';
+      result.textContent = new URLSearchParams(location.search).get('kind') === 'full'
+        ? 'Payment received: you have paid in full. A confirmation email is on its way, and Sam will be in touch soon.'
+        : 'Payment received. Your place is reserved, and a confirmation email is on its way. Sam will be in touch soon.';
     } else if (back === 'cancelled') {
       result.className = 'form-status error';
       result.textContent = 'Payment was cancelled, so nothing was charged. You can try again below.';
@@ -186,12 +188,24 @@
       b.addEventListener('click', function (e) {
         e.preventDefault();
         pickPackage(b.getAttribute('data-package'));
+        var pay = b.getAttribute('data-payment');
+        if (pay) dep.querySelector('[name=payment][value=' + pay + ']').checked = true;
+        payLabel();
         document.getElementById('reserve').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
         setTimeout(function () { dep.name.focus({ preventScroll: true }); }, 400);
       });
     });
     var askedFor = new URLSearchParams(location.search).get('package');
     if (askedFor) pickPackage(askedFor);
+    // The button says exactly what will be charged.
+    function payLabel() {
+      var full = dep.querySelector('[name=payment][value=full]').checked;
+      var opt = dep.package.options[dep.package.selectedIndex];
+      document.getElementById('pay-btn').textContent = full ? 'Pay $' + opt.getAttribute('data-price') + ' today' : 'Pay $250 deposit';
+    }
+    dep.package.addEventListener('change', payLabel);
+    dep.querySelectorAll('[name=payment]').forEach(function (r) { r.addEventListener('change', payLabel); });
+    payLabel();
     dep.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (dep.querySelector('.hp input').value) return; // spam trap
@@ -211,7 +225,8 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json', apikey: cfg.supabaseKey },
           body: JSON.stringify({
-            tour_id: dep.tour.value, tour_label: opt.textContent + ', ' + dep.package.value,
+            tour_id: dep.tour.value, tour_label: opt.textContent,
+            package: dep.package.value, payment: dep.querySelector('[name=payment]:checked').value,
             name: dep.name.value, email: dep.email.value, phone: dep.phone.value, message: dep.message.value
           })
         });

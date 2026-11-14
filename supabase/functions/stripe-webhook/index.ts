@@ -110,23 +110,44 @@ async function depositPaid(session: any) {
     .eq('id', id).eq('status', 'pending').select('*').maybeSingle();
   if (!d) return; // already handled: Stripe can send the same event twice
 
-  const dollars = '$' + (d.amount_cents / 100).toFixed(0);
+  const dollars = '$' + (d.amount_cents / 100).toLocaleString('en-US', { minimumFractionDigits: d.amount_cents % 100 ? 2 : 0 });
   const phone = setting('SAM_PHONE') || '1-832-385-4161';
-  try {
-    await sendMail([d.email], `Your place on ${d.tour_label} is reserved`,
-      `<p>Hi ${esc(d.name)},</p>
-<p>Thank you. Your ${dollars} deposit has been paid and your place on <strong>${esc(d.tour_label)}</strong> is reserved.</p>
+  const small = 'color:#666;font-size:13px';
+  const noMoney = 'iLoveLatins will never ask you to send money by gift card or wire to a person.';
+  let subject: string, body: string, ownerSubject: string, ownerLine: string;
+  if (d.kind === 'full') {
+    subject = `Paid in full: ${d.tour_label}`;
+    body = `<p>Thank you. You have paid <strong>${dollars} in full</strong> for <strong>${esc(d.tour_label)}</strong>. There is nothing more to pay for the package.</p>
+<p>Sam will be in touch about the plan for the week. Hotel and airfare are separate. Questions before then? Call or text Sam at ${phone}.</p>
+<p style="${small}">Stripe sends a separate card receipt. ${noMoney}</p>`;
+    ownerSubject = `Paid in full: ${d.name}, ${d.tour_label}`;
+    ownerLine = `paid <strong>${dollars} in full</strong> for <strong>${esc(d.tour_label)}</strong>.`;
+  } else if (d.kind === 'english') {
+    subject = 'English classes: your subscription has started';
+    body = `<p>Thank you. Your subscription for <strong>English classes for your lady</strong> has started: ${dollars} a month, billed by card each month.</p>
+<p>Sam will be in touch to arrange the classes. To stop them, call or text Sam at ${phone}.</p>
+<p style="${small}">Stripe sends a card receipt every month. ${noMoney}</p>`;
+    ownerSubject = `English classes subscription: ${d.name}`;
+    ownerLine = `subscribed to <strong>English classes</strong> at ${dollars} a month. Arrange the classes with him. To stop billing, cancel the subscription in Stripe (Billing, Subscriptions).`;
+  } else {
+    subject = `Your place on ${d.tour_label} is reserved`;
+    body = `<p>Thank you. Your ${dollars} deposit has been paid and your place on <strong>${esc(d.tour_label)}</strong> is reserved.</p>
 <p>Sam will be in touch about the plan for the week. The balance of your package is due 30 days before the tour starts. Hotel and airfare are separate. Questions before then? Call or text Sam at ${phone}.</p>
-<p style="color:#666;font-size:13px">The deposit is non-refundable, but you can use it on a future tour within 12 months of paying it. Stripe sends a separate card receipt. iLoveLatins will never ask you to send money by gift card or wire to a person.</p>`);
+<p style="${small}">The deposit is non-refundable, but you can use it on a future tour within 12 months of paying it. Stripe sends a separate card receipt. ${noMoney}</p>`;
+    ownerSubject = `Deposit paid: ${d.name}, ${d.tour_label}`;
+    ownerLine = `paid a ${dollars} deposit for <strong>${esc(d.tour_label)}</strong>.`;
+  }
+  try {
+    await sendMail([d.email], subject, `<p>Hi ${esc(d.name)},</p>\n` + body);
   } catch (e) { console.error('customer email', e); }
   try {
     const to = setting('ADMIN_EMAIL').split(',').map((x) => x.trim()).filter(Boolean);
     if (to.length) {
-      await sendMail(to, `Deposit paid: ${d.name}, ${d.tour_label}`,
-        `<p><strong>${esc(d.name)}</strong> paid a ${dollars} deposit for <strong>${esc(d.tour_label)}</strong>.</p>
+      await sendMail(to, ownerSubject,
+        `<p><strong>${esc(d.name)}</strong> ${ownerLine}</p>
 <p>Email: ${esc(d.email)}<br>Phone: ${esc(d.phone) || 'not given'}</p>
 ${d.message ? `<p>Message:<br>${esc(d.message).replace(/\n/g, '<br>')}</p>` : ''}
-<p>All deposits are on the approvals page of the site.</p>`);
+<p>All payments are on the approvals page of the site.</p>`);
     }
   } catch (e) { console.error('owner email', e); }
 }
@@ -139,13 +160,16 @@ Deno.serve(async (req) => {
   try {
     const event = JSON.parse(body);
     const obj = event.data.object;
-    if (event.type === 'checkout.session.completed' && obj.metadata?.kind === 'deposit') {
+    if (event.type === 'checkout.session.completed' && ['deposit', 'full', 'english'].includes(obj.metadata?.kind)) {
       await depositPaid(obj);
     } else if (event.type === 'checkout.session.completed' && obj.mode === 'subscription' && obj.subscription) {
       await saveSubscription(await stripeGet(`subscriptions/${obj.subscription}`), obj.client_reference_id);
     } else if (['customer.subscription.updated', 'customer.subscription.deleted'].includes(event.type)) {
-      // Fetch the current state so an old, late event cannot overwrite a newer one.
-      await saveSubscription(await stripeGet(`subscriptions/${obj.id}`));
+      // English classes are their own subscription, not a site membership: leave those to Stripe.
+      if (obj.metadata?.kind !== 'english') {
+        // Fetch the current state so an old, late event cannot overwrite a newer one.
+        await saveSubscription(await stripeGet(`subscriptions/${obj.id}`));
+      }
     }
     return new Response(JSON.stringify({ received: true }), { headers: { 'Content-Type': 'application/json' } });
   } catch (e) {

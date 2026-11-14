@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=202611141611">
+  <link rel="stylesheet" href="css/style.css?v=202611141613">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -20,7 +20,7 @@
       <div class="wrap">
         <h1>Tours to Colombia</h1>
         <p class="lead">Each tour is a hosted week in Colombia with a welcome dinner, the singles socials and a bilingual host. Your first tour is $1,495; a $250 deposit holds your place.</p>
-        <div class="actions"><a class="btn" href="#reserve">Reserve with a $250 deposit</a><a class="btn btn-quiet" href="#prices">See prices</a></div>
+        <div class="actions"><a class="btn" href="#reserve">Book now: pay today and save $250</a><a class="btn btn-quiet" href="#prices">See prices</a></div>
       </div>
     </section>
 
@@ -59,7 +59,7 @@
             <p class="price">$1,495</p>
             <p class="save">Save $250 when you pay the total today</p>
             <p>Your first iLoveLatins tour.</p>
-            <a class="btn" href="#reserve" data-package="Romance tour, first time ($1,495)">Reserve: $250 deposit</a>
+            <div class="card-actions"><a class="btn" href="#reserve" data-package="first" data-payment="full">Pay $1,495 today</a><a class="btn btn-quiet" href="#reserve" data-package="first" data-payment="deposit">$250 deposit</a></div>
           </article>
           <article class="price-card">
             <h3>Romance tour, repeat client</h3>
@@ -67,7 +67,7 @@
             <p class="price">$995</p>
             <p class="save">Save $250 when you pay the total today</p>
             <p>For men who have been on a tour before.</p>
-            <a class="btn" href="#reserve" data-package="Romance tour, repeat client ($995)">Reserve: $250 deposit</a>
+            <div class="card-actions"><a class="btn" href="#reserve" data-package="repeat" data-payment="full">Pay $995 today</a><a class="btn btn-quiet" href="#reserve" data-package="repeat" data-payment="deposit">$250 deposit</a></div>
           </article>
           <article class="price-card">
             <h3>2 for 1 Buddy plan</h3>
@@ -75,7 +75,7 @@
             <p class="price">$1,595</p>
             <p class="save">Save $250 when you pay the total today</p>
             <p>Two men, one tour. Sign up, then send Sam your buddy’s name and details.</p>
-            <a class="btn" href="#reserve" data-package="2 for 1 Buddy plan ($1,595)">Reserve: $250 deposit</a>
+            <div class="card-actions"><a class="btn" href="#reserve" data-package="buddy" data-payment="full">Pay $1,595 today</a><a class="btn btn-quiet" href="#reserve" data-package="buddy" data-payment="deposit">$250 deposit</a></div>
           </article>
           <article class="price-card">
             <h3>2 tours for the price of 1</h3>
@@ -83,7 +83,7 @@
             <p class="price">$1,595</p>
             <p class="save">Save $250 when you pay the total today</p>
             <p>Two romance tours for one price.</p>
-            <a class="btn" href="#reserve" data-package="2 tours for the price of 1 ($1,595)">Reserve: $250 deposit</a>
+            <div class="card-actions"><a class="btn" href="#reserve" data-package="two_tours" data-payment="full">Pay $1,595 today</a><a class="btn btn-quiet" href="#reserve" data-package="two_tours" data-payment="deposit">$250 deposit</a></div>
           </article>
           <article class="price-card price-special">
             <h3>3 years of unlimited vacations</h3>
@@ -91,7 +91,7 @@
             <p class="price">$2,145</p>
             <p class="save">Save $250 when you pay the total today</p>
             <p>Special offer: come on as many tours as you like for three years.</p>
-            <a class="btn" href="#reserve" data-package="3 years of unlimited vacations ($2,145)">Reserve: $250 deposit</a>
+            <div class="card-actions"><a class="btn" href="#reserve" data-package="three_years" data-payment="full">Pay $2,145 today</a><a class="btn btn-quiet" href="#reserve" data-package="three_years" data-payment="deposit">$250 deposit</a></div>
           </article>
           <article class="price-card">
             <h3>1-on-1 personal introductions</h3>
@@ -99,7 +99,7 @@
             <p class="price">$995 <small>for 6 days</small></p>
             <p class="save">Save $250 when you pay the total today</p>
             <p>Includes 1-on-1 introductions with your own translator, for 6 days. Totally separate from the large planned group events.</p>
-            <a class="btn" href="#reserve" data-package="1-on-1 personal introductions, 6 days ($995)">Reserve: $250 deposit</a>
+            <div class="card-actions"><a class="btn" href="#reserve" data-package="intro" data-payment="full">Pay $995 today</a><a class="btn btn-quiet" href="#reserve" data-package="intro" data-payment="deposit">$250 deposit</a></div>
           </article>
           <article class="price-card">
             <h3>English classes for your lady</h3>
@@ -213,8 +213,8 @@
     <section class="band" id="reserve">
       <div class="wrap split">
         <div>
-          <h2>Reserve your place</h2>
-          <p class="lead">Pay the $250 deposit by card to hold your place. Sam will then be in touch about the plan for the week. The balance is due 30 days before the tour.</p>
+          <h2>Book your place</h2>
+          <p class="lead">Pay the total today and save $250, or hold your place with a $250 deposit. Sam will then be in touch about the plan for the week.</p>
           <p><strong>The deposit is non-refundable</strong>, but you can use it on a future tour within 12 months. You pay on Stripe’s secure page; iLoveLatins never sees your card number.</p>
           <p>Questions first? Call or text <a data-phone></a> before you pay.</p>
           <figure class="quote quote-small"><blockquote><p>“The I Love Latins agency is honest and a great choice to meet a Latina of your dreams.”</p></blockquote><figcaption>Scott M. <a href="testimonials.html">More testimonials</a></figcaption></figure>
@@ -226,15 +226,20 @@
           </label>
           <label>Which package?
             <select name="package" required>
-              <option value="Romance tour, first time ($1,495)">Romance tour, first time ($1,495)</option>
-              <option value="Romance tour, repeat client ($995)">Romance tour, repeat client ($995)</option>
-              <option value="2 for 1 Buddy plan ($1,595)">2 for 1 Buddy plan ($1,595)</option>
-              <option value="2 tours for the price of 1 ($1,595)">2 tours for the price of 1 ($1,595)</option>
-              <option value="3 years of unlimited vacations ($2,145)">3 years of unlimited vacations ($2,145)</option>
-              <option value="1-on-1 personal introductions, 6 days ($995)">1-on-1 personal introductions, 6 days ($995)</option>
+              <option value="first" data-price="1,495">Romance tour, first time ($1,495 today, $1,745 regular)</option>
+              <option value="repeat" data-price="995">Romance tour, repeat client ($995 today, $1,245 regular)</option>
+              <option value="buddy" data-price="1,595">2 for 1 Buddy plan ($1,595 today, $1,845 regular)</option>
+              <option value="two_tours" data-price="1,595">2 tours for the price of 1 ($1,595 today, $1,845 regular)</option>
+              <option value="three_years" data-price="2,145">3 years of unlimited vacations ($2,145 today, $2,395 regular)</option>
+              <option value="intro" data-price="995">1-on-1 personal introductions ($995 today, $1,245 regular)</option>
             </select>
             <span class="hint">On the Buddy plan? Put your buddy’s name in the message box.</span>
           </label>
+          <fieldset class="radios pay-choice">
+            <legend>How do you want to pay?</legend>
+            <label class="check"><input type="radio" name="payment" value="full" checked> <span><strong>Pay in full today</strong> and save $250</span></label>
+            <label class="check"><input type="radio" name="payment" value="deposit"> <span><strong>$250 deposit</strong> now, regular price, balance due 30 days before the tour</span></label>
+          </fieldset>
           <div class="row">
             <label>Your name
               <input type="text" name="name" data-label="Name" autocomplete="name" required>
@@ -250,7 +255,7 @@
             <textarea name="message" data-label="Message"></textarea>
           </label>
           <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-          <button class="btn" type="submit">Pay $250 deposit</button>
+          <button class="btn" type="submit" id="pay-btn">Pay in full today</button>
           <p class="form-status" id="deposit-status" role="status"></p>
         </form>
       </div>
@@ -259,8 +264,8 @@
   </main>
 
   <footer data-footer></footer>
-  <script src="js/data.js?v=202611141611"></script>
-  <script src="js/config.js?v=202611141611"></script>
-  <script src="js/site.js?v=202611141611"></script>
+  <script src="js/data.js?v=202611141613"></script>
+  <script src="js/config.js?v=202611141613"></script>
+  <script src="js/site.js?v=202611141613"></script>
 </body>
 </html>

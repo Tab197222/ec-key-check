@@ -71,9 +71,9 @@ App.start(async function () {
     var dp = await sb.from('deposits').select('*').eq('status', 'paid').order('paid_at', { ascending: false }).limit(100);
     var deps = dp.data || [];
     $('deposits').innerHTML = deps.length ? '<div class="table-wrap"><table class="deposits"><thead><tr>' +
-      '<th>Paid</th><th>Tour</th><th>Name</th><th>Email</th><th>Phone</th><th>Amount</th></tr></thead><tbody>' +
+      '<th>Paid</th><th>Type</th><th>Tour</th><th>Name</th><th>Email</th><th>Phone</th><th>Amount</th></tr></thead><tbody>' +
       deps.map(function (x) {
-        return '<tr><td>' + new Date(x.paid_at).toLocaleDateString() + '</td><td>' + esc(x.tour_label) + '</td><td>' +
+        return '<tr><td>' + new Date(x.paid_at).toLocaleDateString() + '</td><td>' + (x.kind === 'full' ? 'Paid in full' : x.kind === 'english' ? 'English classes' : 'Deposit') + '</td><td>' + esc(x.tour_label) + '</td><td>' +
           esc(x.name) + (x.message ? '<br><span class="form-small">' + esc(x.message) + '</span>' : '') + '</td><td><a href="mailto:' +
           esc(x.email) + '">' + esc(x.email) + '</a></td><td>' + esc(x.phone) + '</td><td>$' + (x.amount_cents / 100) + '</td></tr>';
       }).join('') + '</tbody></table></div>'

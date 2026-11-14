@@ -480,3 +480,9 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .price-card .was { margin: 0 0 0.1rem; font-size: 0.95rem; color: var(--ink-soft); }
 .price-card .was s { text-decoration-thickness: 2px; text-decoration-color: var(--pink); }
 .price-card .save { margin: 0.1rem 0 0.6rem; font-size: 0.9rem; font-weight: 700; color: #1d7a45; }
+
+.card-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pay-choice { display: grid; gap: 0.5rem; }
+.pay-choice label.check { font-weight: 400; }
+.price-card .price + .save { flex: 0 0 auto; }
+.price-card .save + p { flex: 1; margin: 0 0 1.1rem; font-size: 1rem; color: var(--ink-soft); }
