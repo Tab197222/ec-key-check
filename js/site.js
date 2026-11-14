@@ -1,4 +1,7 @@
 (function () {
+  // The version number stamped on this script's link (?v=…); added to the site's own page links below.
+  var VERSION = '';
+  try { VERSION = new URL(document.currentScript.src).searchParams.get('v') || ''; } catch (e) {}
   var D = window.ILL;
   var C = D.contact;
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -291,4 +294,22 @@
       }
     });
   });
+
+  /* ---------- links to the site's own pages carry the version, so browsers never show an old copy ---------- */
+  function freshen(root) {
+    if (!VERSION || !root.querySelectorAll) return;
+    root.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (/^(https?:|mailto:|tel:|sms:|#|javascript:)/i.test(href) || !/^[\w\-\/]*\.html(?:[?#]|$)/.test(href) || /[?&]v=/.test(href)) return;
+      var hash = '', i = href.indexOf('#');
+      if (i >= 0) { hash = href.slice(i); href = href.slice(0, i); }
+      a.setAttribute('href', href + (href.indexOf('?') >= 0 ? '&' : '?') + 'v=' + VERSION + hash);
+    });
+  }
+  freshen(document);
+  if (window.MutationObserver) {
+    new MutationObserver(function (changes) {
+      changes.forEach(function (c) { c.addedNodes.forEach(function (n) { if (n.nodeType === 1) { freshen(n); if (n.matches && n.matches('a[href]')) freshen(n.parentNode); } }); });
+    }).observe(document.body, { childList: true, subtree: true });
+  }
 })();
