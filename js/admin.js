@@ -75,6 +75,26 @@ App.start(async function () {
         }).join('')
       : '<p class="form-small">Nothing waiting.</p>';
 
+    // All members, newest first
+    var all = await sb.from('profiles').select('id, first_name, gender, birthdate, city, country, status, verified, is_admin, created_at')
+      .order('created_at', { ascending: false }).limit(300);
+    var people = all.data || [];
+    var LABEL = { draft: 'Not sent yet', pending: 'Waiting for approval', approved: 'Live', rejected: 'Rejected' };
+    $('members-all').innerHTML = people.length ? '<table class="deposits"><thead><tr>' +
+      '<th>Name</th><th></th><th>Age</th><th>City</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody>' +
+      people.map(function (x) {
+        var acts = [];
+        if (x.status === 'approved') acts.push('<a class="link" href="member.html?id=' + x.id + '">View</a>');
+        if (x.status !== 'approved') acts.push('<button class="link" data-approve="' + x.id + '">Approve</button>');
+        if (x.status === 'approved' && !x.is_admin) acts.push('<button class="link danger" data-reject="' + x.id + '">Take down</button>');
+        if (x.status === 'approved') acts.push('<button class="link" data-verify="' + x.id + '" data-on="' + (!x.verified) + '">' + (x.verified ? 'Remove Verified' : 'Mark Verified') + '</button>');
+        return '<tr><td><strong>' + esc(x.first_name) + '</strong>' + (x.verified ? ' <span class="badge-verified">✓</span>' : '') + (x.is_admin ? ' <span class="tag">owner</span>' : '') + '</td>' +
+          '<td>' + (x.gender === 'woman' ? 'Woman' : 'Man') + '</td><td>' + age(x.birthdate) + '</td>' +
+          '<td>' + esc(x.city) + ', ' + esc(x.country) + '</td><td>' + LABEL[x.status] + '</td>' +
+          '<td>' + new Date(x.created_at).toLocaleDateString() + '</td><td class="row-actions">' + acts.join(' ') + '</td></tr>';
+      }).join('') + '</tbody></table>'
+      : '<p class="form-small">Nobody has made a profile yet.</p>';
+
     // Reports
     var r = await sb.from('reports').select('*, reporter_p:profiles!reports_reporter_fkey(first_name), reported_p:profiles!reports_reported_fkey(id, first_name)')
       .eq('resolved', false).order('created_at');
@@ -115,6 +135,8 @@ App.start(async function () {
     } else if (d.delMedia) {
       await sb.storage.from('media').remove([d.path]);
       await sb.from('media').delete().eq('id', d.delMedia);
+    } else if (d.verify) {
+      await sb.from('profiles').update({ verified: d.on === 'true' }).eq('id', d.verify);
     } else if (d.resolve) {
       await sb.from('reports').update({ resolved: true }).eq('id', d.resolve);
     }

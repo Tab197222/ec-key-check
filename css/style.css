@@ -510,3 +510,7 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .stat span { font-size: 0.9rem; color: var(--ink-soft); }
 .stat strong { font-family: var(--display); font-size: 2.2rem; line-height: 1.1; color: var(--pink); }
 .stat small { font-size: 0.85rem; color: var(--ink-soft); }
+
+.admin-page h2, [data-app] > h2 { margin-top: 2.5rem; }
+.row-actions { white-space: nowrap; }
+.row-actions .link { margin-right: 0.6rem; font-size: 0.92rem; }
