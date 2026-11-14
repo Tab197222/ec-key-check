@@ -503,3 +503,10 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .slide-btn.next { right: 0.8rem; }
 .photo-credit { font-size: 0.85rem; color: var(--ink-soft); margin: 0.5rem 0 0; }
 .venue-info { margin-top: 2rem; }
+
+/* ---------- visitors report ---------- */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.stat { background: var(--wash); border-radius: 16px; padding: 1rem 1.2rem; display: grid; }
+.stat span { font-size: 0.9rem; color: var(--ink-soft); }
+.stat strong { font-family: var(--display); font-size: 2.2rem; line-height: 1.1; color: var(--pink); }
+.stat small { font-size: 0.85rem; color: var(--ink-soft); }

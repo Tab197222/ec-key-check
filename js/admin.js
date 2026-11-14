@@ -27,6 +27,25 @@ App.start(async function () {
   }
 
   async function load() {
+    // Visitors: totals for today, 7 days, 30 days, and the most viewed pages this month
+    var since = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+    var pv = await sb.from('page_views').select('*').gte('day', since);
+    var rows = pv.data || [];
+    var today = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Bogota' })).toISOString().slice(0, 10);
+    var week = new Date(Date.now() - 6 * 864e5).toISOString().slice(0, 10);
+    function sum(list, k) { return list.reduce(function (t, r) { return t + r[k]; }, 0); }
+    var t = rows.filter(function (r) { return r.day === today; });
+    var w = rows.filter(function (r) { return r.day >= week; });
+    var byPage = {};
+    rows.forEach(function (r) { byPage[r.path] = (byPage[r.path] || 0) + r.views; });
+    var top = Object.keys(byPage).sort(function (a, b) { return byPage[b] - byPage[a]; }).slice(0, 8);
+    $('visitors').innerHTML = '<div class="stat-row">' +
+      [['Today', t], ['Last 7 days', w], ['Last 30 days', rows]].map(function (x) {
+        return '<div class="stat"><span>' + x[0] + '</span><strong>' + sum(x[1], 'visits') + '</strong><small>visits, ' + sum(x[1], 'views') + ' page views</small></div>';
+      }).join('') + '</div>' +
+      (top.length ? '<p class="form-small">Most viewed pages, last 30 days: ' + top.map(function (k) { return esc(k.replace('.html', '')) + ' (' + byPage[k] + ')'; }).join(', ') + '</p>'
+                  : '<p class="form-small">No visits counted yet.</p>');
+
     // Profiles waiting for approval
     var p = await sb.from('profiles').select('*').eq('status', 'pending').order('created_at');
     var pending = p.data || [];

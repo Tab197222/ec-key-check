@@ -350,4 +350,17 @@
     box.addEventListener('mouseleave', restart);
     restart();
   });
+
+  /* ---------- private hit counter: one view per page load, one visit per browser session ---------- */
+  (function () {
+    var cfg = window.ILL_CONFIG || { supabaseUrl: 'https://fdhntvzctkdojldxduan.supabase.co', supabaseKey: 'sb_publishable_PVHHl1T18HF3j0kgm94Jkw_alwORgIA' };
+    if (!cfg.supabaseUrl || /^(localhost|127\.)/.test(location.hostname)) return;
+    var newVisit = false;
+    try { newVisit = !sessionStorage.getItem('ill_visit'); sessionStorage.setItem('ill_visit', '1'); } catch (e) {}
+    fetch(cfg.supabaseUrl + '/rest/v1/rpc/count_view', {
+      method: 'POST', keepalive: true,
+      headers: { 'Content-Type': 'application/json', apikey: cfg.supabaseKey },
+      body: JSON.stringify({ p: page, new_visit: newVisit })
+    }).catch(function () {});
+  })();
 })();
