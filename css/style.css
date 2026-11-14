@@ -394,3 +394,11 @@ figcaption { font-size: 0.92rem; margin-top: 0.6rem; opacity: 0.8; }
 table.deposits { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
 table.deposits th, table.deposits td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
 table.deposits th { font-weight: 600; background: var(--wash); }
+
+/* ---------- wide photos ---------- */
+.photo-wide { margin: 1.75rem 0 0; border-radius: 22px; overflow: hidden; border: 8px solid #fff; box-shadow: 0 16px 38px rgba(35, 22, 79, 0.18); }
+.photo-wide img { width: 100%; height: auto; }
+.band-tight { padding-block: clamp(1.5rem, 4vw, 2.5rem); }
+.band-tight .photo-wide { margin-top: 0; }
+.photo-frame.tilt-right { transform: rotate(1.5deg); }
+@media (max-width: 800px) { .photo-frame.tilt-right { transform: none; } }
