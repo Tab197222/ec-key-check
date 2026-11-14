@@ -170,6 +170,23 @@
       result.className = 'form-status error';
       result.textContent = 'Payment was cancelled, so nothing was charged. You can try again below.';
     }
+    // "Reserve" on a price card: pick that package in the form and jump to it.
+    function pickPackage(value) {
+      for (var i = 0; i < dep.package.options.length; i++) {
+        if (dep.package.options[i].value === value) { dep.package.selectedIndex = i; return true; }
+      }
+      return false;
+    }
+    document.querySelectorAll('[data-package]').forEach(function (b) {
+      b.addEventListener('click', function (e) {
+        e.preventDefault();
+        pickPackage(b.getAttribute('data-package'));
+        document.getElementById('reserve').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        setTimeout(function () { dep.name.focus({ preventScroll: true }); }, 400);
+      });
+    });
+    var askedFor = new URLSearchParams(location.search).get('package');
+    if (askedFor) pickPackage(askedFor);
     dep.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (dep.querySelector('.hp input').value) return; // spam trap
