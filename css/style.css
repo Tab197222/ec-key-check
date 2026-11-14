@@ -419,3 +419,7 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .bubble.locked .link { display: block; font-size: 0.85rem; margin-top: 0.3rem; }
 .notice.unlock { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; background: #fff7dc; border-color: #e0b300; max-width: none; }
 .notice.unlock .btn { padding: 0.55em 1.1em; font-size: 0.95rem; }
+
+/* ---------- alternative logo (white background melts into light sections) ---------- */
+.logo-alt { display: block; width: min(100%, 560px); height: auto; margin: 0 0 1.25rem; mix-blend-mode: multiply; }
+.page-head .logo-alt { width: min(100%, 480px); margin-left: -1.5%; }
