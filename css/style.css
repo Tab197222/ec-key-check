@@ -379,8 +379,8 @@ figcaption { font-size: 0.92rem; margin-top: 0.6rem; opacity: 0.8; }
 .space-top { margin-top: 2.5rem; }
 .owner-tools { border-top: 1px dashed var(--line); padding-top: 1rem; }
 .bubble .translate { display: block; font-size: 0.8rem; margin-top: 0.3rem; }
-.poster-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2rem); margin-top: 2rem; }
-@media (max-width: 760px) { .poster-grid { grid-template-columns: 1fr 1fr; } .poster-grid .poster:last-child { grid-column: span 2; max-width: 60%; justify-self: center; } }
+.poster-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2rem); margin-top: 2rem; }
+@media (max-width: 900px) { .poster-grid { grid-template-columns: 1fr 1fr; } }
 .poster { display: block; border-radius: 18px; overflow: hidden; border: 6px solid #fff; box-shadow: 0 12px 30px rgba(35, 22, 79, 0.15); }
 .poster:nth-child(1) { transform: rotate(-1.2deg); }
 .poster:nth-child(3) { transform: rotate(1.2deg); }
@@ -423,3 +423,7 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 /* ---------- alternative logo (white background melts into light sections) ---------- */
 .logo-alt { display: block; width: min(100%, 560px); height: auto; margin: 0 0 1.25rem; mix-blend-mode: multiply; }
 .page-head .logo-alt { width: min(100%, 480px); margin-left: -1.5%; }
+
+.video-feature { margin: 1.75rem 0 0; max-width: 400px; }
+.video-feature video { max-height: 75vh; margin-inline: auto; }
+.price-special { border: 2px solid var(--pink); background: #fff3fa; }
