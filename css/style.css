@@ -465,3 +465,7 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 
 .testimonial.couple { border: 2px solid var(--pink); }
 .testimonial.couple .who strong::after { content: " \2665"; color: var(--pink); }
+
+.past-grid.tall img { aspect-ratio: 3 / 4; }
+.past-grid.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 800px) { .past-grid.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
