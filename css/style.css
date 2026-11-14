@@ -476,3 +476,6 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .past-grid.tall { grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); }
 .photo-wide.pano figcaption { padding: 0.5rem 0.8rem; font-size: 0.9rem; background: #fff; }
 .photo-wide.pano + .past-grid { margin-top: 1.25rem; }
+
+.price-card .was { margin: 0 0 0.1rem; font-size: 0.95rem; color: var(--ink-soft); }
+.price-card .was s { text-decoration-thickness: 2px; text-decoration-color: var(--pink); }
