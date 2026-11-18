@@ -68,13 +68,18 @@
 
   var footer = document.querySelector('[data-footer]');
   if (footer) {
+    var S = D.social || {};
+    var follow = [['Facebook', S.facebook], ['Instagram', S.instagram], ['YouTube', D.youtubeChannel]]
+      .filter(function (s) { return s[1]; })
+      .map(function (s) { return '<a href="' + esc(s[1]) + '" target="_blank" rel="noopener">' + s[0] + '</a>'; });
     footer.className = 'site-footer';
     footer.innerHTML =
       '<div class="wrap"><div class="footer-grid">' +
       '<div><img src="assets/logo.png" alt="iLoveLatins" width="768" height="205">' +
       '<p>Hosted singles tours to Colombia since 2000.</p>' +
       '<p>Call or text ' + esc(C.name) + ': <a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a><br>' +
-      '<a href="mailto:' + C.email + '">' + C.email + '</a></p></div>' +
+      '<a href="mailto:' + C.email + '">' + C.email + '</a></p>' +
+      (follow.length ? '<p class="follow">Follow us: ' + follow.join(' · ') + '</p>' : '') + '</div>' +
       '<div><h3>Tours</h3><ul>' +
       '<li><a href="tours.html">Tour dates</a></li>' +
       '<li><a href="tours.html#reserve">Reserve a tour</a></li>' +

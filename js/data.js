@@ -32,6 +32,13 @@ window.ILL = {
   ],
   youtubeChannel: 'https://www.youtube.com/@user-ye3wm9sb8k',
 
+  // Social media pages, shown as "Follow us" links at the bottom of every page.
+  // Paste a page's address between the quotes; anything left as '' is not shown.
+  social: {
+    facebook: 'https://www.facebook.com/profile.php?id=61596746908010',
+    instagram: ''
+  },
+
   // Online reservations close this many days before a tour starts.
   // Add bookable: false to a tour to list it as a date only, with no deposit.
   bookingCutoffDays: 30,
