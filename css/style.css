@@ -266,6 +266,13 @@ figcaption { font-size: 0.92rem; margin-top: 0.6rem; opacity: 0.8; }
 .site-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.45rem; }
 .site-footer a { color: var(--ink); }
 .site-footer a:hover { color: var(--pink); }
+.site-footer .follow { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+.site-footer .follow span { font-weight: 600; }
+.site-footer .follow a { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; transition: transform 0.15s; }
+.site-footer .follow a:hover { transform: scale(1.1); }
+.site-footer .follow .social-facebook { background: #1877f2; }
+.site-footer .follow .social-instagram { background: linear-gradient(45deg, #f09433, #dc2743 50%, #bc1888); }
+.site-footer .follow .social-youtube { background: #f00; }
 .site-footer h3 { font-size: 1.05rem; font-family: var(--body); font-weight: 600; letter-spacing: 0; margin-bottom: 0.7rem; }
 .legal { margin-top: 2.25rem; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: 0.92rem; color: var(--ink-soft); }
 
