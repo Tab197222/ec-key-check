@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhatsApp invitations | iLoveLatins</title>
+  <meta name="description" content="WhatsApp invitations for the site owners to send.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=202611180328">
+  <style>
+    .invite-list { display: grid; gap: 2rem; max-width: 760px; }
+    .invite { padding: 1.25rem; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    .invite h2 { font-size: 1.3rem; margin: 0 0 0.4rem; }
+    .invite pre { white-space: pre-wrap; font: inherit; font-size: 1rem; background: #e7ffdb; border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+    .invite .actions { margin-top: 0; }
+    .invite details { margin-top: 1rem; color: var(--ink-soft); }
+    .tips { max-width: 760px; }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>WhatsApp invitations</h1>
+        <p class="lead">Three messages in Spanish to invite women to the new site. Open this page on your phone.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <ol class="tips">
+          <li>Tap <strong>Copy message</strong>.</li>
+          <li>Open WhatsApp, open the chat with her, press and hold in the message box and tap <strong>Paste</strong>.</li>
+          <li>Where it says <strong>[nombre]</strong>, type her first name. Then send.</li>
+        </ol>
+        <div class="invite-list" id="invites"></div>
+
+        <h2 style="margin-top:3rem; font-size:1.6rem">Tips</h2>
+        <ul class="tips">
+          <li><strong>Only invite women who would want to be on the site.</strong> Never make a profile for someone, or use her photos without asking.</li>
+          <li><strong>Approve quickly.</strong> A woman who waits days for approval loses interest. The approval email arrives at both owner addresses.</li>
+          <li><strong>Verify as many as you can.</strong> “✓ Verificada” is what convinces men the profiles are real.</li>
+          <li><strong>Twenty real, active profiles</strong> is a good point to start promoting the site to men.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer data-footer></footer>
+  <script src="js/data.js?v=202611180328"></script>
+  <script src="js/config.js?v=202611180328"></script>
+  <script src="js/site.js?v=202611180328"></script>
+  <script>
+    /* When ilovelatins.com points at the new site, change LINK to https://ilovelatins.com/join.html?soy=mujer */
+    var LINK = 'https://tab197222.github.io/ec-key-check/join.html?soy=mujer';
+    var INVITES = [
+      { title: '1. From Sam, to women who have been to a social',
+        how: 'Send this one-to-one, not to a group, so it feels personal.',
+        es: '¡Hola [nombre]! 😊 Soy Sam, de iLoveLatins. Gracias otra vez por venir a nuestro evento en Barranquilla.\n\nEstrenamos página nueva y te quería invitar primero a ti. Puedes crear tu perfil gratis, siempre gratis para las mujeres, con tus fotos, y conocer a hombres serios de Estados Unidos que vienen a nuestros tours.\n\n👉 ' + LINK + '\n\nCada perfil lo reviso yo antes de publicarlo, así que solo hay gente real. Y si me mandas por aquí una selfie sosteniendo un papel con la fecha de hoy y tu nombre, te pongo la insignia de ✓ Verificada, y esos perfiles reciben muchos más mensajes.\n\nVoy a estar en Carnaval (del 6 al 9 de febrero), y justo después tenemos el próximo evento, del 11 al 16 de febrero de 2027. ¡Me encantaría verte allí! 💃',
+        en: 'Hi [name]! It’s Sam from iLoveLatins. Thanks again for coming to our event in Barranquilla. We’ve launched a new website and I wanted to invite you first. You can make a free profile (always free for women) with your photos, and meet serious men from the United States who come on our tours. [link] I check every profile myself before it goes live, so there are only real people. And if you send me a selfie here holding a paper with today’s date and your name, I’ll give you the Verified badge, and those profiles get many more messages. I’ll be at Carnaval (February 6–9), and right after that we have the next event, February 11–16, 2027. I’d love to see you there!' },
+      { title: '2. Short version she can forward to friends',
+        how: 'Send it after message 1 and add: “Si tienes amigas solteras, pásales este mensaje 🙏” (If you have single friends, forward them this message).',
+        es: '¿Soltera? 💕 iLoveLatins organiza eventos para conocer a hombres de Estados Unidos en Barranquilla, y ahora tiene página nueva.\n\n✅ Gratis para mujeres, siempre\n✅ Perfiles revisados uno por uno, solo gente real\n✅ Traductor en los mensajes, no necesitas hablar inglés\n\nCrea tu perfil aquí 👉 ' + LINK + '\n\n¿Preguntas? Escríbele a Sam al +1 832 385 4161',
+        en: 'Single? iLoveLatins hosts events to meet men from the United States in Barranquilla, and now has a new website. Free for women, always. Profiles checked one by one, only real people. A translate button in messages, so you don’t need to speak English. Make your profile here [link]. Questions? Message Sam at +1 832 385 4161.' },
+      { title: '3. Reminder, a few days later',
+        how: 'For women who started an account but didn’t finish their profile.',
+        es: '¡Hola [nombre]! Vi que creaste tu cuenta en iLoveLatins, ¡gracias! 🙌 Solo te falta subir una foto y pulsar «Enviar mi perfil para aprobación» en «My account» (Mi cuenta), arriba en el menú. Si te ayudo con algo, me dices. 😊',
+        en: 'Hi [name]! I saw you made your iLoveLatins account, thank you! You just need to upload a photo and press “Send my profile for approval” on “My account”. Let me know if I can help with anything.' }
+    ];
+    var list = document.getElementById('invites');
+    INVITES.forEach(function (m) {
+      var el = document.createElement('article');
+      el.className = 'invite';
+      el.innerHTML = '<h2></h2><p class="how"></p><pre lang="es"></pre>' +
+        '<div class="actions"><button class="btn" type="button">Copy message</button></div>' +
+        '<details><summary>What it says in English</summary><p></p></details>';
+      el.querySelector('h2').textContent = m.title;
+      el.querySelector('.how').textContent = m.how;
+      el.querySelector('pre').textContent = m.es;
+      el.querySelector('details p').textContent = m.en;
+      var btn = el.querySelector('button');
+      btn.addEventListener('click', function () {
+        var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy message'; }, 2000); };
+        var old = function () {
+          var r = document.createRange(); r.selectNodeContents(el.querySelector('pre'));
+          var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+          var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+          if (ok) done(); else btn.textContent = 'Text selected: press and hold it to copy';
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(m.es).then(done, old);
+        else old();
+      });
+      list.appendChild(el);
+    });
+  </script>
+</body>
+</html>
