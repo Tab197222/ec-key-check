@@ -50,6 +50,7 @@ window.App = (function () {
       // members
       show: 'Show', women: 'Women', men: 'Men', city_filter: 'City', any_age: 'Any age',
       none_yet: 'No profiles to show here yet. Approved profiles appear on this page.',
+      join_lead: 'Create your profile with photos and videos. Women never pay. Men can upgrade for unlimited messages.',
       join_free: 'Join free', login_to_view: 'Log in to see full profiles and send messages.',
       need_approval: 'Full profiles open once your own profile is approved.',
       not_found: 'This profile is not available.',
@@ -127,6 +128,7 @@ window.App = (function () {
       new_password: 'Elige una contraseña nueva', set_password: 'Guardar contraseña',
       show: 'Mostrar', women: 'Mujeres', men: 'Hombres', city_filter: 'Ciudad', any_age: 'Cualquier edad',
       none_yet: 'Todavía no hay perfiles aquí. Los perfiles aprobados aparecen en esta página.',
+      join_lead: 'Crea tu perfil con fotos y videos. Las mujeres nunca pagan. Los hombres pueden mejorar su cuenta para enviar mensajes sin límite.',
       join_free: 'Unirme gratis', login_to_view: 'Entra para ver perfiles completos y enviar mensajes.',
       need_approval: 'Los perfiles completos se abren cuando tu propio perfil sea aprobado.',
       not_found: 'Este perfil no está disponible.',

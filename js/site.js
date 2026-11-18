@@ -34,15 +34,40 @@
 
   /* ---------- header and footer ---------- */
   var page = location.pathname.split('/').pop() || 'index.html';
+
+  /* Language: English or Spanish. The choice is kept on this phone or computer.
+     The menu, the footer and the members' pages are in both languages; the public
+     pages about the tours are in English only. */
+  var lang = null;
+  try { lang = localStorage.getItem('ill_lang'); } catch (e) {}
+  if (new URLSearchParams(location.search).get('soy') === 'mujer' && !lang) {
+    lang = 'es'; // she arrived from a Spanish invitation: stay in Spanish on the next pages too
+    try { localStorage.setItem('ill_lang', 'es'); } catch (e) {}
+  }
+  if (lang !== 'es' && lang !== 'en') lang = (navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
+  var ES = {
+    'Tours': 'Tours', 'Testimonials': 'Testimonios', 'Members': 'Miembros', 'Membership': 'Membresía',
+    'About Sam': 'Sobre Sam', 'Questions': 'Preguntas', 'Contact': 'Contacto', 'My account': 'Mi cuenta',
+    'Join free': 'Únete gratis', 'Menu': 'Menú', 'Close': 'Cerrar',
+    'Hosted singles tours to Colombia since 2000.': 'Tours para solteros en Colombia desde el año 2000.',
+    'Call or text': 'Llama o escribe a', 'Follow us': 'Síguenos',
+    'Tour dates': 'Fechas de los tours', 'Reserve a tour': 'Reservar un tour', 'How it works': 'Cómo funciona',
+    'Tour videos': 'Videos de los tours', 'Messages': 'Mensajes', 'Likes': 'Me gusta', 'Help': 'Ayuda',
+    'Safety': 'Seguridad', 'All rights reserved.': 'Todos los derechos reservados.'
+  };
+  function T(s) { return lang === 'es' && ES[s] ? ES[s] : s; }
+  // Pages whose own words change with the language (the rest are English only).
+  var bilingual = /^(join|members|member|membership|messages|likes|account|admin)\.html$/.test(page);
+
   var links = [
-    ['tours.html', 'Tours'],
-    ['testimonials.html', 'Testimonials'],
-    ['members.html', 'Members'],
-    ['membership.html', 'Membership'],
-    ['about.html', 'About Sam'],
-    ['faq.html', 'Questions'],
-    ['contact.html', 'Contact'],
-    ['account.html', 'My account']
+    ['tours.html', T('Tours')],
+    ['testimonials.html', T('Testimonials')],
+    ['members.html', T('Members')],
+    ['membership.html', T('Membership')],
+    ['about.html', T('About Sam')],
+    ['faq.html', T('Questions')],
+    ['contact.html', T('Contact')],
+    ['account.html', T('My account')]
   ];
   var header = document.querySelector('[data-header]');
   if (header) {
@@ -50,19 +75,29 @@
     header.innerHTML =
       '<div class="wrap">' +
       '<a class="logo" href="index.html"><img src="assets/logo.png" alt="iLoveLatins home" width="768" height="205"></a>' +
-      '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav">Menu</button>' +
+      '<button class="lang-btn" type="button" lang="' + (lang === 'es' ? 'en' : 'es') + '">' + (lang === 'es' ? 'English' : 'Español') + '</button>' +
+      '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav">' + T('Menu') + '</button>' +
       '<nav class="nav" id="nav" aria-label="Main">' +
       links.map(function (l) {
         return '<a href="' + l[0] + '"' + (page === l[0] ? ' aria-current="page"' : '') + '>' + l[1] + '</a>';
       }).join('') +
-      '<a class="btn" href="join.html">Join free</a>' +
-      '</nav></div>';
+      '<a class="btn" href="join.html">' + T('Join free') + '</a>' +
+      '</nav></div>' +
+      // A Spanish reader on an English-only page: say so, and point women to the Spanish sign-up.
+      (lang === 'es' && !bilingual ? '<p class="lang-note" lang="es">Esta página está en inglés. ¿Eres mujer? <a href="join.html?soy=mujer">Crea tu perfil gratis, en español</a>.</p>' : '');
+    header.querySelector('.lang-btn').addEventListener('click', function () {
+      var next = lang === 'es' ? 'en' : 'es';
+      try { localStorage.setItem('ill_lang', next); } catch (e) {}
+      var u = new URL(location.href); u.searchParams.delete('soy');
+      // English-only page, switching to Spanish: go to the sign-up page, which is in Spanish.
+      location.href = next === 'es' && !bilingual ? 'join.html' : u.toString();
+    });
     var toggle = header.querySelector('.nav-toggle');
     var nav = header.querySelector('.nav');
     toggle.addEventListener('click', function () {
       var on = nav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', on);
-      toggle.textContent = on ? 'Close' : 'Menu';
+      toggle.textContent = T(on ? 'Close' : 'Menu');
     });
   }
 
@@ -81,7 +116,7 @@
         'aria-label="iLoveLatins on ' + s[0] + '" title="' + s[0] + '">' +
         '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' + icons[s[0]] + '</svg></a>';
     });
-  var followRow = follow.length ? '<p class="follow"><span>Follow us</span>' + follow.join('') + '</p>' : '';
+  var followRow = follow.length ? '<p class="follow"><span>' + T('Follow us') + '</span>' + follow.join('') + '</p>' : '';
   document.querySelectorAll('[data-social]').forEach(function (el) { el.outerHTML = followRow; });
 
   var footer = document.querySelector('[data-footer]');
@@ -90,29 +125,29 @@
     footer.innerHTML =
       '<div class="wrap"><div class="footer-grid">' +
       '<div><img src="assets/logo.png" alt="iLoveLatins" width="768" height="205">' +
-      '<p>Hosted singles tours to Colombia since 2000.</p>' +
-      '<p>Call or text ' + esc(C.name) + ': <a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a><br>' +
+      '<p>' + T('Hosted singles tours to Colombia since 2000.') + '</p>' +
+      '<p>' + T('Call or text') + ' ' + esc(C.name) + ': <a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a><br>' +
       '<a href="mailto:' + C.email + '">' + C.email + '</a></p>' +
       followRow + '</div>' +
-      '<div><h3>Tours</h3><ul>' +
-      '<li><a href="tours.html">Tour dates</a></li>' +
-      '<li><a href="tours.html#reserve">Reserve a tour</a></li>' +
-      '<li><a href="how-it-works.html">How it works</a></li>' +
-      '<li><a href="tour-videos.html">Tour videos</a></li>' +
-      '<li><a href="testimonials.html">Testimonials</a></li></ul></div>' +
-      '<div><h3>Members</h3><ul>' +
-      '<li><a href="join.html">Join free</a></li>' +
-      '<li><a href="members.html">Members</a></li>' +
-      '<li><a href="messages.html">Messages</a></li>' +
-      '<li><a href="likes.html">Likes</a></li>' +
-      '<li><a href="membership.html">Membership</a></li>' +
-      '<li><a href="account.html">My account</a></li></ul></div>' +
-      '<div><h3>Help</h3><ul>' +
-      '<li><a href="about.html">About Sam</a></li>' +
-      '<li><a href="faq.html">Questions</a></li>' +
-      '<li><a href="safety.html">Safety</a></li>' +
-      '<li><a href="contact.html">Contact</a></li></ul></div>' +
-      '</div><p class="legal">© 2000–' + new Date().getFullYear() + ' iLoveLatins. All rights reserved.</p></div>';
+      '<div><h3>' + T('Tours') + '</h3><ul>' +
+      '<li><a href="tours.html">' + T('Tour dates') + '</a></li>' +
+      '<li><a href="tours.html#reserve">' + T('Reserve a tour') + '</a></li>' +
+      '<li><a href="how-it-works.html">' + T('How it works') + '</a></li>' +
+      '<li><a href="tour-videos.html">' + T('Tour videos') + '</a></li>' +
+      '<li><a href="testimonials.html">' + T('Testimonials') + '</a></li></ul></div>' +
+      '<div><h3>' + T('Members') + '</h3><ul>' +
+      '<li><a href="join.html">' + T('Join free') + '</a></li>' +
+      '<li><a href="members.html">' + T('Members') + '</a></li>' +
+      '<li><a href="messages.html">' + T('Messages') + '</a></li>' +
+      '<li><a href="likes.html">' + T('Likes') + '</a></li>' +
+      '<li><a href="membership.html">' + T('Membership') + '</a></li>' +
+      '<li><a href="account.html">' + T('My account') + '</a></li></ul></div>' +
+      '<div><h3>' + T('Help') + '</h3><ul>' +
+      '<li><a href="about.html">' + T('About Sam') + '</a></li>' +
+      '<li><a href="faq.html">' + T('Questions') + '</a></li>' +
+      '<li><a href="safety.html">' + T('Safety') + '</a></li>' +
+      '<li><a href="contact.html">' + T('Contact') + '</a></li></ul></div>' +
+      '</div><p class="legal">© 2000–' + new Date().getFullYear() + ' iLoveLatins. ' + T('All rights reserved.') + '</p></div>';
   }
 
   /* ---------- contact details ---------- */
