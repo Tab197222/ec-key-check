@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=202611180252">
+  <link rel="stylesheet" href="css/style.css?v=202611180259">
   <style>
     .post-list { display: grid; gap: 2.5rem; max-width: 900px; }
     .post { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; align-items: start; padding: 1.25rem; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
@@ -30,7 +30,7 @@
     <section class="page-head">
       <div class="wrap">
         <h1>Social media posts</h1>
-        <p class="lead">Ten ready-made posts for Instagram and Facebook. Open this page on your phone.</p>
+        <p class="lead">Fourteen ready-made posts for Instagram and Facebook. Open this page on your phone.</p>
       </div>
     </section>
 
@@ -48,9 +48,9 @@
   </main>
 
   <footer data-footer></footer>
-  <script src="js/data.js?v=202611180252"></script>
-  <script src="js/config.js?v=202611180252"></script>
-  <script src="js/site.js?v=202611180252"></script>
+  <script src="js/data.js?v=202611180259"></script>
+  <script src="js/config.js?v=202611180259"></script>
+  <script src="js/site.js?v=202611180259"></script>
   <script>
     /* To add a post: make its picture (see tools/social-cards.html), then add a block here. */
     var TAGS = '#ilovelatins #colombia #barranquilla #singlestravel #romancetour #meetinperson #travelcolombia';
@@ -77,7 +77,15 @@
         text: 'What an iLoveLatins tour includes:\n\n✓ A welcome dinner with the group\n✓ Two to three singles socials\n✓ A local English and Spanish speaking host for the whole trip\n\nYour first tour is $1,495. Hotel and airfare are always booked separately, so you choose your own flights and room.' },
       { file: '10-plane-ticket', title: 'A plane ticket',
         text: 'Some introductions need a plane ticket.\n\nA real relationship needs a real first meeting. That is why iLoveLatins has run in-person tours to Colombia since 2000.\n\nThis street is in Cartagena’s old town, at night.',
-        tags: ' #cartagena' }
+        tags: ' #cartagena' },
+      { file: '11-real-people', title: 'Real people',
+        text: 'Real trips, real people.\n\nThis is from a recent iLoveLatins social: a phone picture, not a stock photo. Every picture we post comes from our own tours.\n\nWant to see more? There are photos and videos from past tours on our website.' },
+      { file: '12-a-social', title: 'What a social looks like',
+        text: 'This is what a singles social looks like.\n\nA table, a cold drink and good conversation. A bilingual host is there the whole time to translate and make introductions.\n\nEvery tour includes two to three of these, plus a welcome dinner.' },
+      { file: '13-is-it-real', title: 'Is it real?',
+        text: '“Is iLoveLatins real?”\n\nYes. Sam Smith has hosted tours to Barranquilla since 2000. You can read letters from men who went, watch the tour videos, and call or text Sam to ask him anything before you pay.' },
+      { file: '14-friends', title: 'Lifetime friends',
+        text: '“You will make lifetime friends.”\n\nThat is from Gary’s letter after his tour. The picture is from one of our recent socials.\n\nFollow us to see the next one.' }
     ];
     var list = document.getElementById('posts');
     POSTS.forEach(function (p, i) {
