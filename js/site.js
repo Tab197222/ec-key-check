@@ -66,22 +66,26 @@
     });
   }
 
+  /* social media logo buttons: footer, home page and Contact page */
+  var S = D.social || {};
+  var icons = {
+    Facebook: '<path fill="#fff" d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"/>',
+    Instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="#fff" stroke-width="2"/>' +
+      '<circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17" cy="7" r="1.2" fill="#fff"/>',
+    YouTube: '<rect x="2" y="5.5" width="20" height="13" rx="4" fill="#fff"/><path fill="#f00" d="M10 9v6l5.2-3z"/>'
+  };
+  var follow = [['Facebook', S.facebook], ['Instagram', S.instagram], ['YouTube', D.youtubeChannel]]
+    .filter(function (s) { return s[1]; })
+    .map(function (s) {
+      return '<a class="social-' + s[0].toLowerCase() + '" href="' + esc(s[1]) + '" target="_blank" rel="noopener" ' +
+        'aria-label="iLoveLatins on ' + s[0] + '" title="' + s[0] + '">' +
+        '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' + icons[s[0]] + '</svg></a>';
+    });
+  var followRow = follow.length ? '<p class="follow"><span>Follow us</span>' + follow.join('') + '</p>' : '';
+  document.querySelectorAll('[data-social]').forEach(function (el) { el.outerHTML = followRow; });
+
   var footer = document.querySelector('[data-footer]');
   if (footer) {
-    var S = D.social || {};
-    var icons = {
-      Facebook: '<path fill="#fff" d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"/>',
-      Instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="#fff" stroke-width="2"/>' +
-        '<circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17" cy="7" r="1.2" fill="#fff"/>',
-      YouTube: '<rect x="2" y="5.5" width="20" height="13" rx="4" fill="#fff"/><path fill="#f00" d="M10 9v6l5.2-3z"/>'
-    };
-    var follow = [['Facebook', S.facebook], ['Instagram', S.instagram], ['YouTube', D.youtubeChannel]]
-      .filter(function (s) { return s[1]; })
-      .map(function (s) {
-        return '<a class="social-' + s[0].toLowerCase() + '" href="' + esc(s[1]) + '" target="_blank" rel="noopener" ' +
-          'aria-label="iLoveLatins on ' + s[0] + '" title="' + s[0] + '">' +
-          '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">' + icons[s[0]] + '</svg></a>';
-      });
     footer.className = 'site-footer';
     footer.innerHTML =
       '<div class="wrap"><div class="footer-grid">' +
@@ -89,7 +93,7 @@
       '<p>Hosted singles tours to Colombia since 2000.</p>' +
       '<p>Call or text ' + esc(C.name) + ': <a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a><br>' +
       '<a href="mailto:' + C.email + '">' + C.email + '</a></p>' +
-      (follow.length ? '<p class="follow"><span>Follow us</span>' + follow.join('') + '</p>' : '') + '</div>' +
+      followRow + '</div>' +
       '<div><h3>Tours</h3><ul>' +
       '<li><a href="tours.html">Tour dates</a></li>' +
       '<li><a href="tours.html#reserve">Reserve a tour</a></li>' +
