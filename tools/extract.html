@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Extract text</title>
+<!-- Used by tools/translations.py: lists every piece of English text on one page, as JSON.
+     Open as  /tools/extract.html?page=tours.html  from the local site server. -->
+<pre id="out">working</pre>
+<script src="../js/lang.js"></script>
+<script>
+  var page = new URLSearchParams(location.search).get('page');
+  fetch('../' + page, { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (html) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    document.getElementById('out').textContent = 'JSON:' + JSON.stringify(window.ILL_LANG.list(doc));
+  });
+</script>

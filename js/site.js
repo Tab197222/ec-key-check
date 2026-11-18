@@ -4,40 +4,11 @@
   try { VERSION = new URL(document.currentScript.src).searchParams.get('v') || ''; } catch (e) {}
   var D = window.ILL;
   var C = D.contact;
-  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-  function day(iso) { var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
-  function range(t) {
-    var a = day(t.start), b = day(t.end);
-    var same = a.getMonth() === b.getMonth();
-    return MONTHS[a.getMonth()] + ' ' + a.getDate() + '–' + (same ? '' : MONTHS[b.getMonth()] + ' ') + b.getDate();
-  }
-  function label(t) { return t.name + ', ' + range(t) + ', ' + day(t.start).getFullYear(); }
-
-  // past = finished, info = a date only (not bookable), closed = inside the booking cutoff,
-  // open = can be reserved online
-  function status(t) {
-    var today = new Date(); today.setHours(0, 0, 0, 0);
-    if (day(t.end) < today) return 'past';
-    if (t.bookable === false) return 'info';
-    var cutoff = day(t.start); cutoff.setDate(cutoff.getDate() - D.bookingCutoffDays);
-    return today > cutoff ? 'closed' : 'open';
-  }
-  var upcoming = D.tours.filter(function (t) { return status(t) !== 'past'; })
-    .sort(function (a, b) { return day(a.start) - day(b.start); });
-  var open = upcoming.filter(function (t) { return status(t) === 'open'; });
-
-  /* ---------- header and footer ---------- */
   var page = location.pathname.split('/').pop() || 'index.html';
 
   /* Language: English or Spanish. The choice is kept on this phone or computer.
-     The menu, the footer and the members' pages are in both languages; the public
-     pages about the tours are in English only. */
+     js/lang.js swaps in the Spanish words of the public pages; the words this
+     file writes itself (menu, footer, tour cards, forms) are in the list below. */
   var lang = null;
   try { lang = localStorage.getItem('ill_lang'); } catch (e) {}
   if (new URLSearchParams(location.search).get('soy') === 'mujer' && !lang) {
@@ -53,11 +24,66 @@
     'Call or text': 'Llama o escribe a', 'Follow us': 'Síguenos',
     'Tour dates': 'Fechas de los tours', 'Reserve a tour': 'Reservar un tour', 'How it works': 'Cómo funciona',
     'Tour videos': 'Videos de los tours', 'Messages': 'Mensajes', 'Likes': 'Me gusta', 'Help': 'Ayuda',
-    'Safety': 'Seguridad', 'All rights reserved.': 'Todos los derechos reservados.'
+    'Safety': 'Seguridad', 'All rights reserved.': 'Todos los derechos reservados.',
+    'Package: ': 'Paquete: ', 'non-refundable deposit holds your place': 'depósito no reembolsable que aparta tu lugar',
+    'Pay deposit': 'Pagar depósito', 'Reserve': 'Reservar',
+    'Not a hosted tour.': 'No es un tour con anfitrión.', ' No deposit and nothing to book.': ' Sin depósito y sin nada que reservar.',
+    'Ask Sam about it': 'Pregúntale a Sam',
+    'Online reservations have closed.': 'Las reservas en línea ya cerraron.', ' Ask Sam about a late place.': ' Pregúntale a Sam por un lugar de última hora.',
+    'Call or text Sam': 'Llama o escribe a Sam', 'Next tour you can reserve': 'Próximo tour que puedes reservar',
+    'New tour dates are being set. Call or text Sam at ': 'Estamos definiendo las nuevas fechas. Llama o escribe a Sam al ',
+    ' to hear them first.': ' para enterarte primero.',
+    'No tours are open for reservations right now': 'No hay tours abiertos para reservar en este momento',
+    'Payment received: you have paid in full. A confirmation email is on its way, and Sam will be in touch soon.':
+      'Pago recibido: pagaste el total. Te llegará un correo de confirmación, y Sam se pondrá en contacto pronto.',
+    'Payment received. Your place is reserved, and a confirmation email is on its way. Sam will be in touch soon.':
+      'Pago recibido. Tu lugar está reservado y te llegará un correo de confirmación. Sam se pondrá en contacto pronto.',
+    'Payment was cancelled, so nothing was charged. You can try again below.':
+      'El pago se canceló, así que no se cobró nada. Puedes intentarlo de nuevo abajo.',
+    'Pay $': 'Paga $', ' today': ' hoy', 'Pay $250 deposit': 'Paga el depósito de $250',
+    'Online payment is not available right now. Call or text Sam at ': 'El pago en línea no está disponible en este momento. Llama o escribe a Sam al ',
+    'Opening the secure payment page…': 'Abriendo la página de pago seguro…',
+    'Payment could not start.': 'No se pudo iniciar el pago.',
+    ' You can also call or text Sam at ': ' También puedes llamar o escribir a Sam al ',
+    'Play video: ': 'Reproducir video: '
   };
   function T(s) { return lang === 'es' && ES[s] ? ES[s] : s; }
-  // Pages whose own words change with the language (the rest are English only).
-  var bilingual = /^(join|members|member|membership|messages|likes|account|admin)\.html$/.test(page);
+  // Pages whose own words change with the language (the owner's helper pages are English only).
+  var bilingual = /^(join|members|member|membership|messages|likes|account|admin|index|tours|how-it-works|about|testimonials|tour-videos|faq|safety|contact)\.html$/.test(page);
+
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function day(iso) { var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  function range(t) {
+    var a = day(t.start), b = day(t.end);
+    var same = a.getMonth() === b.getMonth();
+    if (lang === 'es') return a.getDate() + (same ? '' : ' ' + MESES[a.getMonth()] + ' ') + '–' + (same ? '' : ' ') + b.getDate() + ' ' + MESES[b.getMonth()];
+    return MONTHS[a.getMonth()] + ' ' + a.getDate() + '–' + (same ? '' : MONTHS[b.getMonth()] + ' ') + b.getDate();
+  }
+  // A tour or video's own words: data.js can give a Spanish version as name_es, blurb_es and so on.
+  function L(o, k) { return (lang === 'es' && o[k + '_es']) || o[k]; }
+  function label(t) { return L(t, 'name') + ', ' + range(t) + ', ' + day(t.start).getFullYear(); }
+
+  // past = finished, info = a date only (not bookable), closed = inside the booking cutoff,
+  // open = can be reserved online
+  function status(t) {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    if (day(t.end) < today) return 'past';
+    if (t.bookable === false) return 'info';
+    var cutoff = day(t.start); cutoff.setDate(cutoff.getDate() - D.bookingCutoffDays);
+    return today > cutoff ? 'closed' : 'open';
+  }
+  var upcoming = D.tours.filter(function (t) { return status(t) !== 'past'; })
+    .sort(function (a, b) { return day(a.start) - day(b.start); });
+  var open = upcoming.filter(function (t) { return status(t) === 'open'; });
+
+  /* ---------- header and footer ---------- */
 
   var links = [
     ['tours.html', T('Tours')],
@@ -161,36 +187,36 @@
     if (!a.textContent.trim()) a.textContent = C.email;
   });
   document.querySelectorAll('[data-whatsapp]').forEach(function (a) { a.href = C.whatsappGroup; });
-  document.querySelectorAll('[data-hours]').forEach(function (el) { el.textContent = C.hours; });
+  document.querySelectorAll('[data-hours]').forEach(function (el) { el.textContent = L(C, 'hours'); });
 
   /* ---------- tour tickets ---------- */
   function ticket(t, hero) {
     var st = status(t);
     var facts = '';
-    if (t.packagePrice) facts += '<li>Package: ' + esc(t.packagePrice) + '</li>';
-    if (t.hotel) facts += '<li>' + esc(t.hotel) + '</li>';
+    if (t.packagePrice) facts += '<li>' + T('Package: ') + esc(t.packagePrice) + '</li>';
+    if (t.hotel) facts += '<li>' + esc(L(t, 'hotel')) + '</li>';
     var stub;
     if (st === 'open') {
       var href = t.depositLink || ('tours.html?tour=' + encodeURIComponent(t.id) + '#reserve');
       stub =
-        '<div class="ticket-deposit">$' + D.deposit + '<small>non-refundable deposit holds your place</small></div>' +
-        '<a class="btn" href="' + esc(href) + '">' + (t.depositLink ? 'Pay deposit' : 'Reserve') + '</a>';
+        '<div class="ticket-deposit">$' + D.deposit + '<small>' + T('non-refundable deposit holds your place') + '</small></div>' +
+        '<a class="btn" href="' + esc(href) + '">' + T(t.depositLink ? 'Pay deposit' : 'Reserve') + '</a>';
     } else if (st === 'info') {
       stub =
-        '<p class="ticket-note"><strong>Not a hosted tour.</strong> No deposit and nothing to book.</p>' +
-        '<a class="btn btn-quiet" href="tel:' + C.phoneLink + '">Ask Sam about it</a>';
+        '<p class="ticket-note"><strong>' + T('Not a hosted tour.') + '</strong>' + T(' No deposit and nothing to book.') + '</p>' +
+        '<a class="btn btn-quiet" href="tel:' + C.phoneLink + '">' + T('Ask Sam about it') + '</a>';
     } else {
       stub =
-        '<p class="ticket-note"><strong>Online reservations have closed.</strong> Ask Sam about a late place.</p>' +
-        '<a class="btn btn-quiet" href="tel:' + C.phoneLink + '">Call or text Sam</a>';
+        '<p class="ticket-note"><strong>' + T('Online reservations have closed.') + '</strong>' + T(' Ask Sam about a late place.') + '</p>' +
+        '<a class="btn btn-quiet" href="tel:' + C.phoneLink + '">' + T('Call or text Sam') + '</a>';
     }
     return '<article class="ticket' + (hero ? ' ticket-hero' : '') + (st === 'closed' ? ' closed' : '') + (st === 'info' ? ' info' : '') + '">' +
       '<div class="ticket-main">' +
-      (hero ? '<p class="ticket-label">Next tour you can reserve</p>' : '') +
+      (hero ? '<p class="ticket-label">' + T('Next tour you can reserve') + '</p>' : '') +
       '<div class="ticket-dates">' + range(t) + ' <span class="ticket-year">' + day(t.start).getFullYear() + '</span></div>' +
-      '<h3 class="ticket-name">' + esc(t.name) + '</h3>' +
+      '<h3 class="ticket-name">' + esc(L(t, 'name')) + '</h3>' +
       '<div class="ticket-city">' + esc(t.city) + (t.city === 'Barranquilla' ? ', Colombia' : '') + '</div>' +
-      (hero ? '' : '<p class="ticket-blurb">' + esc(t.blurb) + '</p>') +
+      (hero ? '' : '<p class="ticket-blurb">' + esc(L(t, 'blurb')) + '</p>') +
       (facts ? '<ul class="ticket-facts">' + facts + '</ul>' : '') +
       '</div><div class="ticket-stub">' + stub + '</div></article>';
   }
@@ -199,12 +225,12 @@
   if (next) {
     var pick = open[0] || upcoming.filter(function (t) { return status(t) !== 'info'; })[0];
     next.innerHTML = pick ? ticket(pick, true)
-      : '<p>New tour dates are being set. Call or text Sam at <a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a>.</p>';
+      : '<p>' + T('New tour dates are being set. Call or text Sam at ') + '<a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a>.</p>';
   }
   document.querySelectorAll('[data-tours]').forEach(function (el) {
     el.innerHTML = upcoming.length
       ? upcoming.map(function (t) { return ticket(t, false); }).join('')
-      : '<p>New tour dates are being set. Call or text Sam at <a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a> to hear them first.</p>';
+      : '<p>' + T('New tour dates are being set. Call or text Sam at ') + '<a href="tel:' + C.phoneLink + '">' + C.phoneDisplay + '</a>' + T(' to hear them first.') + '</p>';
   });
 
   var select = document.querySelector('[data-tour-select]');
@@ -213,7 +239,7 @@
     select.innerHTML = open.map(function (t) {
       return '<option value="' + esc(t.id) + '"' + (t.id === wanted ? ' selected' : '') + '>' + esc(label(t)) + '</option>';
     }).join('');
-    if (!open.length) select.innerHTML = '<option value="">No tours are open for reservations right now</option>';
+    if (!open.length) select.innerHTML = '<option value="">' + T('No tours are open for reservations right now') + '</option>';
   }
 
   /* ---------- $250 tour deposit: card payment on Stripe ---------- */
@@ -225,11 +251,11 @@
     var back = new URLSearchParams(location.search).get('deposit');
     if (back === 'paid') {
       result.textContent = new URLSearchParams(location.search).get('kind') === 'full'
-        ? 'Payment received: you have paid in full. A confirmation email is on its way, and Sam will be in touch soon.'
-        : 'Payment received. Your place is reserved, and a confirmation email is on its way. Sam will be in touch soon.';
+        ? T('Payment received: you have paid in full. A confirmation email is on its way, and Sam will be in touch soon.')
+        : T('Payment received. Your place is reserved, and a confirmation email is on its way. Sam will be in touch soon.');
     } else if (back === 'cancelled') {
       result.className = 'form-status error';
-      result.textContent = 'Payment was cancelled, so nothing was charged. You can try again below.';
+      result.textContent = T('Payment was cancelled, so nothing was charged. You can try again below.');
     }
     // "Reserve" on a price card: pick that package in the form and jump to it.
     function pickPackage(value) {
@@ -255,7 +281,7 @@
     function payLabel() {
       var full = dep.querySelector('[name=payment][value=full]').checked;
       var opt = dep.package.options[dep.package.selectedIndex];
-      document.getElementById('pay-btn').textContent = full ? 'Pay $' + opt.getAttribute('data-price') + ' today' : 'Pay $250 deposit';
+      document.getElementById('pay-btn').textContent = full ? T('Pay $') + opt.getAttribute('data-price') + T(' today') : T('Pay $250 deposit');
     }
     dep.package.addEventListener('change', payLabel);
     dep.querySelectorAll('[name=payment]').forEach(function (r) { r.addEventListener('change', payLabel); });
@@ -268,12 +294,12 @@
       if (!dep.tour.value) return;
       if (!cfg.supabaseUrl) {
         out.className = 'form-status error';
-        out.textContent = 'Online payment is not available right now. Call or text Sam at ' + C.phoneDisplay + '.';
+        out.textContent = T('Online payment is not available right now. Call or text Sam at ') + C.phoneDisplay + '.';
         return;
       }
       btn.disabled = true;
       out.className = 'form-status';
-      out.textContent = 'Opening the secure payment page…';
+      out.textContent = T('Opening the secure payment page…');
       try {
         var r = await fetch(cfg.supabaseUrl + '/functions/v1/create-deposit', {
           method: 'POST',
@@ -286,11 +312,11 @@
         });
         var d = await r.json();
         if (d.url) { location.href = d.url; return; }
-        throw new Error(d.error || 'Payment could not start.');
+        throw new Error(d.error || T('Payment could not start.'));
       } catch (err) {
         btn.disabled = false;
         out.className = 'form-status error';
-        out.textContent = err.message + ' You can also call or text Sam at ' + C.phoneDisplay + '.';
+        out.textContent = err.message + T(' You can also call or text Sam at ') + C.phoneDisplay + '.';
       }
     });
   }
@@ -299,10 +325,10 @@
   document.querySelectorAll('[data-videos]').forEach(function (el) {
     var max = +el.getAttribute('data-videos') || D.videos.length;
     el.innerHTML = D.videos.slice(0, max).map(function (v) {
-      return '<figure class="yt"><button type="button" class="yt-play" data-yt="' + esc(v.id) + '" data-title="' + esc(v.title) + '">' +
+      return '<figure class="yt"><button type="button" class="yt-play" data-yt="' + esc(v.id) + '" data-title="' + esc(L(v, 'title')) + '">' +
         '<img src="https://i.ytimg.com/vi/' + esc(v.id) + '/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">' +
-        '<span class="yt-icon" aria-hidden="true"></span><span class="sr">Play video: ' + esc(v.title) + '</span></button>' +
-        '<figcaption><strong>' + esc(v.title) + '</strong><br>' + esc(v.when) + '</figcaption></figure>';
+        '<span class="yt-icon" aria-hidden="true"></span><span class="sr">' + T('Play video: ') + esc(L(v, 'title')) + '</span></button>' +
+        '<figcaption><strong>' + esc(L(v, 'title')) + '</strong><br>' + esc(L(v, 'when')) + '</figcaption></figure>';
     }).join('');
     el.addEventListener('click', function (e) {
       var b = e.target.closest('[data-yt]');
@@ -321,7 +347,7 @@
   /* ---------- forms ---------- */
   document.querySelectorAll('form[data-form]').forEach(function (form) {
     var out = form.querySelector('.form-status');
-    var es = function () { return form.getAttribute('data-lang') === 'es'; };
+    var es = function () { return form.getAttribute('data-lang') === 'es' || (lang === 'es' && window.ILL_LANG && window.ILL_LANG.translated); };
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (form.querySelector('.hp input').value) return; // spam trap
