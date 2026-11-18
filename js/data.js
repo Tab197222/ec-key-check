@@ -36,7 +36,7 @@ window.ILL = {
   // Paste a page's address between the quotes; anything left as '' is not shown.
   social: {
     facebook: 'https://www.facebook.com/profile.php?id=61596746908010',
-    instagram: ''
+    instagram: 'https://www.instagram.com/ilovelatinstours/'
   },
 
   // Online reservations close this many days before a tour starts.
