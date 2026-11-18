@@ -18,6 +18,22 @@ Setup details: SETUP.md. WhatsApp invitations for women: invitaciones-whatsapp.m
 - Contact form emails both owners. Private hit counter on the approvals page.
 - All emails send from ilovelatinsvacations@gmail.com (Gmail App Password).
 
+## Added 18 Nov 2026
+- Social media: Facebook Page and Instagram (ilovelatinstours) are linked from the home
+  page, Contact page and footer as logo buttons. Setup text is in social-media.md.
+- Owner helper pages (not in the menu, hidden from Google):
+  posts.html has 20 ready-made posts (pictures + captions, 6 in Spanish for women);
+  invites.html has the WhatsApp invitations with copy buttons.
+  Post pictures are made from tools/social-cards.html by `python tools/make_posts.py`.
+- Share-preview tags on public pages: `python tools/social_tags.py` (change SITE in it
+  when the domain moves).
+- Visitors report now shows where visits came from. Links can carry ?from=instagram etc.
+- Spanish: an Español / English button is on every page. The public pages are translated
+  by js/lang.js using js/es/<page>.js. **After changing any English text on a public page,
+  run `python tools/translations.py`**: it lists pieces with no Spanish yet; add them to
+  tools/strings/<page>.es.json and run it again. Tours and videos in js/data.js have
+  `_es` lines next to the English ones.
+
 ## Still to do (needs other people)
 1. Stripe "Verify your business", then switch the site to live keys.
 2. Lawyer: privacy policy, terms (deposit and crossed-out price rules), IMBRA question.
