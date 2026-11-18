@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Social media posts | iLoveLatins</title>
+  <meta name="description" content="Ready-made social media posts for the site owners.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=202611180252">
+  <style>
+    .post-list { display: grid; gap: 2.5rem; max-width: 900px; }
+    .post { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; align-items: start; padding: 1.25rem; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    @media (max-width: 700px) { .post { grid-template-columns: 1fr; } }
+    .post img { width: 100%; height: auto; border-radius: 10px; display: block; }
+    .post h2 { font-size: 1.3rem; margin: 0 0 0.75rem; }
+    .post pre { white-space: pre-wrap; font: inherit; font-size: 1rem; background: var(--wash); border-radius: 10px; padding: 1rem; margin: 0 0 1rem; }
+    .post .actions { margin-top: 0; }
+    .steps-how { max-width: 900px; }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header data-header></header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="wrap">
+        <h1>Social media posts</h1>
+        <p class="lead">Ten ready-made posts for Instagram and Facebook. Open this page on your phone.</p>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <ol class="steps-how">
+          <li>Tap <strong>Save picture</strong>. (If nothing happens, press and hold the picture and choose “Save image”.)</li>
+          <li>Tap <strong>Copy caption</strong>.</li>
+          <li>In Instagram tap <strong>+</strong>, pick the picture, and paste the caption. Turn on “Share to Facebook” to post to both at once.</li>
+        </ol>
+        <p>Post one every other day, in order. Number 2 and number 7 mention tour dates, so swap in new ones when the dates change.</p>
+        <div class="post-list" id="posts"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer data-footer></footer>
+  <script src="js/data.js?v=202611180252"></script>
+  <script src="js/config.js?v=202611180252"></script>
+  <script src="js/site.js?v=202611180252"></script>
+  <script>
+    /* To add a post: make its picture (see tools/social-cards.html), then add a block here. */
+    var TAGS = '#ilovelatins #colombia #barranquilla #singlestravel #romancetour #meetinperson #travelcolombia';
+    var END = '\n\nTour dates: link in our profile\nCall or text Sam: 832-385-4161\n\n' + TAGS;
+    var POSTS = [
+      { file: '01-welcome', title: 'Welcome',
+        text: 'Welcome to iLoveLatins.\n\nSince 2000, Sam Smith has hosted singles tours to Barranquilla, on Colombia’s Caribbean coast, so people can meet in person and not just on a screen.\n\nA welcome dinner, the singles socials and a bilingual host are arranged for you. Follow along for tour dates, the city, and stories from people who went.' },
+      { file: '02-next-tour', title: 'Next tour',
+        text: 'Our next Romance Tour: February 11–16, 2027, in Barranquilla.\n\nIt starts two days after Carnaval ends, when hotel and airline prices are much lower.\n\nA $250 deposit reserves your place. Online reservations close 30 days before the tour, so don’t leave it late.' },
+      { file: '03-how-it-works', title: 'How it works',
+        text: 'How an iLoveLatins tour works, start to finish:\n\n1. Call or text Sam and ask anything. Questions cost nothing.\n2. Pick your week and reserve with a $250 deposit.\n3. Book your flight and hotel (both are separate from the tour).\n4. Land in Barranquilla. The welcome dinner, the socials and a bilingual host are waiting.\n\nWhat happens after the tour is up to the two of you.' },
+      { file: '04-spanish', title: 'Do I need to speak Spanish?',
+        text: '“Do I need to speak Spanish?”\n\nNo. A bilingual host is at every event to translate and help the conversation along.\n\nGot another question? Send us a message, or call or text Sam directly.' },
+      { file: '05-just-go', title: 'Scott’s letter',
+        text: '“To all those guys that are skeptical about going, don’t worry. Just go!”\n\nScott M. wrote that to Sam after his tour. He also wrote: “Everything was beautiful. The city, the women, the hotel, the events and the pool party. I had a great time and met a lot of good people.”\n\nYou can read his whole letter, and ten more, on our website.' },
+      { file: '06-cartagena', title: 'Cartagena',
+        text: 'Cartagena’s clock tower, lit up at night.\n\nThe walled old town is a side trip from Barranquilla, and one of the most beautiful places on the Caribbean coast.\n\nHave you been to Colombia before? Tell us where.',
+        tags: ' #cartagena' },
+      { file: '07-dates-2027', title: '2027 tour dates',
+        text: 'Save the dates. Colombia in 2027:\n\nFeb 11–16: Romance Tour, Barranquilla\nJun 17–25: Sizzling Summer Vacation\nSep 9–14: Amor y Amistad, Colombia’s own Valentine’s (and Sam’s birthday party)\n\nWhich one suits you? A $250 deposit holds your place.' },
+      { file: '08-no-nonsense', title: 'Gary’s letter',
+        text: '“Sam is a no-nonsense kind of guy. He does what he says and so much more.”\n\nGary met Lily on a June romance tour. He later wrote to Sam: “Me and Lily want to let you know that we have found a future together.”\n\nRead the whole letter on our website.' },
+      { file: '09-whats-included', title: 'What a tour includes',
+        text: 'What an iLoveLatins tour includes:\n\n✓ A welcome dinner with the group\n✓ Two to three singles socials\n✓ A local English and Spanish speaking host for the whole trip\n\nYour first tour is $1,495. Hotel and airfare are always booked separately, so you choose your own flights and room.' },
+      { file: '10-plane-ticket', title: 'A plane ticket',
+        text: 'Some introductions need a plane ticket.\n\nA real relationship needs a real first meeting. That is why iLoveLatins has run in-person tours to Colombia since 2000.\n\nThis street is in Cartagena’s old town, at night.',
+        tags: ' #cartagena' }
+    ];
+    var list = document.getElementById('posts');
+    POSTS.forEach(function (p, i) {
+      var img = 'assets/social/' + p.file + '.jpg';
+      var el = document.createElement('article');
+      el.className = 'post';
+      el.innerHTML = '<a href="' + img + '" download><img src="' + img + '" alt="Picture for post ' + (i + 1) + '" width="1080" height="1350" loading="lazy"></a>' +
+        '<div><h2>' + (i + 1) + '. ' + p.title + '</h2><pre></pre>' +
+        '<div class="actions"><a class="btn" href="' + img + '" download="ilovelatins-' + p.file + '.jpg">Save picture</a>' +
+        '<button class="btn btn-quiet" type="button">Copy caption</button></div></div>';
+      var caption = p.text + END + (p.tags || '');
+      el.querySelector('pre').textContent = caption;
+      var btn = el.querySelector('button');
+      btn.addEventListener('click', function () {
+        var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy caption'; }, 2000); };
+        var old = function () {
+          var r = document.createRange(); r.selectNodeContents(el.querySelector('pre'));
+          var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+          var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+          if (ok) done(); else btn.textContent = 'Text selected: press and hold it to copy';
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(caption).then(done, old);
+        else old();
+      });
+      list.appendChild(el);
+    });
+  </script>
+</body>
+</html>

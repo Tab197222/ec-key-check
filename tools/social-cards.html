@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Social media post pictures</title>
+<!--
+  The pictures for social media posts. Each <section class="card"> is one picture,
+  1080 x 1350 (the tall shape Instagram and Facebook show largest).
+  Edit the words here, then run:  python tools/make_posts.py
+  to turn every card into an image in assets/social/.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #23164f; --pink: #c81e82; --pink-bright: #ee3fa8; --teal: #08718a; --teal-bright: #0aa5c4; --sun: #ffc93c; --wash: #eef8fa;
+    --display: 'Bricolage Grotesque', 'Arial Narrow', sans-serif; --body: 'Instrument Sans', 'Segoe UI', sans-serif; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #888; font-family: var(--body); }
+  .card { width: 1080px; height: 1350px; position: relative; overflow: hidden; display: flex; flex-direction: column; margin: 0 auto 40px; background: #fff; color: var(--ink); }
+  body.one { background: #fff; } body.one .card { margin: 0; display: none; } body.one .card.show { display: flex; }
+
+  .main { flex: 1; min-height: 0; padding: 90px 84px 60px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+  .foot { height: 150px; flex: none; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 64px; border-top: 8px solid var(--pink); }
+  .foot img { height: 84px; }
+  .foot span { font-size: 34px; font-weight: 600; color: var(--ink); }
+
+  .kicker { font-size: 36px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 36px; }
+  h1 { font-family: var(--display); font-weight: 800; font-size: 118px; line-height: 1.0; letter-spacing: -0.02em; }
+  h1 em { font-style: normal; }
+  .body { font-size: 46px; line-height: 1.35; margin-top: 44px; }
+  .small { font-size: 36px; line-height: 1.4; margin-top: 36px; opacity: 0.85; }
+
+  .dark .main { background: radial-gradient(900px 700px at 100% 0%, rgba(238,63,168,.45), transparent 60%), radial-gradient(800px 700px at 0% 100%, rgba(10,165,196,.4), transparent 60%), var(--ink); color: #fff; }
+  .dark .kicker { color: var(--sun); } .dark h1 em { color: var(--pink-bright); }
+  .light .main { background: radial-gradient(900px 700px at 100% 0%, rgba(238,63,168,.16), transparent 60%), var(--wash); }
+  .light .kicker { color: var(--teal); } .light h1 em { color: var(--pink); }
+
+  .photo { flex: none; background-size: cover; background-position: center; }
+  .photo + .main { justify-content: center; padding-block: 50px; }
+  .photo + .main h1 { font-size: 88px; }
+  .photo + .main .body { font-size: 42px; margin-top: 28px; }
+
+  .quote h1 { font-size: 84px; line-height: 1.1; letter-spacing: -0.01em; }
+  .quote .mark { font-family: Georgia, serif; font-size: 300px; line-height: 0.7; color: var(--pink); height: 150px; }
+  .who { font-size: 40px; margin-top: 50px; } .who strong { display: block; font-size: 46px; }
+
+  ol, ul.ticks, ul.dates { list-style: none; padding: 0; margin-top: 50px; display: grid; gap: 34px; }
+  ol { counter-reset: n; }
+  ol li { counter-increment: n; display: grid; grid-template-columns: 96px 1fr; gap: 30px; align-items: center; font-size: 46px; line-height: 1.25; }
+  ol li::before { content: counter(n); width: 96px; height: 96px; border-radius: 50%; background: var(--sun); color: var(--ink); font-family: var(--display); font-weight: 800; font-size: 54px; display: grid; place-items: center; }
+  ul.ticks li { font-size: 48px; line-height: 1.25; padding-left: 80px; position: relative; }
+  ul.ticks li::before { content: '✓'; position: absolute; left: 0; top: -4px; width: 58px; height: 58px; border-radius: 50%; background: var(--pink); color: #fff; font-size: 38px; font-weight: 700; display: grid; place-items: center; }
+  ul.dates li { background: rgba(255,255,255,.1); border-left: 10px solid var(--sun); border-radius: 0 20px 20px 0; padding: 26px 34px; }
+  ul.dates strong { display: block; font-family: var(--display); font-size: 60px; line-height: 1.1; }
+  ul.dates span { font-size: 38px; opacity: 0.9; }
+  .big-date { font-family: var(--display); font-weight: 800; font-size: 150px; line-height: 1; color: var(--sun); margin-top: 30px; }
+</style>
+</head>
+<body>
+
+<section class="card" data-name="01-welcome">
+  <div class="photo" style="height:608px; background-image:url(../assets/photos/banner-dream-come-true.jpg)"></div>
+  <div class="main light" style="background:var(--wash)">
+    <p class="kicker" style="color:var(--teal)">Since 2000</p>
+    <h1>Meet her in person, <em style="color:var(--pink)">in Barranquilla.</em></h1>
+    <p class="body">Hosted singles tours to Colombia’s Caribbean coast.</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card dark" data-name="02-next-tour">
+  <div class="main">
+    <p class="kicker">Next tour</p>
+    <h1>Romance Tour, <em>Barranquilla</em></h1>
+    <p class="big-date">Feb 11–16</p>
+    <p class="body">2027 · The week after Carnaval, when flights and hotels cost much less.</p>
+    <p class="small">Reserve your place with a $250 deposit.</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card dark" data-name="03-how-it-works">
+  <div class="main">
+    <p class="kicker">How it works</p>
+    <h1>From first call to <em>first date</em></h1>
+    <ol>
+      <li>Call or text Sam. Questions cost nothing.</li>
+      <li>Pick your week and reserve with a $250 deposit.</li>
+      <li>Book your flight and hotel.</li>
+      <li>Land in Barranquilla. The welcome dinner, the socials and a bilingual host are waiting.</li>
+    </ol>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card light" data-name="04-spanish">
+  <div class="main">
+    <p class="kicker">Your questions</p>
+    <h1>“Do I need to speak Spanish?”</h1>
+    <h1 style="margin-top:50px"><em>No.</em></h1>
+    <p class="body">A bilingual host is at every event to translate and help the conversation along.</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card light quote" data-name="05-just-go">
+  <div class="main">
+    <p class="mark">“</p>
+    <h1>To all those guys that are skeptical about going, don’t worry. <em>Just go!</em></h1>
+    <p class="who"><strong>Scott M.</strong>after his iLoveLatins tour</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card" data-name="06-cartagena">
+  <div class="photo" style="height:760px; background-image:url(../assets/photos/cartagena-clock-tower.jpg); background-position:center 38%"></div>
+  <div class="main dark" style="background:var(--ink); color:#fff">
+    <p class="kicker" style="color:var(--sun); margin-bottom:20px">Side trip</p>
+    <h1>Cartagena, <em style="color:var(--pink-bright)">lit up at night</em></h1>
+    <p class="body">The walled old town is a short trip from Barranquilla.</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card dark" data-name="07-dates-2027">
+  <div class="main">
+    <p class="kicker">Save the dates</p>
+    <h1>Colombia <em>in 2027</em></h1>
+    <ul class="dates">
+      <li><strong>Feb 11–16</strong><span>Romance Tour, Barranquilla</span></li>
+      <li><strong>Jun 17–25</strong><span>Sizzling Summer Vacation</span></li>
+      <li><strong>Sep 9–14</strong><span>Amor y Amistad, Colombia’s own Valentine’s</span></li>
+    </ul>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card light quote" data-name="08-no-nonsense">
+  <div class="main">
+    <p class="mark">“</p>
+    <h1>Sam is a no-nonsense kind of guy. He does what he says <em>and so much more.</em></h1>
+    <p class="who"><strong>Gary</strong>met Lily on a June romance tour</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card light" data-name="09-whats-included">
+  <div class="main">
+    <p class="kicker">What a tour includes</p>
+    <h1>Arranged <em>for you</em></h1>
+    <ul class="ticks">
+      <li>A welcome dinner with the group</li>
+      <li>Two to three singles socials</li>
+      <li>A local English and Spanish speaking host, all week</li>
+    </ul>
+    <p class="small">Hotel and airfare are booked separately. First tour $1,495.</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<section class="card" data-name="10-plane-ticket">
+  <div class="photo" style="height:760px; background-image:url(../assets/photos/cartagena-old-town-night.jpg); background-position:center 30%"></div>
+  <div class="main dark" style="background:var(--ink); color:#fff">
+    <h1>Some introductions need <em style="color:var(--pink-bright)">a plane ticket.</em></h1>
+    <p class="body">A real relationship needs a real first meeting.</p>
+  </div>
+  <div class="foot"><img src="../assets/logo.png" alt=""><span>Call or text Sam · 832-385-4161</span></div>
+</section>
+
+<script>
+  // tools/make_posts.py opens this page with ?n=3 to photograph card 3 on its own.
+  var n = new URLSearchParams(location.search).get('n');
+  if (n) { document.body.className = 'one'; document.querySelectorAll('.card')[n - 1].classList.add('show'); }
+</script>
+</body>
+</html>

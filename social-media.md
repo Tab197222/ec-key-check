@@ -62,6 +62,10 @@ Wait for permission first:
 - `venue-*`: these are Hotel American Golf's photos. Ask the hotel.
 
 ## First two weeks of posts
+The finished pictures and captions for these are on the posts page:
+https://tab197222.github.io/ec-key-check/posts.html (open it on a phone).
+To change a picture, edit `tools/social-cards.html` and run `python tools/make_posts.py`.
+
 Post about every other day. Each post ends with the website link or Sam's number.
 
 | Day | Post | Picture or video |
