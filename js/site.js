@@ -378,10 +378,37 @@
     try { if (localStorage.getItem('ill_owner')) return; } catch (e) {} // this browser belongs to an owner
     var newVisit = false;
     try { newVisit = !sessionStorage.getItem('ill_visit'); sessionStorage.setItem('ill_visit', '1'); } catch (e) {}
-    fetch(cfg.supabaseUrl + '/rest/v1/rpc/count_view', {
-      method: 'POST', keepalive: true,
-      headers: { 'Content-Type': 'application/json', apikey: cfg.supabaseKey },
-      body: JSON.stringify({ p: page, new_visit: newVisit })
-    }).catch(function () {});
+    function count(p, visit) {
+      fetch(cfg.supabaseUrl + '/rest/v1/rpc/count_view', {
+        method: 'POST', keepalive: true,
+        headers: { 'Content-Type': 'application/json', apikey: cfg.supabaseKey },
+        body: JSON.stringify({ p: p, new_visit: visit })
+      }).catch(function () {});
+    }
+    count(page, newVisit);
+
+    // Where the visit came from, counted once per visit under a made-up page name
+    // such as "from-instagram.html" (the approvals page shows these separately).
+    // A link ending in ?from=instagram names its own source; otherwise the
+    // address of the page the visitor came from is used.
+    if (newVisit) {
+      var q = new URLSearchParams(location.search);
+      var src = (q.get('from') || q.get('utm_source') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 30);
+      if (!src) {
+        var ref = '';
+        try { ref = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ''; } catch (e) {}
+        if (!ref || ref === location.hostname) src = 'direct';
+        else if (/instagram\./.test(ref)) src = 'instagram';
+        else if (/facebook\.|fb\.(com|me)$|messenger\./.test(ref)) src = 'facebook';
+        else if (/youtube\.|youtu\.be/.test(ref)) src = 'youtube';
+        else if (/whatsapp\.|wa\.me/.test(ref)) src = 'whatsapp';
+        else if (/google\./.test(ref)) src = 'google';
+        else if (/bing\.|duckduckgo\.|yahoo\./.test(ref)) src = 'other-search';
+        else if (/(^|\.)t\.co$|twitter\.|x\.com$/.test(ref)) src = 'x';
+        else if (/tiktok\./.test(ref)) src = 'tiktok';
+        else src = 'other-site';
+      }
+      count('from-' + src + '.html', false);
+    }
   })();
 })();

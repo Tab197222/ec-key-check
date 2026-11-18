@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=202611180328">
+  <link rel="stylesheet" href="css/style.css?v=202611180406">
   <style>
     .post-list { display: grid; gap: 2.5rem; max-width: 900px; }
     .post { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; align-items: start; padding: 1.25rem; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
@@ -30,7 +30,7 @@
     <section class="page-head">
       <div class="wrap">
         <h1>Social media posts</h1>
-        <p class="lead">Fourteen ready-made posts for Instagram and Facebook. Open this page on your phone.</p>
+        <p class="lead">Twenty ready-made posts for Instagram and Facebook. Open this page on your phone.</p>
       </div>
     </section>
 
@@ -48,9 +48,9 @@
   </main>
 
   <footer data-footer></footer>
-  <script src="js/data.js?v=202611180328"></script>
-  <script src="js/config.js?v=202611180328"></script>
-  <script src="js/site.js?v=202611180328"></script>
+  <script src="js/data.js?v=202611180406"></script>
+  <script src="js/config.js?v=202611180406"></script>
+  <script src="js/site.js?v=202611180406"></script>
   <script>
     /* To add a post: make its picture (see tools/social-cards.html), then add a block here. */
     var TAGS = '#ilovelatins #colombia #barranquilla #singlestravel #romancetour #meetinperson #travelcolombia';
@@ -85,8 +85,23 @@
       { file: '13-is-it-real', title: 'Is it real?',
         text: '“Is iLoveLatins real?”\n\nYes. Sam Smith has hosted tours to Barranquilla since 2000. You can read letters from men who went, watch the tour videos, and call or text Sam to ask him anything before you pay.' },
       { file: '14-friends', title: 'Lifetime friends',
-        text: '“You will make lifetime friends.”\n\nThat is from Gary’s letter after his tour. The picture is from one of our recent socials.\n\nFollow us to see the next one.' }
+        text: '“You will make lifetime friends.”\n\nThat is from Gary’s letter after his tour. The picture is from one of our recent socials.\n\nFollow us to see the next one.' },
+
+      /* In Spanish, for women. These end with the Spanish sign-up link. */
+      { file: 'm1-soltera', title: '¿Soltera?', es: true,
+        text: '¿Soltera? 💕\n\niLoveLatins organiza eventos en Barranquilla para conocer en persona a hombres serios de Estados Unidos. Llevamos haciéndolo desde el año 2000.\n\nPara las mujeres es gratis, siempre.' },
+      { file: 'm2-gratis', title: 'Gratis, siempre', es: true,
+        text: 'Gratis para mujeres. Siempre.\n\n✅ Sin pagos y sin tarjeta\n✅ Perfiles revisados uno por uno: solo gente real\n✅ Traductor en los mensajes: no necesitas hablar inglés' },
+      { file: 'm3-como-funciona', title: 'Cómo funciona', es: true,
+        text: 'Cómo funciona, en cuatro pasos:\n\n1. Crea tu perfil con tus fotos.\n2. Sam lo revisa antes de publicarlo.\n3. Recibe mensajes. El traductor te ayuda.\n4. Ven a nuestros eventos en Barranquilla.\n\nY es gratis para mujeres.' },
+      { file: 'm4-verificada', title: 'Insignia Verificada', es: true,
+        text: '¿Quieres la insignia ✓ Verificada en tu perfil?\n\nEnvíale a Sam por WhatsApp una selfie sosteniendo un papel con la fecha de hoy y tu nombre. Los perfiles verificados reciben muchos más mensajes.\n\nUn consejo: nunca le envíes dinero a nadie que conozcas por internet, y avísale a Sam si alguien te lo pide.' },
+      { file: 'm5-proximo-evento', title: 'Próximo evento', es: true,
+        text: 'Próximo evento en Barranquilla: del 11 al 16 de febrero de 2027, justo después de Carnaval. 💃\n\nLa entrada es gratis para mujeres. Crea tu perfil para recibir la invitación.' },
+      { file: 'm6-gente-real', title: 'Gente real', es: true,
+        text: 'Gente real, eventos reales.\n\nEsta foto es de uno de nuestros eventos recientes. Cada perfil lo revisa una persona antes de publicarse.\n\n¿Tienes amigas solteras? Compárteles esta publicación. 🙏' }
     ];
+    var END_ES = '\n\nCrea tu perfil gratis: https://tab197222.github.io/ec-key-check/join.html?soy=mujer\nEscríbele a Sam: +1 832 385 4161\n\n#ilovelatins #barranquilla #colombia #solteras #barranquilleras #amor #carnavaldebarranquilla';
     var list = document.getElementById('posts');
     POSTS.forEach(function (p, i) {
       var img = 'assets/social/' + p.file + '.jpg';
@@ -96,7 +111,12 @@
         '<div><h2>' + (i + 1) + '. ' + p.title + '</h2><pre></pre>' +
         '<div class="actions"><a class="btn" href="' + img + '" download="ilovelatins-' + p.file + '.jpg">Save picture</a>' +
         '<button class="btn btn-quiet" type="button">Copy caption</button></div></div>';
-      var caption = p.text + END + (p.tags || '');
+      var caption = p.text + (p.es ? END_ES : END + (p.tags || ''));
+      if (p.es && !list.querySelector('h2.group')) {
+        var h = document.createElement('div');
+        h.innerHTML = '<h2 class="group">In Spanish, for women</h2><p>These invite women in Barranquilla to join free. Post them on the same accounts, mixed in with the others, about one a week.</p>';
+        list.appendChild(h);
+      }
       el.querySelector('pre').textContent = caption;
       var btn = el.querySelector('button');
       btn.addEventListener('click', function () {
