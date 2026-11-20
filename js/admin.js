@@ -86,6 +86,18 @@ App.start(async function () {
         }).join('')
       : '<p class="form-small">Nothing waiting.</p>';
 
+    // People who signed up and never made a profile
+    var un = await sb.rpc('admin_unfinished_signups');
+    var stuck = un.data || [];
+    var when = function (d) { return d ? new Date(d).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'Never'; };
+    $('unfinished').innerHTML = un.error ? '<p class="form-small">This list could not be loaded.</p>'
+      : stuck.length ? '<table class="deposits"><thead><tr><th>Email</th><th>Signed up</th><th>Where they stopped</th><th>Last log-in</th></tr></thead><tbody>' +
+        stuck.map(function (x) {
+          return '<tr><td><a href="mailto:' + esc(x.email) + '">' + esc(x.email) + '</a></td><td>' + esc(when(x.signed_up)) + '</td>' +
+            '<td>' + (x.confirmed ? 'Confirmed email, no profile yet' : 'Has not confirmed their email') + '</td><td>' + esc(when(x.last_login)) + '</td></tr>';
+        }).join('') + '</tbody></table>'
+      : '<p class="form-small">Nobody is stuck.</p>';
+
     // All members, newest first
     var all = await sb.from('profiles').select('id, first_name, gender, birthdate, city, country, status, verified, is_admin, created_at')
       .order('created_at', { ascending: false }).limit(300);
