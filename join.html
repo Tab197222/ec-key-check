@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=202611200619">
+  <link rel="stylesheet" href="css/style.css?v=202611200624">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -103,8 +103,8 @@
             </label>
           </div>
           <div class="row">
-            <label><span data-t="city">City</span>
-              <input type="text" name="city" data-label="City" required>
+            <label><span data-t="city">City and state</span>
+              <input type="text" name="city" data-label="City" maxlength="80" placeholder="Houston, Texas / Barranquilla, Atlántico" required>
             </label>
             <label><span data-t="country">Country</span>
               <input type="text" name="country" data-label="Country" autocomplete="country-name" required>
@@ -132,17 +132,17 @@
   </main>
 
   <footer data-footer></footer>
-  <script src="js/vendor/supabase.js?v=202611200619"></script>
-  <script src="js/data.js?v=202611200619"></script>
-  <script src="js/site.js?v=202611200619"></script>
-  <script src="js/config.js?v=202611200619"></script>
-  <script src="js/app.js?v=202611200619"></script>
-  <script src="js/join.js?v=202611200619"></script>
+  <script src="js/vendor/supabase.js?v=202611200624"></script>
+  <script src="js/data.js?v=202611200624"></script>
+  <script src="js/site.js?v=202611200624"></script>
+  <script src="js/config.js?v=202611200624"></script>
+  <script src="js/app.js?v=202611200624"></script>
+  <script src="js/join.js?v=202611200624"></script>
   <script>
     (function () {
       var T = {
-        man: { first: 'First name', age: 'Age', agehint: 'You must be 18 or over.', city: 'City', country: 'Country', email: 'Email', phone: 'Mobile or WhatsApp', about: 'About you, and who you hope to meet', photo: 'Sam will reply and ask for a recent photo. A profile needs a real photo before it is shown to anyone.', send: 'Send my details', as: 'Man seeking a woman', lang: 'en' },
-        woman: { first: 'Nombre', age: 'Edad', agehint: 'Debes tener 18 años o más.', city: 'Ciudad', country: 'País', email: 'Correo electrónico', phone: 'Celular o WhatsApp', about: 'Cuéntanos de ti y a quién te gustaría conocer', photo: 'Es gratis. Sam te responderá y te pedirá una foto reciente. Un perfil necesita una foto real antes de mostrarse.', send: 'Enviar mis datos', as: 'Woman seeking a man', lang: 'es' }
+        man: { first: 'First name', age: 'Age', agehint: 'You must be 18 or over.', city: 'City and state', country: 'Country', email: 'Email', phone: 'Mobile or WhatsApp', about: 'About you, and who you hope to meet', photo: 'Sam will reply and ask for a recent photo. A profile needs a real photo before it is shown to anyone.', send: 'Send my details', as: 'Man seeking a woman', lang: 'en' },
+        woman: { first: 'Nombre', age: 'Edad', agehint: 'Debes tener 18 años o más.', city: 'Ciudad y departamento', country: 'País', email: 'Correo electrónico', phone: 'Celular o WhatsApp', about: 'Cuéntanos de ti y a quién te gustaría conocer', photo: 'Es gratis. Sam te responderá y te pedirá una foto reciente. Un perfil necesita una foto real antes de mostrarse.', send: 'Enviar mis datos', as: 'Woman seeking a man', lang: 'es' }
       };
       var form = document.getElementById('join-form');
       var buttons = document.querySelectorAll('[data-who]');
