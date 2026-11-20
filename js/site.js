@@ -11,11 +11,17 @@
      file writes itself (menu, footer, tour cards, forms) are in the list below. */
   var lang = null;
   try { lang = localStorage.getItem('ill_lang'); } catch (e) {}
+  // The language button reloads the page with ?lang=es or ?lang=en: that always wins.
+  var asked = new URLSearchParams(location.search).get('lang');
+  if (asked === 'es' || asked === 'en') { lang = asked; try { localStorage.setItem('ill_lang', asked); } catch (e) {} }
   if (new URLSearchParams(location.search).get('soy') === 'mujer' && !lang) {
     lang = 'es'; // she arrived from a Spanish invitation: stay in Spanish on the next pages too
     try { localStorage.setItem('ill_lang', 'es'); } catch (e) {}
   }
   if (lang !== 'es' && lang !== 'en') lang = (navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
+  // If this browser will not remember the choice (some private modes), carry it on every link instead.
+  var carryLang = '';
+  try { localStorage.setItem('ill_lang_test', '1'); localStorage.removeItem('ill_lang_test'); } catch (e) { carryLang = asked || ''; }
   var ES = {
     'Tours': 'Tours', 'Testimonials': 'Testimonios', 'Members': 'Miembros', 'Membership': 'Membresía',
     'About Sam': 'Sobre Sam', 'Questions': 'Preguntas', 'Contact': 'Contacto', 'My account': 'Mi cuenta',
@@ -88,9 +94,12 @@
   function switchLang() {
     var next = lang === 'es' ? 'en' : 'es';
     try { localStorage.setItem('ill_lang', next); } catch (e) {}
-    var u = new URL(location.href); u.searchParams.delete('soy');
     // An owner's helper page has no Spanish: go to the sign-up page, which does.
-    location.href = next === 'es' && !bilingual ? 'join.html' : u.toString();
+    var u = new URL(next === 'es' && !bilingual ? 'join.html' : location.href, location.href);
+    u.searchParams.delete('soy');
+    u.searchParams.set('lang', next); // a changed address, so the browser really loads the page again
+    u.hash = '';
+    location.href = u.toString();
   }
 
   var links = [
@@ -404,7 +413,9 @@
       if (/^(https?:|mailto:|tel:|sms:|#|javascript:)/i.test(href) || !/^[\w\-\/]*\.html(?:[?#]|$)/.test(href) || /[?&]v=/.test(href)) return;
       var hash = '', i = href.indexOf('#');
       if (i >= 0) { hash = href.slice(i); href = href.slice(0, i); }
-      a.setAttribute('href', href + (href.indexOf('?') >= 0 ? '&' : '?') + 'v=' + VERSION + hash);
+      href += (href.indexOf('?') >= 0 ? '&' : '?') + 'v=' + VERSION;
+      if (carryLang && !/[?&]lang=/.test(href)) href += '&lang=' + carryLang;
+      a.setAttribute('href', href + hash);
     });
   }
   freshen(document);

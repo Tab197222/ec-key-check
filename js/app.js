@@ -166,6 +166,8 @@ window.App = (function () {
   var lang = localStorage.getItem('ill_lang') ||
     ((navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
   if (new URLSearchParams(location.search).get('soy') === 'mujer') lang = 'es';
+  var askedLang = new URLSearchParams(location.search).get('lang');
+  if (askedLang === 'es' || askedLang === 'en') lang = askedLang;
 
   function t(key) { return STR[lang][key] || STR.en[key] || key; }
   function translate(root) {

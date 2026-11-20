@@ -2,7 +2,7 @@
   Language for the public pages: English or Spanish.
 
   The pages are written in English. When a visitor has chosen Spanish, this file
-  loads the page's Spanish words from js/es/<page>.js and swaps them in, piece by
+  loads the page's Spanish words from js/es/<page>.json and swaps them in, piece by
   piece, before the rest of the site's scripts run.
 
   Each piece of English text (a heading, a paragraph, a button) is found by a short
@@ -15,6 +15,9 @@
   var page = location.pathname.split('/').pop() || 'index.html';
   var lang = null;
   try { lang = localStorage.getItem('ill_lang'); } catch (e) {}
+  // The language button reloads the page with ?lang=es or ?lang=en: that always wins.
+  var asked = new URLSearchParams(location.search).get('lang');
+  if (asked === 'es' || asked === 'en') { lang = asked; try { localStorage.setItem('ill_lang', asked); } catch (e) {} }
   if (new URLSearchParams(location.search).get('soy') === 'mujer' && !lang) {
     lang = 'es'; // she arrived from a Spanish invitation: stay in Spanish on the next pages too
     try { localStorage.setItem('ill_lang', 'es'); } catch (e) {}
@@ -72,7 +75,7 @@
       pieces(doc, function (kind, node, en) { out[code(en)] = en; });
       return out;
     },
-    // Called by js/es/<page>.js with that page's Spanish.
+    // Swaps in a page's Spanish (the contents of js/es/<page>.json).
     apply: function (dict) {
       pieces(document, function (kind, node, en, attr) {
         var es = dict[code(en)];
@@ -94,6 +97,11 @@
   if (lang === 'es' && PAGES.test(page)) {
     var v = '';
     try { v = new URL(document.currentScript.src).searchParams.get('v') || ''; } catch (e) {}
-    document.write('<script src="js/es/' + page.replace('.html', '.js') + (v ? '?v=' + v : '') + '"><\/script>');
+    try {
+      var x = new XMLHttpRequest();
+      x.open('GET', 'js/es/' + page.replace('.html', '.json') + (v ? '?v=' + v : ''), false); // wait for it: the swap must happen before site.js runs
+      x.send();
+      if (x.status === 200) window.ILL_LANG.apply(JSON.parse(x.responseText));
+    } catch (e) {}
   }
 })();

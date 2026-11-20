@@ -4,7 +4,7 @@ For each public page this:
   1. lists every piece of English text on it   -> tools/strings/<page>.en.json
   2. reads the Spanish for those pieces from    tools/strings/<page>.es.json
   3. reports any piece with no Spanish yet (it shows in English on the site)
-  4. writes the file the site loads             -> js/es/<page>.js
+  4. writes the file the site loads             -> js/es/<page>.json
 
 To translate a new or edited piece: run this, look up the missing code in
 <page>.en.json, add the same code with its Spanish to <page>.es.json, run again.
@@ -52,10 +52,7 @@ with tempfile.TemporaryDirectory() as tmp:
         for k in broken:
             print('  %s %s: the Spanish does not keep the same <tags> as the English' % (name, k))
         use = {k: es[k] for k in en if es.get(k) and k not in broken}
-        (out / (name + '.js')).write_text(
-            '/* Spanish for %s.html. Made by tools/translations.py from tools/strings/%s.es.json: edit that file, not this one. */\n'
-            'window.ILL_LANG.apply(%s);\n' % (name, name, json.dumps(use, ensure_ascii=False, separators=(',', ':'))),
-            encoding='utf-8', newline='\n')
+        (out / (name + '.json')).write_text(json.dumps(use, ensure_ascii=False, separators=(',', ':')), encoding='utf-8', newline='\n')
         problems += len(missing) + len(broken)
         print('%-14s %3d pieces, %3d in Spanish, %d missing%s' % (name, len(en), len(use), len(missing),
               (': ' + ', '.join(missing[:6]) + (' …' if len(missing) > 6 else '')) if missing else ''))

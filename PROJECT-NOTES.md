@@ -29,7 +29,7 @@ Setup details: SETUP.md. WhatsApp invitations for women: invitaciones-whatsapp.m
   when the domain moves).
 - Visitors report now shows where visits came from. Links can carry ?from=instagram etc.
 - Spanish: an Español / English button is on every page. The public pages are translated
-  by js/lang.js using js/es/<page>.js. **After changing any English text on a public page,
+  by js/lang.js using js/es/<page>.json. **After changing any English text on a public page,
   run `python tools/translations.py`**: it lists pieces with no Spanish yet; add them to
   tools/strings/<page>.es.json and run it again. Tours and videos in js/data.js have
   `_es` lines next to the English ones.
