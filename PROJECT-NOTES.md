@@ -34,6 +34,19 @@ Setup details: SETUP.md. WhatsApp invitations for women: invitaciones-whatsapp.m
   tools/strings/<page>.es.json and run it again. Tours and videos in js/data.js have
   `_es` lines next to the English ones.
 
+## Added 20 Nov 2026
+- Browsers are told not to auto-translate (Edge was turning the Spanish pages back into English).
+- Owners see an "Owner tools" bar on every page once they have logged in on that browser.
+- Profiles ask for "City and state" in the one city box. A member's own words on a profile
+  are translated automatically for the reader.
+- Approvals page: "Signed up but not finished" list (supabase/008).
+- Automatic reminder (supabase/009 + functions/remind-unfinished): once a day at 15:00 UTC,
+  anyone who signed up 1 to 14 days ago and has no profile gets ONE email with a link to
+  finish. To stop it, run in the SQL Editor: `select cron.unschedule('remind-unfinished');`
+  To keep someone from being emailed, add them to `signup_reminders` with note 'held'.
+- The business Gmail account (ilovelatinsvacations@gmail.com) has a login but no profile
+  yet, so it is not an owner. Fill in its profile, then mark it is_admin (see SETUP.md).
+
 ## Still to do (needs other people)
 1. Stripe "Verify your business", then switch the site to live keys.
 2. Lawyer: privacy policy, terms (deposit and crossed-out price rules), IMBRA question.
