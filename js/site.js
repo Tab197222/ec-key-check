@@ -115,7 +115,12 @@
   var header = document.querySelector('[data-header]');
   if (header) {
     header.className = 'site-header';
+    // Owners only: a bar with their tools. A browser counts as an owner's once an owner
+    // has logged in on it (the approvals page and the members' pages set this mark).
+    var owner = false;
+    try { owner = !!localStorage.getItem('ill_owner'); } catch (e) {}
     header.innerHTML =
+      (owner ? '<p class="owner-bar"><strong>Owner tools:</strong> <a href="admin.html">Approvals</a> <a href="posts.html">Social media posts</a> <a href="invites.html">WhatsApp invitations</a></p>' : '') +
       '<div class="wrap">' +
       '<a class="logo" href="index.html"><img src="assets/logo.png" alt="iLoveLatins home" width="768" height="205"></a>' +
       '<button class="lang-btn" type="button" lang="' + (lang === 'es' ? 'en' : 'es') + '">' + (lang === 'es' ? 'English' : 'Español') + '</button>' +

@@ -311,6 +311,14 @@ window.App = (function () {
     }
     touch();
     unreadBadge();
+    // An owner who is logged in: mark this browser, so every page shows the owner tools bar.
+    user().then(function (u) { return u && myProfile(u.id); }).then(function (me) {
+      if (!me || !me.is_admin) return;
+      try { localStorage.setItem('ill_owner', '1'); } catch (e) {}
+      var head = document.querySelector('.site-header');
+      if (head && !head.querySelector('.owner-bar')) head.insertAdjacentHTML('afterbegin',
+        '<p class="owner-bar"><strong>Owner tools:</strong> <a href="admin.html">Approvals</a> <a href="posts.html">Social media posts</a> <a href="invites.html">WhatsApp invitations</a></p>');
+    }).catch(function () {});
     Promise.resolve(fn()).catch(function (e) {
       console.error(e);
       if (root) root.insertAdjacentHTML('afterbegin', '<p class="form-status error">' + esc(e.message || e) + '</p>');

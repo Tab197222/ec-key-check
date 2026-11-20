@@ -108,6 +108,8 @@ p { margin: 0 0 1em; max-width: 62ch; }
   .lang-btn, .nav-toggle { flex: none; font-size: 0.9rem; padding: 0.45em 0.8em; }
 }
 .lang-foot { display: block; margin-top: 0.6rem; }
+.owner-bar { margin: 0; max-width: none; padding: 0.45rem var(--gap); background: var(--ink); color: #fff; font-size: 0.92rem; display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; justify-content: center; }
+.owner-bar a { color: var(--sun); font-weight: 600; }
 .lang-note { margin: 0; max-width: none; padding: 0.6rem var(--gap); background: var(--sun); color: var(--ink); font-size: 0.98rem; text-align: center; }
 .lang-note a { color: var(--ink); font-weight: 600; }
 
