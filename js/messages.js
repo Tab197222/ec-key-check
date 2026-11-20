@@ -79,27 +79,7 @@ App.start(async function () {
 
   /* ----- translation: a free public service, used only when the reader presses Translate ----- */
   var originals = {};
-  async function translateText(text) {
-    var target = App.lang() === 'es' ? 'es' : 'en';
-    var source = target === 'es' ? 'en' : 'es';
-    // The service takes up to about 500 characters at a time: split at spaces.
-    var chunks = [], rest = text;
-    while (rest.length > 450) {
-      var cut = rest.lastIndexOf(' ', 450);
-      if (cut < 100) cut = 450;
-      chunks.push(rest.slice(0, cut)); rest = rest.slice(cut);
-    }
-    chunks.push(rest);
-    var out = [];
-    for (var i = 0; i < chunks.length; i++) {
-      var r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunks[i]) +
-        '&langpair=' + source + '|' + target + '&de=' + encodeURIComponent((window.ILL && ILL.contact.email) || ''));
-      var d = await r.json();
-      if (!d || d.responseStatus !== 200 || !d.responseData) throw new Error('translation failed');
-      out.push(d.responseData.translatedText);
-    }
-    return out.join(' ');
-  }
+  var translateText = App.translateText;
   $('thread').addEventListener('click', async function (e) {
     var b = e.target.closest('[data-translate]');
     if (!b) return;

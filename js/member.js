@@ -39,7 +39,8 @@ App.start(async function () {
         : '<video src="' + src + '" controls preload="metadata" playsinline></video>';
     }).join('') + '</div>' +
     App.facts(p) +
-    (p.about ? '<p class="about">' + esc(p.about) + '</p>' : '') +
+    (p.about ? '<p class="about" id="about">' + esc(p.about) + '</p>' +
+      '<p class="form-small" id="about-tools"><span id="about-note"></span> <button type="button" class="link" id="about-translate">' + esc(t('translate')) + '</button></p>' : '') +
     (mine ? '' :
       '<div class="actions">' +
       '<button class="btn btn-like" type="button" id="like" aria-pressed="' + liked + '">' + esc(t(liked ? 'liked' : 'like')) + '</button>' +
@@ -87,4 +88,22 @@ App.start(async function () {
     var res = await sb.from('blocks').upsert({ blocker: u.id, blocked: id });
     App.say(out, res.error ? res.error.message : t('blocked'), !!res.error);
   });
+
+  /* ----- her or his own words: shown in the reader's language, with the original one press away ----- */
+  if (p.about) {
+    var about = document.getElementById('about'), aboutBtn = document.getElementById('about-translate'), aboutNote = document.getElementById('about-note');
+    var translatedAbout = null, showing = false;
+    var toggle = async function () {
+      if (showing) { about.textContent = p.about; aboutNote.textContent = ''; aboutBtn.textContent = t('translate'); showing = false; return; }
+      aboutBtn.disabled = true; aboutBtn.textContent = t('translating');
+      try {
+        if (translatedAbout == null) translatedAbout = await App.translateText(p.about);
+        about.textContent = translatedAbout; aboutNote.textContent = t('translated_note'); aboutBtn.textContent = t('original'); showing = true;
+      } catch (err) { aboutBtn.textContent = t('translate_failed'); }
+      aboutBtn.disabled = false;
+    };
+    aboutBtn.addEventListener('click', toggle);
+    var wrote = App.guessLang(p.about);
+    if (wrote && wrote !== App.lang()) toggle(); // written in the other language: translate straight away
+  }
 });

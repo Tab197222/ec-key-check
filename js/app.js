@@ -81,6 +81,7 @@ window.App = (function () {
       no_i_like: 'You haven’t liked anyone yet. Open a profile and press “I’m interested”.',
       // translation
       translate: 'Translate', original: 'Show original', translating: 'Translating…',
+      translated_note: 'Translated automatically from Spanish.',
       translate_failed: 'Translation is not available right now.',
       locked_preview: 'New message: upgrade to read',
       locked_bubble: 'Message locked',
@@ -154,6 +155,7 @@ window.App = (function () {
       no_likes: 'Nadie todavía. Un perfil completo con buenas fotos recibe más interés.',
       no_i_like: 'Todavía no has marcado a nadie. Abre un perfil y pulsa «Me interesa».',
       translate: 'Traducir', original: 'Ver original', translating: 'Traduciendo…',
+      translated_note: 'Traducido automáticamente del inglés.',
       translate_failed: 'La traducción no está disponible ahora.',
       locked_preview: 'Mensaje nuevo: mejora tu plan para leerlo',
       locked_bubble: 'Mensaje bloqueado',
@@ -298,6 +300,40 @@ window.App = (function () {
     } catch (e) { /* the badge is a nicety */ }
   }
 
+  /* ---------- translation: a free public service, used for messages and profile text ---------- */
+  async function translateText(text) {
+    var target = lang === 'es' ? 'es' : 'en';
+    var source = target === 'es' ? 'en' : 'es';
+    // The service takes up to about 500 characters at a time: split at spaces.
+    var chunks = [], rest = text;
+    while (rest.length > 450) {
+      var cut = rest.lastIndexOf(' ', 450);
+      if (cut < 100) cut = 450;
+      chunks.push(rest.slice(0, cut)); rest = rest.slice(cut);
+    }
+    chunks.push(rest);
+    var out = [];
+    for (var i = 0; i < chunks.length; i++) {
+      var r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(chunks[i]) +
+        '&langpair=' + source + '|' + target + '&de=' + encodeURIComponent((window.ILL && ILL.contact.email) || ''));
+      var d = await r.json();
+      if (!d || d.responseStatus !== 200 || !d.responseData) throw new Error('translation failed');
+      out.push(d.responseData.translatedText);
+    }
+    return out.join(' ');
+  }
+  // A rough guess at the language of a member's own words: 'es', 'en', or '' when unsure.
+  function guessLang(text) {
+    var s = ' ' + String(text || '').toLowerCase().replace(/[^a-záéíóúüñ¿¡]+/g, ' ') + ' ';
+    var count = function (words) { return words.reduce(function (n, w) { return n + s.split(' ' + w + ' ').length - 1; }, 0); };
+    var es = count(['que', 'de', 'el', 'la', 'los', 'las', 'un', 'una', 'y', 'con', 'soy', 'busco', 'para', 'mi', 'me', 'muy', 'hombre', 'mujer', 'es', 'en', 'por', 'pero', 'como', 'amor', 'vida', 'persona', 'serio', 'seria', 'gusta', 'quiero']) +
+      (/[áéíóúñ¿¡]/.test(s) ? 2 : 0);
+    var en = count(['the', 'and', 'i', 'am', 'a', 'to', 'of', 'with', 'for', 'my', 'is', 'looking', 'who', 'someone', 'love', 'life', 'man', 'woman', 'in', 'you', 'have', 'like', 'want']);
+    if (es > en) return 'es';
+    if (en > es) return 'en';
+    return '';
+  }
+
   function start(fn) {
     document.documentElement.lang = lang;
     translate();
@@ -327,5 +363,6 @@ window.App = (function () {
 
   return { opt: opt, options: options, badges: badges, facts: facts, heightText: heightText,
     sb: sb, ready: ready, recovery: recovery, t: t, translate: translate, esc: esc, say: say, lang: function () { return lang; },
-    user: user, requireUser: requireUser, myProfile: myProfile, signed: signed, start: start };
+    user: user, requireUser: requireUser, myProfile: myProfile, signed: signed, start: start,
+    translateText: translateText, guessLang: guessLang };
 })();
