@@ -85,6 +85,14 @@
 
   /* ---------- header and footer ---------- */
 
+  function switchLang() {
+    var next = lang === 'es' ? 'en' : 'es';
+    try { localStorage.setItem('ill_lang', next); } catch (e) {}
+    var u = new URL(location.href); u.searchParams.delete('soy');
+    // An owner's helper page has no Spanish: go to the sign-up page, which does.
+    location.href = next === 'es' && !bilingual ? 'join.html' : u.toString();
+  }
+
   var links = [
     ['tours.html', T('Tours')],
     ['testimonials.html', T('Testimonials')],
@@ -111,13 +119,7 @@
       '</nav></div>' +
       // A Spanish reader on an English-only page: say so, and point women to the Spanish sign-up.
       (lang === 'es' && !bilingual ? '<p class="lang-note" lang="es">Esta página está en inglés. ¿Eres mujer? <a href="join.html?soy=mujer">Crea tu perfil gratis, en español</a>.</p>' : '');
-    header.querySelector('.lang-btn').addEventListener('click', function () {
-      var next = lang === 'es' ? 'en' : 'es';
-      try { localStorage.setItem('ill_lang', next); } catch (e) {}
-      var u = new URL(location.href); u.searchParams.delete('soy');
-      // English-only page, switching to Spanish: go to the sign-up page, which is in Spanish.
-      location.href = next === 'es' && !bilingual ? 'join.html' : u.toString();
-    });
+    header.querySelector('.lang-btn').addEventListener('click', switchLang);
     var toggle = header.querySelector('.nav-toggle');
     var nav = header.querySelector('.nav');
     toggle.addEventListener('click', function () {
@@ -173,7 +175,9 @@
       '<li><a href="faq.html">' + T('Questions') + '</a></li>' +
       '<li><a href="safety.html">' + T('Safety') + '</a></li>' +
       '<li><a href="contact.html">' + T('Contact') + '</a></li></ul></div>' +
-      '</div><p class="legal">© 2000–' + new Date().getFullYear() + ' iLoveLatins. ' + T('All rights reserved.') + '</p></div>';
+      '</div><p class="legal">© 2000–' + new Date().getFullYear() + ' iLoveLatins. ' + T('All rights reserved.') +
+      '<button class="link lang-foot" type="button">' + (lang === 'es' ? 'Read this site in English' : 'Leer este sitio en español') + '</button></p></div>';
+    footer.querySelector('.lang-foot').addEventListener('click', switchLang);
   }
 
   /* ---------- contact details ---------- */
