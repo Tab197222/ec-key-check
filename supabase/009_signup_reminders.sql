@@ -11,10 +11,12 @@ create table if not exists public.signup_reminders (
 alter table public.signup_reminders enable row level security;  -- no policies: only the server can read or write
 
 -- Who is due a reminder now: signed up 1 to 14 days ago, no profile, not reminded yet.
-create or replace function public.unfinished_to_remind()
-returns table (id uuid, email text, confirmed boolean)
+-- lang is the language they signed up in ('en' or 'es'), or null for older sign-ups.
+drop function if exists public.unfinished_to_remind();
+create function public.unfinished_to_remind()
+returns table (id uuid, email text, confirmed boolean, lang text)
 language sql stable security definer set search_path = public as $$
-  select u.id, u.email::text, u.email_confirmed_at is not null
+  select u.id, u.email::text, u.email_confirmed_at is not null, u.raw_user_meta_data->>'lang'
   from auth.users u
   where u.created_at < now() - interval '24 hours'
     and u.created_at > now() - interval '14 days'

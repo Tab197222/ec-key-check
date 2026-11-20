@@ -23,7 +23,8 @@ App.start(async function () {
     var r = await sb.auth.signUp({
       email: forms.signup.email.value.trim(),
       password: forms.signup.password.value,
-      options: { emailRedirectTo: accountUrl }
+      // lang: the language they signed up in, so emails to them are written in it
+      options: { emailRedirectTo: accountUrl, data: { lang: App.lang() } }
     });
     if (r.error) return App.say(out, r.error.message, true);
     if (r.data.session) location.href = 'account.html';
