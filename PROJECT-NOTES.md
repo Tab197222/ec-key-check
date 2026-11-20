@@ -1,9 +1,10 @@
-# iLoveLatins: where things stand (14 Nov 2026)
+# iLoveLatins: where things stand (updated 20 Nov 2026)
 
 Live preview: https://tab197222.github.io/ec-key-check/
 Owner page: https://tab197222.github.io/ec-key-check/admin.html
 Code: GitHub Tab197222/ec-key-check, branch `new-site` (published from `gh-pages`).
 Setup details: SETUP.md. WhatsApp invitations for women: invitaciones-whatsapp.md.
+Social media setup: social-media.md. Moving the domain: domain-move.md.
 
 ## Built and working
 - Public pages: Home, Tours (dates, prices, Cartagena side trip, events venue
@@ -44,8 +45,23 @@ Setup details: SETUP.md. WhatsApp invitations for women: invitaciones-whatsapp.m
   anyone who signed up 1 to 14 days ago and has no profile gets ONE email with a link to
   finish. To stop it, run in the SQL Editor: `select cron.unschedule('remind-unfinished');`
   To keep someone from being emailed, add them to `signup_reminders` with note 'held'.
-- The business Gmail account (ilovelatinsvacations@gmail.com) has a login but no profile
-  yet, so it is not an owner. Fill in its profile, then mark it is_admin (see SETUP.md).
+- The reminder is written in the language the person signed up in (English, or Spanish
+  if they used the Español button or an invitation link). Older sign-ups get both.
+- This file is published with the site: never write members' names or emails in it.
+
+## Open right now (20 Nov 2026)
+- **Sam's owner access:** Sam fills in his profile on the business Gmail account (the
+  reminder email in that inbox has a log-in link, or use "Forgot password" on the Join
+  page). Trent approves it on the Approvals page. Then Claude marks that account as an
+  owner (needs a Supabase token; the SQL is in SETUP.md).
+- **Trent's photo** is approved but not set as his main photo: set it on My account.
+- **Web developer:** send him the message in domain-move.md.
+- **Supabase token:** delete any token that is still active when the work is done.
+- **Spanish text** was machine-translated; Sam should read the Tours and Questions pages.
+- One unfinished sign-up is due its automatic reminder on 21 Nov; see the Approvals page.
+- Ideas not started: "Message Sam on WhatsApp" button, promote the Buddy plan, Google
+  Business Profile, reviews from past guests, short phone videos from Sam, a Hold button
+  on the unfinished sign-ups list.
 
 ## Still to do (needs other people)
 1. Stripe "Verify your business", then switch the site to live keys.
