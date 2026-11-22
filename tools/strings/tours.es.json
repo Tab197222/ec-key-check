@@ -185,5 +185,6 @@
  "970b57e4": "<a class=\"btn\" href=\"#dates\">Ver fechas de tours</a> <a class=\"btn btn-quiet\" data-phone=\"\">Pregúntale a Sam qué hay planeado</a>",
  "92d308da": "<a class=\"btn\" href=\"#dates\">Ver fechas de tours</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Pregúntale a Sam qué hay planeado</a>",
  "acfe2705": "<strong>Paga el total hoy y ahorra $250</strong> sobre el precio regular. Llama o escribe a Sam al <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> para pagar el total.",
- "f3043a5f": "¿Tienes preguntas primero? Llama o escribe al <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> antes de pagar."
+ "f3043a5f": "¿Tienes preguntas primero? Llama o escribe al <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> antes de pagar.",
+ "c17de53b": "Escribe un número de teléfono, por ejemplo 832-385-4161"
 }
