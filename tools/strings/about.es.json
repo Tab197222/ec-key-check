@@ -25,5 +25,7 @@
  "6a4003f0": "Los tours existen porque una relación real necesita un primer encuentro real.",
  "a2033060": "iLoveLatins.com",
  "9ce67bc0": "Mira cuándo sale el próximo tour.",
- "239d0019": "<a class=\"btn\" href=\"tours.html\">Ver fechas de los tours</a>"
+ "239d0019": "<a class=\"btn\" href=\"tours.html\">Ver fechas de los tours</a>",
+ "7aa66479": "<a class=\"btn\" data-phone=\"\" href=\"tel:+18323854161\">Llama a Sam, 832-385-4161</a> <a class=\"btn btn-quiet\" data-sms=\"\" href=\"sms:+18323854161\">Enviar un mensaje de texto</a>",
+ "113f5074": "Sam dirige iLoveLatins, es el anfitrión de los tours y contesta el teléfono. Cuando llamas al <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> hablas con la persona que planea la semana que vas a pasar en Colombia."
 }

@@ -182,5 +182,8 @@
  "8e39f139": "Almuerzo de langosta y camarones junto a la playa, 22 de diciembre de 2023",
  "9440f7f5": "Casa en el Agua, una cabaña sobre el mar Caribe, 30 de mayo de 2024",
  "26d4a194": "Saliendo de Cartagena en el bote hacia Casa en el Agua, bajo la lluvia, 30 de mayo de 2024",
- "970b57e4": "<a class=\"btn\" href=\"#dates\">Ver fechas de tours</a> <a class=\"btn btn-quiet\" data-phone=\"\">Pregúntale a Sam qué hay planeado</a>"
+ "970b57e4": "<a class=\"btn\" href=\"#dates\">Ver fechas de tours</a> <a class=\"btn btn-quiet\" data-phone=\"\">Pregúntale a Sam qué hay planeado</a>",
+ "92d308da": "<a class=\"btn\" href=\"#dates\">Ver fechas de tours</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Pregúntale a Sam qué hay planeado</a>",
+ "acfe2705": "<strong>Paga el total hoy y ahorra $250</strong> sobre el precio regular. Llama o escribe a Sam al <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> para pagar el total.",
+ "f3043a5f": "¿Tienes preguntas primero? Llama o escribe al <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> antes de pagar."
 }

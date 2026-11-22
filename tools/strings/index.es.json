@@ -83,5 +83,10 @@
  "5f00008a": "Sam con camiseta de Colombia y sombrero vaquero celebrando con un grupo de mujeres en una salida nocturna",
  "a2033060": "iLoveLatins.com",
  "37a3ded5": "Elige una fecha, o toma el teléfono.",
- "683af670": "<a class=\"btn\" href=\"tours.html#reserve\">Reserva un tour</a> <a class=\"btn btn-quiet\" data-phone=\"\">Llama a Sam, 832-385-4161</a>"
+ "683af670": "<a class=\"btn\" href=\"tours.html#reserve\">Reserva un tour</a> <a class=\"btn btn-quiet\" data-phone=\"\">Llama a Sam, 832-385-4161</a>",
+ "4ca6e1b4": "<a class=\"btn\" href=\"tours.html\">Ver fechas de los tours</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Llama o escribe a Sam, 832-385-4161</a>",
+ "814eea92": "¿No estás seguro? Llama o escribe a Sam al <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> y pregúntale lo que quieras, o lee <a href=\"testimonials.html\">las cartas de hombres que fueron</a>.",
+ "e4fc1aa4": "<a class=\"btn btn-sun\" data-sms=\"\" href=\"sms:+18323854161\">Escríbele a Sam</a> <a class=\"btn btn-sun\" data-whatsapp=\"\" href=\"https://chat.whatsapp.com/FEq4WaAWiylIFiqvFz3wKc\" rel=\"noopener\">Únete al grupo de WhatsApp de los hombres</a>",
+ "412be38a": "<a class=\"btn\" href=\"tours.html\">Ver fechas de los tours</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Pregúntale a Sam qué hay planeado</a>",
+ "0750dc82": "<a class=\"btn\" href=\"tours.html#reserve\">Reserva un tour</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Llama a Sam, 832-385-4161</a>"
 }

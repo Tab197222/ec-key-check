@@ -4,7 +4,7 @@
  "c7af44e6": "Skip to content",
  "cf627978": "<span>Meet her in person,</span> <span class=\"place\">in Barranquilla.</span>",
  "1d2f3df2": "iLoveLatins runs hosted singles tours to Colombia’s Caribbean coast. A welcome dinner, the singles socials and a bilingual host are arranged for you. Your hotel and flight are booked separately.",
- "54e41172": "<a class=\"btn\" href=\"tours.html\">See tour dates</a> <a class=\"btn btn-quiet\" data-phone=\"\">Call or text Sam, 832-385-4161</a>",
+ "4ca6e1b4": "<a class=\"btn\" href=\"tours.html\">See tour dates</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Call or text Sam, 832-385-4161</a>",
  "b1dc808a": "Sam with a smiling woman: iLoveLatins makes your dream come true. Meet singles, date online, group tours, find romance",
  "0f21904d": "Sam’s singles socials",
  "8b6c2679": "A room full of local single women, Sam at the front, and a host to translate. This is how every tour week starts.",
@@ -19,7 +19,7 @@
  "970f19a6": "<a class=\"btn btn-quiet\" href=\"testimonials.html\">Read their letters</a>",
  "c40f941c": "Real trips, real people",
  "3c054a2b": "These are unedited phone photos from Sam’s trips to Barranquilla in 2024 and 2025, not stock pictures. The guests, the women, the party: all real.",
- "1a581f91": "Not sure? Call or text Sam at <a data-phone=\"\"></a> and ask him anything, or read <a href=\"testimonials.html\">letters from men who went</a>.",
+ "814eea92": "Not sure? Call or text Sam at <a data-phone=\"\" href=\"tel:+18323854161\">832-385-4161</a> and ask him anything, or read <a href=\"testimonials.html\">letters from men who went</a>.",
  "e7f8c6d2": "Guests and local women talking at a recent iLoveLatins social",
  "1ecc04bb": "Social night, Barranquilla, January 27, 2024",
  "a3046795": "A guest and a smiling woman at a recent iLoveLatins social",
@@ -27,7 +27,7 @@
  "8a0facc7": "A guest dancing with a woman at a recent social",
  "eadbd7fc": "Sam answers this number.",
  "78462f4c": "Sam Smith hosts the tours and takes the calls. Ask anything about the trip, the city or the women you will meet before you pay a dollar. The answers are free.",
- "514e581c": "<a class=\"btn btn-sun\" data-sms=\"\">Text Sam</a> <a class=\"btn btn-sun\" data-whatsapp=\"\" rel=\"noopener\">Join the men’s WhatsApp group</a>",
+ "e4fc1aa4": "<a class=\"btn btn-sun\" data-sms=\"\" href=\"sms:+18323854161\">Text Sam</a> <a class=\"btn btn-sun\" data-whatsapp=\"\" href=\"https://chat.whatsapp.com/FEq4WaAWiylIFiqvFz3wKc\" rel=\"noopener\">Join the men’s WhatsApp group</a>",
  "6448c22b": "A video message about the tours, October 2026.",
  "1781dbe7": "What is arranged for you",
  "c689a5b4": "Every tour covers the same three things, so you can spend the week meeting people.",
@@ -41,7 +41,7 @@
  "83d49ee2": "A long lunch table set on a white-sand beach with Caribbean water behind it",
  "1207aeb2": "Colombia’s Caribbean coast",
  "6dc84c91": "Warm water, long lunches, and evenings that start late. Barranquilla sits on the coast, with beaches and islands a short trip away.",
- "deb5edf4": "<a class=\"btn\" href=\"tours.html\">See tour dates</a> <a class=\"btn btn-quiet\" data-phone=\"\">Ask Sam what’s planned</a>",
+ "412be38a": "<a class=\"btn\" href=\"tours.html\">See tour dates</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Ask Sam what’s planned</a>",
  "b1a78cf1": "Life on the coast",
  "c6611959": "Beaches, the water, Barranquilla, and the people you’ll meet. Tap a picture to see it full size.",
  "f2bea836": "A woman in a sun hat relaxing on a beach net over the Caribbean, with the city skyline behind",
@@ -83,5 +83,5 @@
  "5f00008a": "Sam in a Colombia shirt and cowboy hat celebrating with a group of women on a night out",
  "a2033060": "iLoveLatins.com",
  "37a3ded5": "Pick a date, or pick up the phone.",
- "683af670": "<a class=\"btn\" href=\"tours.html#reserve\">Reserve a tour</a> <a class=\"btn btn-quiet\" data-phone=\"\">Call Sam, 832-385-4161</a>"
+ "0750dc82": "<a class=\"btn\" href=\"tours.html#reserve\">Reserve a tour</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Call Sam, 832-385-4161</a>"
 }

@@ -102,5 +102,6 @@
  "968c460c": "Estoy seguro de que, si vienes, ¡encontrarás lo que estás buscando! Yo estaré aquí para ayudarte.",
  "97a63274": "Espero verte pronto. Alexis",
  "a2ebe5ed": "Escribe tú la próxima.",
- "54e41172": "<a class=\"btn\" href=\"tours.html\">Ver fechas de los tours</a> <a class=\"btn btn-quiet\" data-phone=\"\">Llama o escribe a Sam, 832-385-4161</a>"
+ "54e41172": "<a class=\"btn\" href=\"tours.html\">Ver fechas de los tours</a> <a class=\"btn btn-quiet\" data-phone=\"\">Llama o escribe a Sam, 832-385-4161</a>",
+ "4ca6e1b4": "<a class=\"btn\" href=\"tours.html\">Ver fechas de los tours</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Llama o escribe a Sam, 832-385-4161</a>"
 }

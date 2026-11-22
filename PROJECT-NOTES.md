@@ -49,11 +49,15 @@ Social media setup: social-media.md. Moving the domain: domain-move.md.
   if they used the Español button or an invitation link). Older sign-ups get both.
 - This file is published with the site: never write members' names or emails in it.
 
+## Added 21 Nov 2026
+- Sam's account is an owner. The Tours page "See tour dates" button jumps to the dates.
+- The phone number, email, tour cards and video list are also written into the page files,
+  so tools that read a page without running its script can see them. **After changing
+  tours, videos or contact details in js/data.js, run `python tools/static_fallback.py`
+  and then `python tools/translations.py`.** Skipping it harms nothing a visitor sees,
+  but script-less readers would see the old dates.
+
 ## Open right now (20 Nov 2026)
-- **Sam's owner access:** Sam fills in his profile on the business Gmail account (the
-  reminder email in that inbox has a log-in link, or use "Forgot password" on the Join
-  page). Trent approves it on the Approvals page. Then Claude marks that account as an
-  owner (needs a Supabase token; the SQL is in SETUP.md).
 - **Trent's photo** is approved but not set as his main photo: set it on My account.
 - **Web developer:** send him the message in domain-move.md.
 - **Supabase token:** delete any token that is still active when the work is done.

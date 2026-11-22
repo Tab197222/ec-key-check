@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Prerender</title>
+<!-- Used by tools/static_fallback.py: opens one page of the site, lets its script run, and
+     prints what the script wrote into the tour and video boxes, as JSON.
+     Open as  /tools/prerender.html?page=tours.html  from the local site server. -->
+<pre id="out">working</pre>
+<iframe id="f" style="width:1200px;height:900px"></iframe>
+<script>
+  var page = new URLSearchParams(location.search).get('page');
+  var f = document.getElementById('f');
+  f.onload = function () {
+    setTimeout(function () {
+      var boxes = f.contentDocument.querySelectorAll('[data-tours], [data-next-tour], [data-videos]');
+      var html = Array.prototype.map.call(boxes, function (b) { return b.innerHTML; });
+      document.getElementById('out').textContent = 'JSON:' + JSON.stringify(html);
+    }, 1500);
+  };
+  f.src = '../' + page + '?lang=en';
+</script>

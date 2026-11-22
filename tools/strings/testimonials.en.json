@@ -102,5 +102,5 @@
  "968c460c": "I’m sure if you come, you’ll find what you’re looking for! I’ll be here to help you.",
  "97a63274": "I hope to see you soon. Alexis",
  "a2ebe5ed": "Write the next one yourself.",
- "54e41172": "<a class=\"btn\" href=\"tours.html\">See tour dates</a> <a class=\"btn btn-quiet\" data-phone=\"\">Call or text Sam, 832-385-4161</a>"
+ "4ca6e1b4": "<a class=\"btn\" href=\"tours.html\">See tour dates</a> <a class=\"btn btn-quiet\" data-phone=\"\" href=\"tel:+18323854161\">Call or text Sam, 832-385-4161</a>"
 }
