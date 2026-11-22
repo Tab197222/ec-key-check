@@ -452,6 +452,8 @@ table.deposits th { font-weight: 600; background: var(--wash); }
 .page-head .logo-alt { width: min(100%, 480px); margin-left: -1.5%; }
 
 .video-feature { margin: 1.75rem 0 0; max-width: 400px; }
+.video-row { display: flex; flex-wrap: wrap; gap: 0 1.5rem; align-items: flex-start; }
+.video-row .video-feature { flex: 1 1 240px; max-width: 320px; }
 .video-feature video { max-height: 75vh; margin-inline: auto; }
 .price-special { border: 2px solid var(--pink); background: #fff3fa; }
 
